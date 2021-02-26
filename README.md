@@ -1,1 +1,39 @@
-# koishi-plugin-genshin
+# 原神四季 `koishi-plugin-genshin`
+
+**原神四季**（_koishi-plugin-genshin_ ~~征名启事~~）是一个为[koishi](https://github.com/koishijs/koishi)设计的查询原神国服玩家数据的插件。
+
+## 安装
+
+```bash
+# Via yarn
+yarn add koishi-plugin-genshin
+# Or via npm
+npm install koishi-plugin-genshin
+```
+
+## 需求
+
+目前插件需要使用数据库才能正常运行！
+
+## 配置
+
+插件目前需要使用您的网页版米游社的 cookie 来获取玩家信息。
+
+> 使用网页版米游社登录 https://bbs.mihoyo.com/ys/，然后在控制台输入 `document.cookie`，返回的结果就是 cookie，一般来说一个 cookie 可以使用一段时间，如果失效了就再次获取一遍。
+
+> **⚠️ 注意 ⚠️**：请妥善保存您的 cookies。绝对不要把你的 cookies 交给任何人！绝对绝对不要把你的 cookies 交给任何人！！绝对绝对绝对不要把你的 cookies 交给任何人！！！
+
+```js
+// 注册插件
+App.plugin(require('koishi-plugin-genshin'), {
+  cookie: '<您的cookie>',
+})
+```
+
+## 指令
+
+具体用法请使用`help`查看（~~作者只是懒得写文档~~）
+
+### `genshin <uid>`
+
+别名：`原神`
