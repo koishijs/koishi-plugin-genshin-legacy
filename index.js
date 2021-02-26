@@ -12,7 +12,7 @@ registerFont(path.resolve(__dirname, './static/SourceHanSansCN-Medium.ttf'), {
 /**
  * @command genshin
  */
-const apply = (koishi, options) => {
+const commandGenshin = (koishi, options) => {
   genshin.loginWithCookie(options.cookie)
 
   // 注册
@@ -181,6 +181,6 @@ async function getCard(allCharas) {
 }
 
 module.exports = {
-  name: 'koishi-plugin-genshin',
-  apply,
+  name: 'genshin',
+  apply: commandGenshin,
 }
