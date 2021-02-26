@@ -19,12 +19,9 @@ const commandGenshin = (koishi, options) => {
   koishi
     .command('genshin <uid> 注册您的《原神》玩家信息')
     .alias('原神')
+    .userFields(['genshin_uid'])
     .action(async ({ session }, uid) => {
-      const userData = await session.database.getUser(
-        session.platform,
-        session.userId,
-        ['genshin_uid']
-      )
+      const userData = session.$user
       if (
         uid &&
         typeof uid === 'number' &&
@@ -48,12 +45,9 @@ const commandGenshin = (koishi, options) => {
   koishi
     .command('genshin.5star 显示您的 5★ 角色')
     .shortcut(/原神[五5]星/)
+    .userFields(['genshin_uid'])
     .action(async ({ session }) => {
-      const userData = await session.database.getUser(
-        session.platform,
-        session.userId,
-        ['genshin_uid']
-      )
+      const userData = session.$user
       let uid = userData.genshin_uid
       if (!uid)
         return '您还没有注册您的《原神》用户信息，请使用“genshin <uid>”进行注册~'
@@ -71,12 +65,9 @@ const commandGenshin = (koishi, options) => {
   koishi
     .command('genshin.abyss 显示您当前的深境螺旋关卡')
     .shortcut(/(原神深渊|深境螺旋)/)
+    .userFields(['genshin_uid'])
     .action(async ({ session }) => {
-      const userData = await session.database.getUser(
-        session.platform,
-        session.userId,
-        ['genshin_uid']
-      )
+      const userData = session.$user
       let uid = userData.genshin_uid
       if (!uid)
         return '您还没有注册您的《原神》用户信息，请使用“genshin <uid>”进行注册~'
@@ -125,7 +116,7 @@ async function getCard(allCharas) {
     ctx.font = `${px}px SourceHanSans`
   }
   function centerTextX(str) {
-    return 200 - ctx.measureText(ctx).width / 2
+    return 200 - ctx.measureText(str).width / 2
   }
   async function singleCard(chara, index) {
     // 变量
