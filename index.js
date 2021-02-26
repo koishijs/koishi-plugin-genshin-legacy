@@ -108,7 +108,9 @@ async function getCard(allCharas) {
   const total = allCharas.length
 
   // 创建canvas
-  const canvas = createCanvas(400, 120 * (total + 1))
+  let width = 400
+  let height = 120 * (total + 1) + 40
+  const canvas = createCanvas(width, height)
   const ctx = canvas.getContext('2d')
 
   // utils
@@ -116,7 +118,7 @@ async function getCard(allCharas) {
     ctx.font = `${px}px SourceHanSans`
   }
   function centerTextX(str) {
-    return 200 - ctx.measureText(str).width / 2
+    return width / 2 - ctx.measureText(str).width / 2
   }
   async function singleCard(chara, index) {
     // 变量
