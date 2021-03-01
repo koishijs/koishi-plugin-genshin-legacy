@@ -1,5 +1,6 @@
 const { createCanvas, loadImage, registerFont } = require('canvas')
 const { genshinKit } = require('genshin-kit')
+const { segment } = require('koishi-utils')
 const genshin = new genshinKit()
 const path = require('path')
 
@@ -13,13 +14,45 @@ registerFont(path.resolve(__dirname, './static/SourceHanSansCN-Medium.ttf'), {
  * @command genshin
  */
 const commandGenshin = (koishi, options) => {
+  function _msg(msgKey, ...args) {
+    function handleArgs(message, ...args) {
+      args.forEach(function(elem, index) {
+        var rgx = new RegExp('\\$' + (index + 1), 'g')
+        message = message.replace(rgx, elem)
+      })
+
+      return message
+    }
+    let allMsg = {
+      command_description: '获取《原神》玩家信息',
+      not_registered:
+        '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
+      successfully_registered: '您的《原神》信息注册成功~',
+      info_regestered: '您的《原神》uid已注册为：$1',
+      invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
+      // failed: '出现了亿点问题……',
+      fetch_data_failed:
+        '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
+    }
+    if (allMsg[msgKey]) {
+      let finalMsg = handleArgs(allMsg[msgKey], ...args)
+      return finalMsg
+    } else {
+      let showArgs = ''
+      if (args.length > 0) {
+        showArgs += ': ' + args.join(', ')
+      }
+      return `<plugin-genshin-${msgKey}${showArgs}>`
+    }
+  }
   genshin.loginWithCookie(options.cookie)
 
   // 注册
   koishi
-    .command('genshin <uid> 注册您的《原神》玩家信息')
+    .command(`genshin <uid> ${_msg('command_description')}`)
     .alias('原神')
     .userFields(['genshin_uid'])
+    .example('@我 genshin 100000001')
     .action(async ({ session }, uid) => {
       const userData = session.user
       if (
@@ -33,30 +66,31 @@ const commandGenshin = (koishi, options) => {
         })
         return '您的《原神》信息注册成功~'
       } else if (uid) {
-        return '您输入的不是合法的《原神》国服uid~'
+        return _msg('invalid_cn_uid')
       } else {
         return userData.genshin_uid
           ? `您的《原神》uid已注册为：${userData.genshin_uid}`
-          : '您尚未注册您的《原神》信息~'
+          : _msg('not_registered')
       }
     })
 
   // 五星角色
   koishi
     .command('genshin.5star 显示您的 5★ 角色')
-    .shortcut(/原神[五5]星/)
+    // .shortcut(/原神[五5]星/)
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
       const userData = session.user
       let uid = userData.genshin_uid
-      if (!uid)
-        return '您还没有注册您的《原神》用户信息，请使用“genshin <uid>”进行注册~'
+      if (!uid) return _msg('not_registered')
       const chara = await genshin.getAllCharacters(uid)
-      if (!chara) return '出现了亿点问题。'
+      if (!chara) return _msg('fetch_data_failed')
       const fiveStar = chara.rarity(5) || []
       if (fiveStar.length > 0) {
         let card = await getCard(fiveStar)
-        return `玩家 ${uid} 一共有 ${fiveStar.length} 个 5★ 角色[CQ:image,file=base64://${card}]`
+        return `玩家 ${uid} 一共有 ${
+          fiveStar.length
+        } 个 5★ 角色${segment('image', { file: 'base64://' + card })}` // [CQ:image,file=base64://${card}]
       }
       return `玩家 ${uid} 木有 5★ 角色 :(`
     })
@@ -64,13 +98,12 @@ const commandGenshin = (koishi, options) => {
   // 深境螺旋
   koishi
     .command('genshin.abyss 显示您当前的深境螺旋关卡')
-    .shortcut(/(原神深渊|深境螺旋)/)
+    // .shortcut(/(原神深渊|深境螺旋)/)
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
       const userData = session.user
       let uid = userData.genshin_uid
-      if (!uid)
-        return '您还没有注册您的《原神》用户信息，请使用“genshin <uid>”进行注册~'
+      if (!uid) return _msg('not_registered')
       const info = await genshin.getUserInfo(uid)
       if (info.data && info.data.stats && info.data.stats.spiral_abyss) {
         let abyss = info.data.stats.spiral_abyss
@@ -78,6 +111,7 @@ const commandGenshin = (koishi, options) => {
 
         // 获取当期剩余天数
         let now = new Date()
+        // let serverNow = new Date(now.getTime() - 4 * 60 * 1000)
         let year = now.getFullYear()
         let month = now.getMonth()
         let day = now.getDate()
@@ -97,9 +131,11 @@ const commandGenshin = (koishi, options) => {
           }~`
         }
         // ${segment.quote(session.messageId)}
-        return `[CQ:reply,id=${session.messageId}]${msg}`
+        return `${segment('quote', { id: session.messageId })}${msg}`
       } else {
-        return `[CQ:reply,id=${session.messageId}]出现了亿点小问题QAQ`
+        return `${segment('quote', {
+          id: session.messageId,
+        })}${_msg('fetch_data_failed')}`
       }
     })
 }
@@ -144,8 +180,8 @@ async function getCard(allCharas) {
   }
 
   // 填个底色
-  ctx.fillStyle = '#fafafa'
-  ctx.fillRect(0, 0, 400, 120 * (total + 1))
+  ctx.fillStyle = '#f4f4f4'
+  ctx.fillRect(0, 0, width, height)
 
   // 绘制顶部
   ctx.lineJoin = 'round'
