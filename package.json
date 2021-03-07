@@ -1,13 +1,15 @@
 {
   "name": "koishi-plugin-genshin",
-  "version": "1.2.1",
+  "version": "2.0.0-alpha.2",
   "main": "index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
   "author": "Dragon-Fish <824399619@qq.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "canvas": "^2.6.1",
-    "genshin-kit": "^0.2.0",
-    "koishi-utils": "^4.0.1"
+    "fs-extra": "^9.1.0",
+    "genshin-kit": "^0.3.0",
+    "koishi-utils": "^4.0.1",
+    "puppeteer": "^8.0.0"
   }
 }
