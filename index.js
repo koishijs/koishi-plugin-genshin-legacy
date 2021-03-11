@@ -155,7 +155,7 @@ const apply = (koishi, options) => {
           '',
           '〓武器〓',
           `${chara.weapon.name} (${chara.weapon.rarity}★${chara.weapon.type_name})`,
-          `${chara.weapon.level}级 (${chara.weapon.affix_level}精通)`,
+          `${chara.weapon.level}级 (${chara.weapon.affix_level}精炼)`,
           '',
           '〓圣遗物〓',
           formatedReliquaries(chara.reliquaries),
@@ -235,7 +235,7 @@ const apply = (koishi, options) => {
               '',
               '〓顶尖数据〓',
               `最强一击：${formatedCharacterValue(damage_rank)}`,
-              `最多承伤：${formatedCharacterValue(take_damage_rank)}`,
+              `最高承伤：${formatedCharacterValue(take_damage_rank)}`,
               `最常出场：${formatedCharacterValue(reveal_rank)}`,
               `元素爆发：${formatedCharacterValue(energy_skill_rank)}`,
             ].join('\n')

@@ -6,14 +6,21 @@
   "author": "Dragon-Fish <824399619@qq.com>",
   "license": "Apache-2.0",
   "scripts": {
-    "publish:stable": "npm publish --tag latest",
-    "publish:next": "npm publish --tag next"
+    "publish:stable": "yarn publish --tag latest",
+    "publish:next": "yarn publish --tag next"
   },
   "dependencies": {
     "dayjs": "^1.10.4",
-    "fs-extra": "^9.1.0",
     "genshin-kit": "^0.3.0",
-    "koishi-utils": "^4.0.1",
-    "puppeteer": "^8.0.0"
-  }
+    "koishi-utils": "^4.0.1"
+  },
+  "keywords": [
+    "genshin",
+    "genshin-impact",
+    "genshin-api",
+    "hoyolab",
+    "koishi",
+    "mihoyo",
+    "qqbot"
+  ]
 }
