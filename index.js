@@ -138,24 +138,27 @@ const apply = (koishi, options) => {
 
         if (!chara) return `玩家 ${uid} 似乎没有名为 ${name} 的角色。`
 
-        let reliquaries = ''
-        chara.reliquaries.forEach(item => {
-          reliquaries += `${item.pos_name}：${item.name} (${item.rarity})★\n`
-        })
-        reliquaries = reliquaries.trim()
+        function formatedReliquaries(reliquaries) {
+          if (reliquaries.length < 1) return '无'
+          let msg = ''
+          reliquaries.forEach(item => {
+            msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
+          })
+          return msg.trim()
+        }
 
         return [
           `玩家 ${uid} 的 ${chara.name}：`,
           segment('image', { file: chara.image }),
           `${chara.rarity}★ ${chara.name}`,
-          `等级${chara.level}，好感${chara.fetter}`,
+          `等级：${chara.level}级，好感：${chara.fetter}级`,
           '',
-          '▶ 武器',
+          '〓武器〓',
           `${chara.weapon.name} (${chara.weapon.rarity}★${chara.weapon.type_name})`,
           `${chara.weapon.level}级 (${chara.weapon.affix_level}精通)`,
           '',
-          '▶ 圣遗物',
-          reliquaries,
+          '〓圣遗物〓',
+          formatedReliquaries(chara.reliquaries),
         ].join('\n')
       } catch (err) {
         return _msg('failed', err.message || '出现未知问题')
@@ -171,9 +174,11 @@ const apply = (koishi, options) => {
       const userData = session.user
       let uid = userData.genshin_uid
       if (!uid) return _msg('not_registered')
-      genshin.getCurAbyss(uid).then(
+      Promise.all([genshin.getCurAbyss(uid), genshin.getUserInfo(uid)]).then(
         data => {
           // 变量
+          let [abyssInfo, basicInfo] = data
+          let Filter = new util.CharactersFilter(basicInfo.avatars || [])
           let {
             start_time,
             end_time,
@@ -182,43 +187,64 @@ const apply = (koishi, options) => {
             max_floor,
             total_star,
             is_unlock,
-          } = data
+            reveal_rank,
+            damage_rank,
+            take_damage_rank,
+            energy_skill_rank,
+          } = abyssInfo
           start_time *= 1000
           end_time *= 1000
 
           // 格式化的时间
-          function getFormatedTime(t) {
+          function formatedTime(t) {
             return dayjs(t).format('lll')
+          }
+          // 格式化的顶尖信息
+          function formatedCharacterValue(data) {
+            if (data.length < 1) return '无'
+            let top = data[0]
+            return `${Filter.id(top.avatar_id).name || top.avatar_id} ${
+              top.value
+            }`
           }
 
           // 计算时间
           let now = dayjs()
-          let hoursLeft = dayjs(end_time)
-            .diff(now, 'hours', true)
-            .toFixed(1)
+          let timeLeft =
+            dayjs(end_time).diff(now, 'hours') < 1
+              ? dayjs(end_time).diff(now, 'minutes') + ' 分钟'
+              : dayjs(end_time)
+                  .diff(now, 'hours', true)
+                  .toFixed(1) + ' 小时'
 
           // 格式化信息
           let msg = ''
           if (!is_unlock) {
             msg += `${segment('at', {
               id: session.userId,
-            })} 玩家 ${uid} 还没有开启深境螺旋。\n`
+            })} 玩家 ${uid} 还没有开启深境螺旋。`
           } else {
             msg += [
               `${segment('at', {
                 id: session.userId,
-              })} 玩家 ${uid} 的深渊信息：`,
+              })} 玩家 ${uid} 的深境螺旋信息：`,
+              '〓基本信息〓',
               `到达层数：${max_floor}`,
-              `经历战斗：${total_win_times}通关/${total_battle_times}总尝试`,
+              `战斗次数：${total_win_times}次通关/${total_battle_times}总尝试`,
               `获得渊星：${total_star}`,
               '',
+              '〓顶尖数据〓',
+              `最强一击：${formatedCharacterValue(damage_rank)}`,
+              `最多承伤：${formatedCharacterValue(take_damage_rank)}`,
+              `最常出场：${formatedCharacterValue(reveal_rank)}`,
+              `元素爆发：${formatedCharacterValue(energy_skill_rank)}`,
             ].join('\n')
           }
 
           // 当期信息
-          msg += `本期深渊将于【${getFormatedTime(
+          msg += `\n\n本期深渊将于【${formatedTime(
             end_time
-          )}】结束，还剩 ${hoursLeft} 小时。`
+          )}】结束，还剩 ${timeLeft}。`
 
           // 发送
           session.send(msg)

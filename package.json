@@ -1,10 +1,14 @@
 {
   "name": "koishi-plugin-genshin",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0-alpha.7",
   "main": "index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
   "author": "Dragon-Fish <824399619@qq.com>",
   "license": "Apache-2.0",
+  "scripts": {
+    "publish:stable": "npm publish --tag latest",
+    "publish:next": "npm publish --tag next"
+  },
   "dependencies": {
     "dayjs": "^1.10.4",
     "fs-extra": "^9.1.0",
