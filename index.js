@@ -1,19 +1,24 @@
-const { createCanvas, loadImage, registerFont } = require('canvas')
-const { genshinKit } = require('genshin-kit')
+/** 变量 */
+// Koishi
 const { segment } = require('koishi-utils')
-const genshin = new genshinKit()
-const path = require('path')
 
-// 设定字体
-registerFont(path.resolve(__dirname, './static/SourceHanSansCN-Medium.ttf'), {
-  family: 'SourceHanSans',
-  weight: 'medium',
-})
+// GenshinKit
+const { GenshinKit, util } = require('genshin-kit')
+const genshin = new GenshinKit()
+
+// Day.js
+const dayjs = require('dayjs')
+require('dayjs/locale/zh')
+dayjs.locale('zh')
+dayjs.extend(require('dayjs/plugin/localizedFormat'))
+dayjs.extend(require('dayjs/plugin/duration'))
 
 /**
  * @command genshin
  */
-const commandGenshin = (koishi, options) => {
+const apply = (koishi, options) => {
+  genshin.loginWithCookie(options.cookie)
+
   function _msg(msgKey, ...args) {
     function handleArgs(message, ...args) {
       args.forEach(function(elem, index) {
@@ -30,9 +35,12 @@ const commandGenshin = (koishi, options) => {
       successfully_registered: '您的《原神》信息注册成功~',
       info_regestered: '您的《原神》uid已注册为：$1',
       invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
-      // failed: '出现了亿点问题……',
+      failed: '出现了亿点问题：$1',
+      api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
       fetch_data_failed:
         '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
+      has_x_star_characters: '玩家 $1 一共拥有 $2 个 $3★ 角色$4',
+      no_x_star_character: '玩家 $1 木有 $2★ 角色',
     }
     if (allMsg[msgKey]) {
       let finalMsg = handleArgs(allMsg[msgKey], ...args)
@@ -45,7 +53,6 @@ const commandGenshin = (koishi, options) => {
       return `<plugin-genshin-${msgKey}${showArgs}>`
     }
   }
-  genshin.loginWithCookie(options.cookie)
 
   // 注册
   koishi
@@ -64,152 +71,166 @@ const commandGenshin = (koishi, options) => {
         await session.database.setUser(session.platform, session.userId, {
           genshin_uid: uid,
         })
-        return '您的《原神》信息注册成功~'
+        return _msg('successfully_registered')
       } else if (uid) {
         return _msg('invalid_cn_uid')
       } else {
         return userData.genshin_uid
-          ? `您的《原神》uid已注册为：${userData.genshin_uid}`
+          ? _msg('info_regestered', userData.genshin_uid)
           : _msg('not_registered')
       }
     })
 
-  // 五星角色
   koishi
-    .command('genshin.5star 显示您的 5★ 角色')
-    // .shortcut(/原神[五5]星/)
+    .command('genshin.basic')
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
-      const userData = session.user
-      let uid = userData.genshin_uid
+      let uid = session.user.genshin_uid
       if (!uid) return _msg('not_registered')
-      const chara = await genshin.getAllCharacters(uid)
-      if (!chara) return _msg('fetch_data_failed')
-      const fiveStar = chara.rarity(5) || []
-      if (fiveStar.length > 0) {
-        let card = await getCard(fiveStar)
-        return `玩家 ${uid} 一共有 ${
-          fiveStar.length
-        } 个 5★ 角色${segment('image', { file: 'base64://' + card })}` // [CQ:image,file=base64://${card}]
+
+      return '功能开发中……'
+
+      try {
+        let basic = require('./module/basic')
+        let image = await basic({ uid, userInfo })
+        return image
+      } catch (err) {
+        return err
       }
-      return `玩家 ${uid} 木有 5★ 角色 :(`
+    })
+
+  // 五星角色
+  // koishi
+  //   .command('genshin.5star 显示您的 5★ 角色')
+  //   // .shortcut(/原神[五5]星/)
+  //   .userFields(['genshin_uid'])
+  //   .action(async ({ session }) => {
+  //     const userData = session.user
+  //     let uid = userData.genshin_uid
+  //     if (!uid) return _msg('not_registered')
+  //     const chara = await genshin.getAllCharacters(uid)
+  //     if (!chara) return _msg('fetch_data_failed')
+  //     const fiveStar = chara.rarity(5) || []
+  //     if (fiveStar.length > 0) {
+  //       let card = await getCard(fiveStar)
+  //       return _msg(
+  //         'has_x_star_characters',
+  //         uid,
+  //         fiveStar.length,
+  //         5,
+  //         segment('image', { file: 'base64://' + card })
+  //       )
+  //     }
+  //     return _msg('no_x_star_character', uid, 5)
+  //   })
+
+  koishi
+    .command('genshin.character <name> 查询指定名称的角色的等级与装备信息')
+    .example('genshin.character 旅行者')
+    .userFields(['genshin_uid'])
+    .action(async ({ session }, name = '旅行者') => {
+      let uid = session.user.genshin_uid
+      if (!uid) return _msg('not_registered')
+      try {
+        const allCharas = await genshin.getUserRoles(uid)
+        const Filter = new util.CharactersFilter(allCharas)
+        const chara = Filter.name(name)
+
+        if (!chara) return `玩家 ${uid} 似乎没有名为 ${name} 的角色。`
+
+        let reliquaries = ''
+        chara.reliquaries.forEach(item => {
+          reliquaries += `${item.pos_name}：${item.name} (${item.rarity})★\n`
+        })
+        reliquaries = reliquaries.trim()
+
+        return [
+          `玩家 ${uid} 的 ${chara.name}：`,
+          segment('image', { file: chara.image }),
+          `${chara.rarity}★ ${chara.name}`,
+          `等级${chara.level}，好感${chara.fetter}`,
+          '',
+          '▶ 武器',
+          `${chara.weapon.name} (${chara.weapon.rarity}★${chara.weapon.type_name})`,
+          `${chara.weapon.level}级 (${chara.weapon.affix_level}精通)`,
+          '',
+          '▶ 圣遗物',
+          reliquaries,
+        ].join('\n')
+      } catch (err) {
+        return _msg('failed', err.message || '出现未知问题')
+      }
     })
 
   // 深境螺旋
   koishi
-    .command('genshin.abyss 显示您当前的深境螺旋关卡')
+    .command('genshin.abyss 显示您当前的深境螺旋信息')
     // .shortcut(/(原神深渊|深境螺旋)/)
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
       const userData = session.user
       let uid = userData.genshin_uid
       if (!uid) return _msg('not_registered')
-      const info = await genshin.getUserInfo(uid)
-      if (info.data && info.data.stats && info.data.stats.spiral_abyss) {
-        let abyss = info.data.stats.spiral_abyss
-        let msg = '您目前的深渊层数是' + abyss + '\n'
+      genshin.getCurAbyss(uid).then(
+        data => {
+          // 变量
+          let {
+            start_time,
+            end_time,
+            total_battle_times,
+            total_win_times,
+            max_floor,
+            total_star,
+            is_unlock,
+          } = data
+          start_time *= 1000
+          end_time *= 1000
 
-        // 获取当期剩余天数
-        let now = new Date()
-        // let serverNow = new Date(now.getTime() - 4 * 60 * 1000)
-        let year = now.getFullYear()
-        let month = now.getMonth()
-        let day = now.getDate()
-        let nextMonth = month + 1
-        let dayAfterMonth = new Date(year, nextMonth, 0)
-        let dayOfMonth = dayAfterMonth.getDate()
-        let dayLeft = 15 - day
-        if (dayLeft < 0) dayLeft = dayOfMonth - day
+          // 格式化的时间
+          function getFormatedTime(t) {
+            return dayjs(t).format('lll')
+          }
 
-        if (abyss !== '12-3') {
-          msg += `本期深渊还没有通关！${
-            dayLeft === 0 ? '今天就要结算了' : '还有' + dayLeft + '天就要结算了'
-          }，请加油哦！`
-        } else {
-          msg += `本期深渊已经通关了！下一期刷新${
-            dayLeft === 0 ? '就在今天凌晨4点' : '还有' + dayLeft + '天'
-          }~`
+          // 计算时间
+          let now = dayjs()
+          let hoursLeft = dayjs(end_time)
+            .diff(now, 'hours', true)
+            .toFixed(1)
+
+          // 格式化信息
+          let msg = ''
+          if (!is_unlock) {
+            msg += `${segment('at', {
+              id: session.userId,
+            })} 玩家 ${uid} 还没有开启深境螺旋。\n`
+          } else {
+            msg += [
+              `${segment('at', {
+                id: session.userId,
+              })} 玩家 ${uid} 的深渊信息：`,
+              `到达层数：${max_floor}`,
+              `经历战斗：${total_win_times}通关/${total_battle_times}总尝试`,
+              `获得渊星：${total_star}`,
+              '',
+            ].join('\n')
+          }
+
+          // 当期信息
+          msg += `本期深渊将于【${getFormatedTime(
+            end_time
+          )}】结束，还剩 ${hoursLeft} 小时。`
+
+          // 发送
+          session.send(msg)
+        },
+        err => {
+          session.send(_msg('failed', err.message || '出现未知问题'))
         }
-        // ${segment.quote(session.messageId)}
-        return `${segment('quote', { id: session.messageId })}${msg}`
-      } else {
-        return `${segment('quote', {
-          id: session.messageId,
-        })}${_msg('fetch_data_failed')}`
-      }
+      )
     })
-}
-
-async function getCard(allCharas) {
-  const total = allCharas.length
-
-  // 创建canvas
-  let width = 400
-  let height = 120 * (total + 1) + 40
-  const canvas = createCanvas(width, height)
-  const ctx = canvas.getContext('2d')
-
-  // utils
-  function fontSize(px) {
-    ctx.font = `${px}px SourceHanSans`
-  }
-  function centerTextX(str) {
-    return width / 2 - ctx.measureText(str).width / 2
-  }
-  async function singleCard(chara, index) {
-    // 变量
-    let { image: avatar, name, level, element, fetter } = chara
-    // 计算距离顶部的高度
-    let baseX = 20
-    let baseY = (index + 1) * 120 + 20
-    // 绘制圆角矩形
-    ctx.lineJoin = 'round'
-    ctx.fillStyle = '#fff2db'
-    ctx.fillRect(baseX, baseY, 360, 100)
-    // 绘制头图
-    let avatarImg = await loadImage(avatar)
-    ctx.drawImage(avatarImg, baseX + 10, baseY + 20, 70, 70)
-    // 填写名字
-    fontSize(38)
-    ctx.fillStyle = '#000'
-    ctx.fillText(name, baseX + 90, baseY + 45)
-    // 填写等级
-    fontSize(28)
-    ctx.fillStyle = '#444'
-    ctx.fillText(level + '级', baseX + 90, baseY + 90)
-  }
-
-  // 填个底色
-  ctx.fillStyle = '#f4f4f4'
-  ctx.fillRect(0, 0, width, height)
-
-  // 绘制顶部
-  ctx.lineJoin = 'round'
-  ctx.fillStyle = '#fff'
-  ctx.fillRect(50, 10, 300, 80)
-  ctx.fillRect(80, 95, 240, 30)
-  fontSize(40)
-  ctx.fillStyle = '#000'
-  ctx.fillText('全部 5 星角色', centerTextX('全部 5 星角色'), 65)
-  fontSize(18)
-  ctx.fillStyle = '#222'
-  ctx.fillText(
-    `共有 ${total} 个5★角色`,
-    centerTextX(`共有 ${total} 个5★角色`),
-    120
-  )
-
-  // 开始给爷递归
-  async function makeAllCards(index) {
-    await singleCard(allCharas[index], index)
-    if (index + 1 < total) await makeAllCards(index + 1)
-  }
-  await makeAllCards(0)
-
-  return canvas.toBuffer().toString('base64')
 }
 
 module.exports = {
   name: 'genshin',
-  apply: commandGenshin,
+  apply,
 }
