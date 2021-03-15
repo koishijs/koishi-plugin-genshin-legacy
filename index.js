@@ -1,17 +1,66 @@
 /** 变量 */
 // Koishi
-const { segment } = require('koishi-utils')
+const { segment, template } = require('koishi-utils')
 
 // GenshinKit
 const { GenshinKit, util } = require('genshin-kit')
 const genshin = new GenshinKit()
 
-// Day.js
-const dayjs = require('dayjs')
-require('dayjs/locale/zh')
-dayjs.locale('zh')
-dayjs.extend(require('dayjs/plugin/localizedFormat'))
-dayjs.extend(require('dayjs/plugin/duration'))
+/**
+ * @function timeLeft
+ */
+function getTimeLeft(time) {
+  const now = Date.now()
+  const end = new Date(time)
+
+  let timeLeft = end - now
+  let timeLeftStr = ''
+
+  let day = Math.floor(timeLeft / (1 * 24 * 60 * 60 * 1000))
+  timeLeft = timeLeft % (1 * 24 * 60 * 60 * 1000)
+  if (day) timeLeftStr += `${day}天`
+
+  let hour = Math.floor(timeLeft / (1 * 60 * 60 * 1000))
+  timeLeft = timeLeft % (1 * 60 * 60 * 1000)
+  if (hour) timeLeftStr += `${hour}小时`
+
+  let minute = Math.floor(timeLeft / (1 * 60 * 1000))
+  timeLeft = timeLeft % (1 * 60 * 1000)
+  if (minute) timeLeftStr += `${minute}分`
+
+  let second = Math.floor(timeLeft / 1000)
+  timeLeftStr += `${second}秒`
+
+  return timeLeftStr
+}
+/**
+ * @function Date.format
+ */
+Date.prototype.format = function(fmt) {
+  var o = {
+    'M+': this.getMonth() + 1, //月份
+    'd+': this.getDate(), //日
+    'h+': this.getHours(), //小时
+    'm+': this.getMinutes(), //分
+    's+': this.getSeconds(), //秒
+    'q+': Math.floor((this.getMonth() + 3) / 3), //季度
+    S: this.getMilliseconds(), //毫秒
+  }
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(
+      RegExp.$1,
+      (this.getFullYear() + '').substr(4 - RegExp.$1.length)
+    )
+  }
+  for (var k in o)
+    if (new RegExp('(' + k + ')').test(fmt)) {
+      fmt = fmt.replace(
+        RegExp.$1,
+        RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
+      )
+    }
+  return fmt
+}
 
 /**
  * @command genshin
@@ -19,44 +68,24 @@ dayjs.extend(require('dayjs/plugin/duration'))
 const apply = (koishi, options) => {
   genshin.loginWithCookie(options.cookie)
 
-  function _msg(msgKey, ...args) {
-    function handleArgs(message, ...args) {
-      args.forEach(function(elem, index) {
-        var rgx = new RegExp('\\$' + (index + 1), 'g')
-        message = message.replace(rgx, elem)
-      })
-
-      return message
-    }
-    let allMsg = {
-      command_description: '获取《原神》玩家信息',
-      not_registered:
-        '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
-      successfully_registered: '您的《原神》信息注册成功~',
-      info_regestered: '您的《原神》uid已注册为：$1',
-      invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
-      failed: '出现了亿点问题：$1',
-      api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
-      fetch_data_failed:
-        '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
-      has_x_star_characters: '玩家 $1 一共拥有 $2 个 $3★ 角色$4',
-      no_x_star_character: '玩家 $1 木有 $2★ 角色',
-    }
-    if (allMsg[msgKey]) {
-      let finalMsg = handleArgs(allMsg[msgKey], ...args)
-      return finalMsg
-    } else {
-      let showArgs = ''
-      if (args.length > 0) {
-        showArgs += ': ' + args.join(', ')
-      }
-      return `<plugin-genshin-${msgKey}${showArgs}>`
-    }
-  }
+  template.set('genshin', {
+    command_description: '获取《原神》玩家信息',
+    not_registered:
+      '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
+    successfully_registered: '您的《原神》信息注册成功~',
+    info_regestered: '您的《原神》uid已注册为：{0}',
+    invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
+    failed: '出现了亿点问题：{0}',
+    api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
+    fetch_data_failed:
+      '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
+    has_x_star_characters: '玩家 {0} 一共拥有 {1} 个 {2}★ 角色{3}',
+    no_x_star_character: '玩家 {0} 木有 {1}★ 角色',
+  })
 
   // 注册
   koishi
-    .command(`genshin <uid> ${_msg('command_description')}`)
+    .command(`genshin <uid> ${template('genshin.command_description')}`)
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
@@ -71,13 +100,13 @@ const apply = (koishi, options) => {
         await session.database.setUser(session.platform, session.userId, {
           genshin_uid: uid,
         })
-        return _msg('successfully_registered')
+        return template('genshin.successfully_registered')
       } else if (uid) {
-        return _msg('invalid_cn_uid')
+        return template('invalid_cn_uid')
       } else {
         return userData.genshin_uid
-          ? _msg('info_regestered', userData.genshin_uid)
-          : _msg('not_registered')
+          ? template('genshin.info_regestered', userData.genshin_uid)
+          : template('genshin.not_registered')
       }
     })
 
@@ -86,7 +115,7 @@ const apply = (koishi, options) => {
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
       let uid = session.user.genshin_uid
-      if (!uid) return _msg('not_registered')
+      if (!uid) return template('not_registered')
 
       return '功能开发中……'
 
@@ -107,9 +136,9 @@ const apply = (koishi, options) => {
   //   .action(async ({ session }) => {
   //     const userData = session.user
   //     let uid = userData.genshin_uid
-  //     if (!uid) return _msg('not_registered')
+  //     if (!uid) return template('genshin.not_registered')
   //     const chara = await genshin.getAllCharacters(uid)
-  //     if (!chara) return _msg('fetch_data_failed')
+  //     if (!chara) return template('genshin.fetch_data_failed')
   //     const fiveStar = chara.rarity(5) || []
   //     if (fiveStar.length > 0) {
   //       let card = await getCard(fiveStar)
@@ -121,7 +150,7 @@ const apply = (koishi, options) => {
   //         segment('image', { file: 'base64://' + card })
   //       )
   //     }
-  //     return _msg('no_x_star_character', uid, 5)
+  //     return template('genshin.no_x_star_character', uid, 5)
   //   })
 
   koishi
@@ -130,18 +159,24 @@ const apply = (koishi, options) => {
     .userFields(['genshin_uid'])
     .action(async ({ session }, name = '旅行者') => {
       let uid = session.user.genshin_uid
-      if (!uid) return _msg('not_registered')
+      if (!uid) return template('genshin.not_registered')
       try {
-        const allCharas = await genshin.getUserRoles(uid)
+        const [userInfo, allCharas] = await Promise.all([
+          genshin.getUserInfo(uid),
+          genshin.getUserRoles(uid),
+        ])
         const Filter = new util.CharactersFilter(allCharas)
         const chara = Filter.name(name)
+        const basicFilter = new util.CharactersFilter(userInfo.avatars)
 
         if (!chara) return `玩家 ${uid} 似乎没有名为 ${name} 的角色。`
+
+        const avatar = basicFilter.name(name).image
 
         function formatedReliquaries(reliquaries) {
           if (reliquaries.length < 1) return '无'
           let msg = ''
-          reliquaries.forEach(item => {
+          reliquaries.forEach((item) => {
             msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
           })
           return msg.trim()
@@ -149,7 +184,7 @@ const apply = (koishi, options) => {
 
         return [
           `玩家 ${uid} 的 ${chara.name}：`,
-          segment('image', { file: chara.image }),
+          segment('image', { file: avatar }),
           `${chara.rarity}★ ${chara.name}`,
           `等级：${chara.level}级，好感：${chara.fetter}级`,
           '',
@@ -161,7 +196,7 @@ const apply = (koishi, options) => {
           formatedReliquaries(chara.reliquaries),
         ].join('\n')
       } catch (err) {
-        return _msg('failed', err.message || '出现未知问题')
+        return template('genshin.failed', err.message || '出现未知问题')
       }
     })
 
@@ -173,9 +208,9 @@ const apply = (koishi, options) => {
     .action(async ({ session }) => {
       const userData = session.user
       let uid = userData.genshin_uid
-      if (!uid) return _msg('not_registered')
+      if (!uid) return template('genshin.not_registered')
       Promise.all([genshin.getCurAbyss(uid), genshin.getUserInfo(uid)]).then(
-        data => {
+        (data) => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new util.CharactersFilter(basicInfo.avatars || [])
@@ -197,7 +232,7 @@ const apply = (koishi, options) => {
 
           // 格式化的时间
           function formatedTime(t) {
-            return dayjs(t).format('lll')
+            return new Date(t).format('yyyy年M月d日 hh:mm:ss')
           }
           // 格式化的顶尖信息
           function formatedCharacterValue(data) {
@@ -209,13 +244,7 @@ const apply = (koishi, options) => {
           }
 
           // 计算时间
-          let now = dayjs()
-          let timeLeft =
-            dayjs(end_time).diff(now, 'hours') < 1
-              ? dayjs(end_time).diff(now, 'minutes') + ' 分钟'
-              : dayjs(end_time)
-                  .diff(now, 'hours', true)
-                  .toFixed(1) + ' 小时'
+          let timeLeft = getTimeLeft(end_time)
 
           // 格式化信息
           let msg = ''
@@ -244,13 +273,15 @@ const apply = (koishi, options) => {
           // 当期信息
           msg += `\n\n本期深渊将于【${formatedTime(
             end_time
-          )}】结束，还剩 ${timeLeft}。`
+          )}】结束，还剩${timeLeft}。`
 
           // 发送
           session.send(msg)
         },
-        err => {
-          session.send(_msg('failed', err.message || '出现未知问题'))
+        (err) => {
+          session.send(
+            template('genshin.failed', err.message || '出现未知问题')
+          )
         }
       )
     })
