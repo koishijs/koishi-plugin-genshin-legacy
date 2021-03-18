@@ -51,3 +51,17 @@ App.plugin(require('koishi-plugin-genshin'), {
 ### `genshin <uid>`
 
 别名：`原神`
+
+---
+
+_For communication and learning only._
+
+**All game data & pictures from query:** &copy;miHoYo
+
+> Copyright 2021 Koishijs/机智的小鱼君
+>
+> Licensed under the Apache License, Version 2.0 (the "License");<br>
+> you may not use this file except in compliance with the License.<br>
+> You may obtain a copy of the License at
+>
+> http://www.apache.org/licenses/LICENSE-2.0
