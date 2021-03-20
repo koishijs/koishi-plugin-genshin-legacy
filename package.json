@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-genshin",
-  "version": "2.0.0-alpha.10",
+  "version": "2.0.0-alpha.11",
   "main": "index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
   "author": "Dragon-Fish <824399619@qq.com>",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "dayjs": "^1.10.4",
-    "genshin-kit": "^0.3.0",
+    "genshin-kit": "^0.4.0",
     "koishi-utils": "^4.0.1"
   },
   "keywords": [

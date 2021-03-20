@@ -1,6 +1,6 @@
 /** 变量 */
 // Koishi
-const { segment, template } = require('koishi-utils')
+const { segment, template, interpolate } = require('koishi-utils')
 
 // GenshinKit
 const { GenshinKit, util } = require('genshin-kit')
@@ -69,18 +69,22 @@ const apply = (koishi, options) => {
   genshin.loginWithCookie(options.cookie)
 
   template.set('genshin', {
-    command_description: '获取《原神》玩家信息',
-    not_registered:
-      '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
-    successfully_registered: '您的《原神》信息注册成功~',
-    info_regestered: '您的《原神》uid已注册为：{0}',
-    invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
-    failed: '出现了亿点问题：{0}',
+    abyss_basic_data:
+      '〓基本信息〓\n到达层数：{{ max_floor }}\n战斗次数：{{ total_win_times }}次通关/{{ total_battle_times }}总尝试\n获得渊星：{{ total_star }}',
+    abyss_top_stats:
+      '〓最佳战绩〓\n最强一击：{0}\n最高承伤：{1}\n最常出场：{2}\n元素爆发：{3}',
     api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
+    command_description: '获取《原神》玩家信息',
+    failed: '出现了亿点问题：{0}',
     fetch_data_failed:
       '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
     has_x_star_characters: '玩家 {0} 一共拥有 {1} 个 {2}★ 角色{3}',
+    info_regestered: '您的《原神》uid已注册为：{0}',
+    invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
+    not_registered:
+      '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
     no_x_star_character: '玩家 {0} 木有 {1}★ 角色',
+    successfully_registered: '您的《原神》信息注册成功~',
   })
 
   // 注册
@@ -257,10 +261,12 @@ const apply = (koishi, options) => {
               `${segment('at', {
                 id: session.userId,
               })} 玩家 ${uid} 的深境螺旋信息：`,
-              '〓基本信息〓',
-              `到达层数：${max_floor}`,
-              `战斗次数：${total_win_times}次通关/${total_battle_times}总尝试`,
-              `获得渊星：${total_star}`,
+              interpolate(template('genshin.abyss_basic_data'), {
+                max_floor,
+                total_win_times,
+                total_battle_times,
+                total_star,
+              }),
               '',
               '〓顶尖数据〓',
               `最强一击：${formatedCharacterValue(damage_rank)}`,

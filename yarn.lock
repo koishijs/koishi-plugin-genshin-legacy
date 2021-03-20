@@ -19,10 +19,10 @@ follow-redirects@^1.10.0:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.13.3.tgz#e5598ad50174c1bc4e872301e82ac2cd97f90267"
   integrity sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
 
-genshin-kit@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-0.3.0.tgz#8a138a75fddbcff57f44ae0a89a9901cb8eb289a"
-  integrity sha512-+Qvn6iHWeI0qXmbsJF3Mh18NmrYWBxySPxi1hc5r1X3rd/oZY2eaA+i3v6aU8qPva1/zvW6the8WUSmRzApdeQ==
+genshin-kit@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-0.4.0.tgz#10c4f8a6e2f5dea45f5eac7226d33170d4370ba4"
+  integrity sha512-jVW1tUEoAuBaWWlIIXX5MqNXCbscXb8FMhV2o68/HtIDk06BDCcy0+hd8a7iwMZ75uvSDH7pwrxM5tN0epOJUg==
   dependencies:
     axios "^0.21.1"
 
