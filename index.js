@@ -188,7 +188,7 @@ const apply = (koishi, options) => {
 
         return [
           `玩家 ${uid} 的 ${chara.name}：`,
-          segment('image', { file: avatar }),
+          segment('image', { url: avatar }),
           `${chara.rarity}★ ${chara.name}`,
           `等级：${chara.level}级，好感：${chara.fetter}级`,
           '',
@@ -253,14 +253,10 @@ const apply = (koishi, options) => {
           // 格式化信息
           let msg = ''
           if (!is_unlock) {
-            msg += `${segment('at', {
-              id: session.userId,
-            })} 玩家 ${uid} 还没有开启深境螺旋。`
+            msg += `玩家 ${uid} 还没有开启本期深境螺旋。`
           } else {
             msg += [
-              `${segment('at', {
-                id: session.userId,
-              })} 玩家 ${uid} 的深境螺旋信息：`,
+              `玩家 ${uid} 的深境螺旋信息：`,
               interpolate(template('genshin.abyss_basic_data'), {
                 max_floor,
                 total_win_times,
