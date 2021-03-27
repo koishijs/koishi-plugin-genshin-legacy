@@ -12,23 +12,34 @@ const genshin = new GenshinKit()
 function getTimeLeft(time) {
   const now = Date.now()
   const end = new Date(time)
+  const [
+    oneDay,
+    oneHour,
+    oneMinute,
+    oneSecond
+  ] = [
+    1 * 24 * 60 * 60 * 1000,
+    1 * 60 * 60 * 1000,
+    1 * 60 * 1000,
+    1000
+  ]
 
   let timeLeft = end - now
   let timeLeftStr = ''
 
-  let day = Math.floor(timeLeft / (1 * 24 * 60 * 60 * 1000))
-  timeLeft = timeLeft % (1 * 24 * 60 * 60 * 1000)
+  let day = Math.floor(timeLeft / oneDay)
+  timeLeft = timeLeft % oneDay
   if (day) timeLeftStr += `${day}天`
 
-  let hour = Math.floor(timeLeft / (1 * 60 * 60 * 1000))
-  timeLeft = timeLeft % (1 * 60 * 60 * 1000)
+  let hour = Math.floor(timeLeft / oneHour)
+  timeLeft = timeLeft % oneHour
   if (hour) timeLeftStr += `${hour}小时`
 
-  let minute = Math.floor(timeLeft / (1 * 60 * 1000))
-  timeLeft = timeLeft % (1 * 60 * 1000)
+  let minute = Math.floor(timeLeft / oneMinute)
+  timeLeft = timeLeft % oneMinute
   if (minute) timeLeftStr += `${minute}分`
 
-  let second = Math.floor(timeLeft / 1000)
+  let second = Math.floor(timeLeft / oneSecond)
   timeLeftStr += `${second}秒`
 
   return timeLeftStr
@@ -89,7 +100,7 @@ const apply = (koishi, options) => {
 
   // 注册
   koishi
-    .command(`genshin <uid> ${template('genshin.command_description')}`)
+    .command('genshin [uid:posint]', template('genshin.command_description')})
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
@@ -97,16 +108,13 @@ const apply = (koishi, options) => {
       const userData = session.user
       if (
         uid &&
-        typeof uid === 'number' &&
-        uid > 100000000 &&
+        String(uid).length === 9 &&
         (String(uid)[0] === '1' || String(uid)[0] === '5')
       ) {
-        await session.database.setUser(session.platform, session.userId, {
-          genshin_uid: uid,
-        })
+        userData.genshin_uid = uid
         return template('genshin.successfully_registered')
       } else if (uid) {
-        return template('invalid_cn_uid')
+        return template('genshin.invalid_cn_uid')
       } else {
         return userData.genshin_uid
           ? template('genshin.info_regestered', userData.genshin_uid)
