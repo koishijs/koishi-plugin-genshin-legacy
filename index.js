@@ -12,36 +12,6 @@ const genshin = new GenshinKit()
 function getTimeLeft(time) {
   return Time.formatTime(time - Date.now())
 }
-// function getTimeLeft(time) {
-//   const now = Date.now()
-//   const end = new Date(time)
-//   const [oneDay, oneHour, oneMinute, oneSecond] = [
-//     1 * 24 * 60 * 60 * 1000,
-//     1 * 60 * 60 * 1000,
-//     1 * 60 * 1000,
-//     1000,
-//   ]
-
-//   let timeLeft = end - now
-//   let timeLeftStr = ''
-
-//   let day = Math.floor(timeLeft / oneDay)
-//   timeLeft = timeLeft % oneDay
-//   if (day) timeLeftStr += `${day}天`
-
-//   let hour = Math.floor(timeLeft / oneHour)
-//   timeLeft = timeLeft % oneHour
-//   if (hour) timeLeftStr += `${hour}小时`
-
-//   let minute = Math.floor(timeLeft / oneMinute)
-//   timeLeft = timeLeft % oneMinute
-//   if (minute) timeLeftStr += `${minute}分`
-
-//   let second = Math.floor(timeLeft / oneSecond)
-//   timeLeftStr += `${second}秒`
-
-//   return timeLeftStr
-// }
 
 /**
  * @function Date.format
@@ -106,11 +76,7 @@ const apply = (koishi, options) => {
     .example('@我 genshin 100000001')
     .action(async ({ session }, uid) => {
       const userData = session.user
-      if (
-        uid &&
-        String(uid).length === 9 &&
-        (String(uid)[0] === '1' || String(uid)[0] === '5')
-      ) {
+      if (util.isValidCnUid(uid)) {
         userData.genshin_uid = uid
         return template('genshin.successfully_registered')
       } else if (uid) {
@@ -173,6 +139,7 @@ const apply = (koishi, options) => {
     .action(async ({ session, options }, name = '旅行者') => {
       let uid = session.user.genshin_uid || options.uid
       if (!uid) return template('genshin.not_registered')
+      if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
         const [userInfo, allCharas] = await Promise.all([
           genshin.getUserInfo(uid),
