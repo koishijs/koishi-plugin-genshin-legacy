@@ -19,10 +19,10 @@ follow-redirects@^1.10.0:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.13.3.tgz#e5598ad50174c1bc4e872301e82ac2cd97f90267"
   integrity sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==
 
-genshin-kit@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-0.4.0.tgz#10c4f8a6e2f5dea45f5eac7226d33170d4370ba4"
-  integrity sha512-jVW1tUEoAuBaWWlIIXX5MqNXCbscXb8FMhV2o68/HtIDk06BDCcy0+hd8a7iwMZ75uvSDH7pwrxM5tN0epOJUg==
+genshin-kit@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-0.4.1.tgz#d113046072faab641cd3d88c16ba06341f645e43"
+  integrity sha512-YEy7yNK/S/FevMIymgPJ77qEIE9xjCVRuvU+vV/1jSsD1HoaR251gkDzJ6iaFiUq/z7Jc57ejsrkiQYeqf83UQ==
   dependencies:
     axios "^0.21.1"
 
@@ -31,10 +31,10 @@ has-flag@^4.0.0:
   resolved "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz#944771fd9c81c81265c4d6941860da06bb59479b"
   integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
 
-koishi-utils@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/koishi-utils/-/koishi-utils-4.0.1.tgz#0683c5ed345b571481e441862153e871addc0eb5"
-  integrity sha512-vuwdO9XBExwGqHnHOXz0MxNI0zhAX3COogX8em5e0HKj0AcFpsU49iyqWKpyZuFRt3NGNb54iBDnD93Kleq8AQ==
+koishi-utils@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/koishi-utils/-/koishi-utils-4.1.1.tgz#88ffbab60885c6ba5f5ece37dc821fe5d202b60c"
+  integrity sha512-Z5eKlnCg4YX8CEmx2vhoUzNR1Emy1KPbb0a2sqy6A4iiKMXqy7BZcfWVrmW64vSIxDVATaEfIzRV45nZKEqYGA==
   dependencies:
     supports-color "^8.1.1"
 

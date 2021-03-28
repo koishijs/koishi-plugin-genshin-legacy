@@ -6,13 +6,18 @@
   "author": "Dragon-Fish <824399619@qq.com>",
   "license": "Apache-2.0",
   "scripts": {
-    "publish:stable": "yarn publish --tag latest",
-    "publish:next": "yarn publish --tag next"
+    "publish:stable": "npm publish --tag latest",
+    "publish:next": "npm publish --tag next"
   },
   "dependencies": {
     "dayjs": "^1.10.4",
-    "genshin-kit": "^0.4.0",
-    "koishi-utils": "^4.0.1"
+    "genshin-kit": "^0.4.1"
+  },
+  "peerDependencies": {
+    "koishi-utils": "^4.1.1"
+  },
+  "devDependencies": {
+    "koishi-utils": "^4.1.1"
   },
   "keywords": [
     "genshin",
