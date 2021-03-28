@@ -1,49 +1,48 @@
 /** 变量 */
 // Koishi
-const { segment, template, interpolate } = require('koishi-utils')
+const { segment, template, interpolate, Time } = require('koishi-utils')
 
 // GenshinKit
 const { GenshinKit, util } = require('genshin-kit')
 const genshin = new GenshinKit()
 
 /**
- * @function timeLeft
+ * @function getTimeLeft
  */
 function getTimeLeft(time) {
-  const now = Date.now()
-  const end = new Date(time)
-  const [
-    oneDay,
-    oneHour,
-    oneMinute,
-    oneSecond
-  ] = [
-    1 * 24 * 60 * 60 * 1000,
-    1 * 60 * 60 * 1000,
-    1 * 60 * 1000,
-    1000
-  ]
-
-  let timeLeft = end - now
-  let timeLeftStr = ''
-
-  let day = Math.floor(timeLeft / oneDay)
-  timeLeft = timeLeft % oneDay
-  if (day) timeLeftStr += `${day}天`
-
-  let hour = Math.floor(timeLeft / oneHour)
-  timeLeft = timeLeft % oneHour
-  if (hour) timeLeftStr += `${hour}小时`
-
-  let minute = Math.floor(timeLeft / oneMinute)
-  timeLeft = timeLeft % oneMinute
-  if (minute) timeLeftStr += `${minute}分`
-
-  let second = Math.floor(timeLeft / oneSecond)
-  timeLeftStr += `${second}秒`
-
-  return timeLeftStr
+  return Time.formatTime(time - Date.now())
 }
+// function getTimeLeft(time) {
+//   const now = Date.now()
+//   const end = new Date(time)
+//   const [oneDay, oneHour, oneMinute, oneSecond] = [
+//     1 * 24 * 60 * 60 * 1000,
+//     1 * 60 * 60 * 1000,
+//     1 * 60 * 1000,
+//     1000,
+//   ]
+
+//   let timeLeft = end - now
+//   let timeLeftStr = ''
+
+//   let day = Math.floor(timeLeft / oneDay)
+//   timeLeft = timeLeft % oneDay
+//   if (day) timeLeftStr += `${day}天`
+
+//   let hour = Math.floor(timeLeft / oneHour)
+//   timeLeft = timeLeft % oneHour
+//   if (hour) timeLeftStr += `${hour}小时`
+
+//   let minute = Math.floor(timeLeft / oneMinute)
+//   timeLeft = timeLeft % oneMinute
+//   if (minute) timeLeftStr += `${minute}分`
+
+//   let second = Math.floor(timeLeft / oneSecond)
+//   timeLeftStr += `${second}秒`
+
+//   return timeLeftStr
+// }
+
 /**
  * @function Date.format
  */
@@ -96,11 +95,16 @@ const apply = (koishi, options) => {
       '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
     no_x_star_character: '玩家 {0} 木有 {1}★ 角色',
     successfully_registered: '您的《原神》信息注册成功~',
+    specify_uid: '查询指定 uid 的信息',
   })
 
   // 注册
   koishi
-    .command('genshin [uid:posint]', template('genshin.command_description')})
+    .command(
+      'genshin [uid:posint]',
+      template('genshin.command_description'),
+      {}
+    )
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
@@ -167,10 +171,11 @@ const apply = (koishi, options) => {
 
   koishi
     .command('genshin.character <name> 查询指定名称的角色的等级与装备信息')
+    .options('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
-    .action(async ({ session }, name = '旅行者') => {
-      let uid = session.user.genshin_uid
+    .action(async ({ session, options }, name = '旅行者') => {
+      let uid = session.user.genshin_uid || options.uid
       if (!uid) return template('genshin.not_registered')
       try {
         const [userInfo, allCharas] = await Promise.all([
@@ -216,10 +221,10 @@ const apply = (koishi, options) => {
   koishi
     .command('genshin.abyss 显示您当前的深境螺旋信息')
     // .shortcut(/(原神深渊|深境螺旋)/)
+    .option('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
-      const userData = session.user
-      let uid = userData.genshin_uid
+      let uid = session.user.genshin_uid || options.uid
       if (!uid) return template('genshin.not_registered')
       Promise.all([genshin.getCurAbyss(uid), genshin.getUserInfo(uid)]).then(
         (data) => {
