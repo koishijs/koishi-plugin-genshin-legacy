@@ -100,11 +100,7 @@ const apply = (koishi, options) => {
 
   // 注册
   koishi
-    .command(
-      'genshin [uid:posint]',
-      template('genshin.command_description'),
-      {}
-    )
+    .command('genshin [uid:posint]', template('genshin.command_description'))
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
@@ -127,7 +123,7 @@ const apply = (koishi, options) => {
     })
 
   koishi
-    .command('genshin.basic')
+    .command('genshin.basic', '查询玩家基本信息（宝箱、成就、声望）')
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
       let uid = session.user.genshin_uid
@@ -170,8 +166,8 @@ const apply = (koishi, options) => {
   //   })
 
   koishi
-    .command('genshin.character <name> 查询指定名称的角色的等级与装备信息')
-    .options('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
+    .command('genshin.character <name>', '查询指定名称的角色的等级与装备信息')
+    .option('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
     .action(async ({ session, options }, name = '旅行者') => {
@@ -219,7 +215,7 @@ const apply = (koishi, options) => {
 
   // 深境螺旋
   koishi
-    .command('genshin.abyss 显示您当前的深境螺旋信息')
+    .command('genshin.abyss 查询当前的深境螺旋信息')
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
     .userFields(['genshin_uid'])
