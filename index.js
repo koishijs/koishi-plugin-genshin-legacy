@@ -52,20 +52,19 @@ Date.prototype.format = function(fmt) {
 /**
  * @command genshin
  */
-const apply = (koishi, options) => {
-  genshin.loginWithCookie(options.cookie)
+const apply = (koishi, pOptions) => {
+  genshin.loginWithCookie(pOptions.cookie)
 
-  template.set('genshin', require('./i18n'))
+  template.set('genshin', { ...require('./i18n'), ...pOptions.i18n })
 
   // 注册
   koishi
     .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
-      maxUsage: 10,
-      minInterval: Time.minute,
+      minInterval: Time.hour,
     })
     .alias('原神')
     .userFields(['genshin_uid'])
-    .example(`${segment('at', { id: session.bot.selfId })} genshin 100000001`)
+    .example('@我 genshin 100000001')
     .action(async ({ session }, uid) => {
       const userData = session.user
       if (util.isValidCnUid(uid)) {
@@ -82,11 +81,10 @@ const apply = (koishi, options) => {
 
   koishi
     .command(
-      'genshin.basic',
-      '警告：实验功能！查询玩家基本信息（宝箱、成就、声望）',
+      'genshin.profile',
+      '警告：实验功能！' + template('genshin.cmd_profile'),
       {
-        maxUsage: 20,
-        minInterval: Time.minute * 2,
+        minInterval: Time.second * 30,
       }
     )
     .userFields(['genshin_uid'])
@@ -96,8 +94,9 @@ const apply = (koishi, options) => {
       if (!uid) return template('genshin.not_registered')
 
       try {
-        let basic = require('./module/basic')
-        let image = await basic({ uid, userInfo })
+        const userInfo = await genshin.getUserInfo(uid)
+        let profile = require('./module/profile')
+        let image = await profile({ uid, userInfo })
         return image
       } catch (err) {
         return err
@@ -145,13 +144,9 @@ const apply = (koishi, options) => {
       if (!uid) return template('genshin.not_registered')
       if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
-        const [userInfo, allCharas] = await Promise.all([
-          genshin.getUserInfo(uid),
-          genshin.getUserRoles(uid),
-        ])
+        const allCharas = await genshin.getUserRoles(uid)
         const Filter = new util.CharactersFilter(allCharas)
         const chara = Filter.name(name)
-        const basicFilter = new util.CharactersFilter(userInfo.avatars)
 
         if (!chara) return template('genshin.no_character', uid, name)
 
@@ -173,13 +168,13 @@ const apply = (koishi, options) => {
         return [
           template('genshin.has_character', uid, chara.name),
           template('genshin.character_basic', {
-            avatar: segment('image', { url: basicFilter.name(name).image }),
-            portrait: segment('image', { url: chara.image }),
+            icon: segment('image', { url: chara.icon }),
+            image: segment('image', { url: chara.image }),
             name: chara.name,
             rarity: chara.rarity,
             constellation: constellationActived,
             level: chara.level,
-            fletter: chara.fletter,
+            fetter: chara.fetter,
           }),
           template('genshin.character_weapon', {
             name: chara.weapon.name,
@@ -194,7 +189,10 @@ const apply = (koishi, options) => {
           ),
         ].join('\n')
       } catch (err) {
-        return template('genshin.failed', err.message || '出现未知问题')
+        return template(
+          'genshin.failed',
+          err.message || template('genshin.error_unknown')
+        )
       }
     })
 
@@ -205,9 +203,9 @@ const apply = (koishi, options) => {
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
-    .option('previous', '-p 查询上一期的数据')
+    .option('previous', '-p 查询上一期的数据', { type: 'boolean' })
     .userFields(['genshin_uid'])
-    .action(async ({ session }) => {
+    .action(async ({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
 

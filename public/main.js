@@ -93,7 +93,7 @@ function makeCharactersList(charas) {
   )
 }
 
-function Basic({ uid, userInfo }) {
+function Profile({ uid, userInfo }) {
   addMainTitle(uid)
   makeNormalDataList(userInfo.stats)
   makeCharactersList(userInfo.avatars)

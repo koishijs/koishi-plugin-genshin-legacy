@@ -21,8 +21,7 @@ module.exports = async ({ uid, userInfo }) => {
   try {
     await page.evaluate(
       (userInfo, uid) => {
-        return Basic({ uid, userInfo })
-        // return awaitImages()
+        return Profile({ uid, userInfo })
       },
       userInfo,
       uid

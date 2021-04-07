@@ -1,6 +1,7 @@
 module.exports = {
   // command descriptions
-  cmd_genshin_desc: '获取《原神》玩家信息',
+  cmd_genshin_desc: '《原神 Genshin Impact》功能',
+  cmd_profile: '查询玩家基本信息（宝箱、成就、声望）',
   cmd_abyss_desc: '查询原神深境螺旋数据。',
   cmd_character_desc: '查询指定名称的角色的等级与装备信息。',
   cmd_specify_uid: '查询指定 uid 的信息',
@@ -25,7 +26,7 @@ module.exports = {
   has_character: '玩家 {0} 的 {1}：',
   no_character: '玩家 {0} 似乎没有名为 {1} 的角色。',
   character_basic:
-    '{{ avatar }}\n{{ rarity }}★ {{ constellation }}命 {{ name }}\n等级：{{ level }}级，好感：{{ fetter }}级', // {{ portrait }} -> 立绘
+    '{{ icon }}\n{{ name }} {{ rarity }}★ {{ constellation }}命\n等级：{{ level }}级，好感：{{ fetter }}级', // {{ icon }} -> 头像, {{ image }} -> 立绘
   character_weapon:
     '〓武器〓\n{{ name }} ({{ rarity }}★{{ type_name }})\n{{ level }}级 ({{ affix_level }}精炼)',
   character_reliquaries: '〓圣遗物〓\n{0}',
@@ -36,4 +37,5 @@ module.exports = {
   failed: '出现了亿点问题：{0}',
   fetch_data_failed:
     '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
+  error_unknown: '未知问题',
 }
