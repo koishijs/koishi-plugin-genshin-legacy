@@ -1,6 +1,12 @@
-/** 变量 */
+/**
+ * @name koishi-plugin-genshin
+ * @desc Genshin Impact plugin for Koishijs
+ *
+ * @author Koishijs(机智的小鱼君) <dragon-fish@qq.com>
+ * @license Apache-2.0
+ */
 // Koishi
-const { segment, template, interpolate, Time } = require('koishi-utils')
+const { segment, template, Time } = require('koishi-utils')
 
 // GenshinKit
 const { GenshinKit, util } = require('genshin-kit')
@@ -32,13 +38,14 @@ Date.prototype.format = function(fmt) {
       (this.getFullYear() + '').substr(4 - RegExp.$1.length)
     )
   }
-  for (var k in o)
+  for (var k in o) {
     if (new RegExp('(' + k + ')').test(fmt)) {
       fmt = fmt.replace(
         RegExp.$1,
         RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length)
       )
     }
+  }
   return fmt
 }
 
@@ -49,31 +56,54 @@ const apply = (koishi, options) => {
   genshin.loginWithCookie(options.cookie)
 
   template.set('genshin', {
-    abyss_basic_data:
-      '〓基本信息〓\n到达层数：{{ max_floor }}\n战斗次数：{{ total_win_times }}次通关/{{ total_battle_times }}总尝试\n获得渊星：{{ total_star }}',
-    abyss_top_stats:
-      '〓最佳战绩〓\n最强一击：{0}\n最高承伤：{1}\n最常出场：{2}\n元素爆发：{3}',
-    api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
-    command_description: '获取《原神》玩家信息',
-    failed: '出现了亿点问题：{0}',
-    fetch_data_failed:
-      '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
-    has_x_star_characters: '玩家 {0} 一共拥有 {1} 个 {2}★ 角色{3}',
+    // command descriptions
+    cmd_genshin_desc: '获取《原神》玩家信息',
+    cmd_abyss_desc: '查询原神深境螺旋数据。',
+    cmd_character_desc: '查询指定名称的角色的等级与装备信息。',
+    cmd_specify_uid: '查询指定 uid 的信息',
+    // genshin
     info_regestered: '您的《原神》uid已注册为：{0}',
     invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
     not_registered:
-      '您还没有注册您的《原神》用户信息，请艾特我输入“genshin <游戏内uid>”进行注册~',
-    no_x_star_character: '玩家 {0} 木有 {1}★ 角色',
+      '您还没有注册您的《原神》用户信息，请艾特我输入“genshin 游戏内uid”进行注册~（注意打空格）',
     successfully_registered: '您的《原神》信息注册成功~',
-    specify_uid: '查询指定 uid 的信息',
+    // abyss
+    abyss_cur_not_active: '玩家 {0} 还没有开启本期深境螺旋。',
+    abyss_cur_is_active: '玩家 {0} 的本期深境螺旋数据：',
+    abyss_prev_not_active: '玩家 {0} 没有参与上一期深境螺旋。',
+    abyss_prev_is_active: '玩家 {0} 的上一期深境螺旋数据：',
+    abyss_basic_data:
+      '〓基本信息〓\n到达层数：{{ max_floor }}\n战斗次数：{{ total_win_times }}次通关/{{ total_battle_times }}总尝试\n获得渊星：{{ total_star }}',
+    abyss_top_stats:
+      '〓最佳战绩〓\n最强一击：{{ damage_rank }}\n最高承伤：{{ take_damage_rank }}\n最常出场：{{ reveal_rank }}\n元素爆发：{{ energy_skill_rank }}',
+    abyss_cur_time: '本期深境螺旋将于【{0}】结束，还剩 {1}。',
+    abyss_prev_time: '上期深境螺旋从 {0} 开始，于 {1} 结束。',
+    // characters
+    has_character: '玩家 {0} 的 {1}：',
+    no_character: '玩家 {0} 似乎没有名为 {1} 的角色。',
+    character_basic:
+      '{{ avatar }}\n{{ rarity }}★ {{ constellation }}命 {{ name }}\n等级：{{ level }}级，好感：{{ fetter }}级', // {{ portrait }} -> 立绘
+    character_weapon:
+      '〓武器〓\n{{ name }} ({{ rarity }}★{{ type_name }})\n{{ level }}级 ({{ affix_level }}精炼)',
+    character_reliquaries: '〓圣遗物〓\n{0}',
+    has_x_star_characters: '玩家 {0} 一共拥有 {1} 个 {2}★ 角色。',
+    no_x_star_character: '玩家 {0} 似乎没有 {1}★ 角色。',
+    // error messages
+    api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
+    failed: '出现了亿点问题：{0}',
+    fetch_data_failed:
+      '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
   })
 
   // 注册
   koishi
-    .command('genshin [uid:posint]', template('genshin.command_description'))
+    .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
+      maxUsage: 10,
+      minInterval: Time.minute,
+    })
     .alias('原神')
     .userFields(['genshin_uid'])
-    .example('@我 genshin 100000001')
+    .example(`${segment('at', { id: session.bot.selfId })} genshin 100000001`)
     .action(async ({ session }, uid) => {
       const userData = session.user
       if (util.isValidCnUid(uid)) {
@@ -89,13 +119,17 @@ const apply = (koishi, options) => {
     })
 
   koishi
-    .command('genshin.basic', '查询玩家基本信息（宝箱、成就、声望）')
+    .command('genshin.basic', '警告：实验功能！查询玩家基本信息（宝箱、成就、声望）', {
+      maxUsage: 20,
+      minInterval: Time.minute,
+    })
     .userFields(['genshin_uid'])
-    .action(async ({ session }) => {
-      let uid = session.user.genshin_uid
+    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
+    .action(async ({ session, opttions }) => {
+      let uid = opttions.uid || session.user.genshin_uid
       if (!uid) return template('not_registered')
 
-      return '功能开发中……'
+      // return '功能开发中……'
 
       try {
         let basic = require('./module/basic')
@@ -132,12 +166,18 @@ const apply = (koishi, options) => {
   //   })
 
   koishi
-    .command('genshin.character <name>', '查询指定名称的角色的等级与装备信息')
-    .option('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
+    .command(
+      'genshin.character <name>',
+      template('genshin.cmd_character_desc'),
+      {
+        minInterval: Time.second * 5,
+      }
+    )
+    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
     .action(async ({ session, options }, name = '旅行者') => {
-      let uid = session.user.genshin_uid || options.uid
+      let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
       if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
@@ -149,11 +189,11 @@ const apply = (koishi, options) => {
         const chara = Filter.name(name)
         const basicFilter = new util.CharactersFilter(userInfo.avatars)
 
-        if (!chara) return `玩家 ${uid} 似乎没有名为 ${name} 的角色。`
+        if (!chara) return template('genshin.no_character', uid, name)
 
         const avatar = basicFilter.name(name).image
 
-        function formatedReliquaries(reliquaries) {
+        function reliquariesFmt(reliquaries) {
           if (reliquaries.length < 1) return '无'
           let msg = ''
           reliquaries.forEach((item) => {
@@ -162,18 +202,34 @@ const apply = (koishi, options) => {
           return msg.trim()
         }
 
+        const constellations = chara.constellations || []
+        let constellationActived = 0
+        constellations.forEach(({ is_actived }) =>
+          is_actived ? constellationActived++ : null
+        )
+
         return [
-          `玩家 ${uid} 的 ${chara.name}：`,
-          segment('image', { url: avatar }),
-          `${chara.rarity}★ ${chara.name}`,
-          `等级：${chara.level}级，好感：${chara.fetter}级`,
-          '',
-          '〓武器〓',
-          `${chara.weapon.name} (${chara.weapon.rarity}★${chara.weapon.type_name})`,
-          `${chara.weapon.level}级 (${chara.weapon.affix_level}精炼)`,
-          '',
-          '〓圣遗物〓',
-          formatedReliquaries(chara.reliquaries),
+          template('genshin.has_character', uid, chara.name),
+          template('genshin.character_basic', {
+            avatar: segment('image', { url: basicFilter.name(name).image }),
+            portrait: segment('image', { url: chara.image }),
+            name: chara.name,
+            rarity: chara.rarity,
+            constellation: constellationActived,
+            level: chara.level,
+            fletter: chara.fletter,
+          }),
+          template('genshin.character_weapon', {
+            name: chara.weapon.name,
+            rarity: chara.weapon.rarity,
+            type_name: chara.weapon.type_name,
+            level: chara.weapon.level,
+            affix_level: chara.weapon.affix_level,
+          }),
+          template(
+            'genshin.character_reliquaries',
+            reliquariesFmt(chara.reliquaries)
+          ),
         ].join('\n')
       } catch (err) {
         return template('genshin.failed', err.message || '出现未知问题')
@@ -182,14 +238,23 @@ const apply = (koishi, options) => {
 
   // 深境螺旋
   koishi
-    .command('genshin.abyss 查询当前的深境螺旋信息')
+    .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
+      minInterval: Time.second * 5,
+    })
     // .shortcut(/(原神深渊|深境螺旋)/)
-    .option('uid', `-u <uid:posint> ${template('genshin.specify_uid')}`)
+    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
+    .option('previous', '-p 查询上一期的数据')
     .userFields(['genshin_uid'])
     .action(async ({ session }) => {
-      let uid = session.user.genshin_uid || options.uid
+      let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
-      Promise.all([genshin.getCurAbyss(uid), genshin.getUserInfo(uid)]).then(
+
+      const type = options.previous ? 'prev' : 'cur'
+
+      Promise.all([
+        genshin.getAbyss(uid, type === 'cur' ? 1 : 2),
+        genshin.getUserInfo(uid),
+      ]).then(
         (data) => {
           // 变量
           let [abyssInfo, basicInfo] = data
@@ -223,35 +288,43 @@ const apply = (koishi, options) => {
             }`
           }
 
-          // 计算时间
-          let timeLeft = getTimeLeft(end_time)
-
           // 格式化信息
           let msg = ''
           if (!is_unlock) {
-            msg += `玩家 ${uid} 还没有开启本期深境螺旋。`
+            msg += template(`genshin.abyss_${type}_not_active`, uid)
           } else {
             msg += [
-              `玩家 ${uid} 的深境螺旋信息：`,
-              interpolate(template('genshin.abyss_basic_data'), {
+              template(`genshin.abyss_${type}_is_active`, uid),
+              template('genshin.abyss_basic_data', {
                 max_floor,
                 total_win_times,
                 total_battle_times,
                 total_star,
               }),
-              '',
-              '〓顶尖数据〓',
-              `最强一击：${formatedCharacterValue(damage_rank)}`,
-              `最高承伤：${formatedCharacterValue(take_damage_rank)}`,
-              `最常出场：${formatedCharacterValue(reveal_rank)}`,
-              `元素爆发：${formatedCharacterValue(energy_skill_rank)}`,
+              template('genshin.abyss_top_stats', {
+                damage_rank: formatedCharacterValue(damage_rank),
+                take_damage_rank: formatedCharacterValue(take_damage_rank),
+                reveal_rank: formatedCharacterValue(reveal_rank),
+                energy_skill_rank: formatedCharacterValue(energy_skill_rank),
+              }),
             ].join('\n')
           }
 
-          // 当期信息
-          msg += `\n\n本期深渊将于【${formatedTime(
-            end_time
-          )}】结束，还剩${timeLeft}。`
+          // 时间信息
+          msg += '\n\n'
+          if (type === 'cur') {
+            msg += template(
+              'genshin.abyss_cur_time',
+              formatedTime(end_time),
+              getTimeLeft(end_time)
+            )
+          } else {
+            msg += template(
+              'genshin.abyss_prev_time',
+              formatedTime(start_time),
+              formatedTime(end_time)
+            )
+          }
 
           // 发送
           session.send(msg)

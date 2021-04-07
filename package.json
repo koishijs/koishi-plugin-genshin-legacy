@@ -7,17 +7,19 @@
   "license": "Apache-2.0",
   "scripts": {
     "publish:stable": "npm publish --tag latest",
-    "publish:next": "npm publish --tag next"
+    "publish:next": "npm publish --tag next",
+    "bump": "bump"
   },
   "dependencies": {
-    "dayjs": "^1.10.4",
-    "genshin-kit": "^0.4.2"
+    "genshin-kit": "^0.4.2",
+    "puppeteer": "^8.0.0"
   },
   "peerDependencies": {
-    "koishi-utils": "^4.1.1"
+    "koishi-utils": "^4.1.3"
   },
   "devDependencies": {
-    "koishi-utils": "^4.1.1"
+    "@dragon-fish/bump": "^0.0.13",
+    "koishi-utils": "^4.1.3"
   },
   "keywords": [
     "genshin",
