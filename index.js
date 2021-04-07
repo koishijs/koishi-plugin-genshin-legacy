@@ -86,16 +86,14 @@ const apply = (koishi, options) => {
       '警告：实验功能！查询玩家基本信息（宝箱、成就、声望）',
       {
         maxUsage: 20,
-        minInterval: Time.minute,
+        minInterval: Time.minute * 2,
       }
     )
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .action(async ({ session, opttions }) => {
       let uid = opttions.uid || session.user.genshin_uid
-      if (!uid) return template('not_registered')
-
-      // return '功能开发中……'
+      if (!uid) return template('genshin.not_registered')
 
       try {
         let basic = require('./module/basic')
