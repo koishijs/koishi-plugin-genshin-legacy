@@ -89,8 +89,8 @@ const apply = (koishi, pOptions) => {
     )
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
-    .action(async ({ session, opttions }) => {
-      let uid = opttions.uid || session.user.genshin_uid
+    .action(async ({ session, options }) => {
+      let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
 
       try {
