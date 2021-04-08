@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "genshin-kit": "^0.4.2",
+    "pug": "^3.0.2",
     "puppeteer": "^8.0.0"
   },
   "peerDependencies": {
