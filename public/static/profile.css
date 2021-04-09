@@ -48,3 +48,18 @@
   font-size: 1.4rem;
   padding: 0.2rem;
 }
+
+/* 城市列表 */
+.cityCard {
+  background: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.cityCard img {
+  width: 80px;
+  float: left;
+}
+.cityCard .cityName {
+  font-size: 30px;
+}

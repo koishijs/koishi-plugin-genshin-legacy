@@ -1,36 +1,41 @@
 /* Common STyles */
-
-/* Google Noto Fonts */
-@font-face {
-  font-family: NotoSansHans;
-  src: url('./static/NotoSansHans-Regular.otf');
-}
-
 html,
 body {
   margin: 0.5em;
   padding: 0;
   font-size: 14px;
-  font-family: '微软雅黑', 'Microsoft Yahei', NotoSansHans, Arial, Helvetica,
-    sans-serif;
+  font-family: '微软雅黑', 'Microsoft Yahei', Arial, Helvetica, sans-serif;
   background-color: white;
 }
 
 h1 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #eae3dd;
+  box-shadow: 0 0 0 2px #d9d3c5 inset, 0 0 0 4px #eae3dd;
 }
 
 .box {
-  border: 1px solid rgb(255, 221, 149);
   margin: 1rem 0;
 }
 
 .box .boxTitle {
+  margin: 1rem;
   padding: 0.5rem 1rem;
+  color: #fff;
   font-size: 1.4rem;
   font-weight: bold;
-  background-color: rgb(255, 241, 212);
+  background-image: url(image/boxTitle.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 14rem;
 }
 
 .box .boxContent {
+  border: 1px solid rgb(255, 221, 149);
+  background-color: #eae3dd;
   padding: 0.4rem 0.75rem;
 }

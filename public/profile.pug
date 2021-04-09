@@ -1,5 +1,5 @@
 mixin statsCard(ctx)
-  - 
+  - const { desc, count } = ctx
   .item
     .count= count 
     .desc= desc 
@@ -14,6 +14,11 @@ mixin characterCard(ctx)
 
 mixin cityCard(ctx)
   - const { level, exploration_percentage, icon, name } = ctx
+  .cityCard 
+    img.cityIcon(src=icon)
+    .cityName= name 
+    .cityLevel 声望 #{level} 级
+    .cityExploration 探索度 #{exploration_percentage / 10}%
 
 doctype html 
 html 
