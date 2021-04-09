@@ -1,0 +1,5 @@
+module.exports = {
+  cookie:
+    'UM_distinctid=177bf2c9b2bd1d-01409b6e2ea716-7a667e63-1fa400-177bf2c9b2cba3; _ga=GA1.2.1789341070.1613820122; _gid=GA1.2.371259068.1613820122; CNZZDATA1275023096=1556333237-1613816299-%7C1613816299; login_uid=160397615; login_ticket=0LlQgqcPH5ZvOZX0B3rPoM2qHxold18Bvh3dxyGY; account_id=160397615; cookie_token=HplRedQVEE1M9mHb7avT72CfFzi1ru02dK229ipQ; ltoken=LiqlYujKam0e7IJvPLeK1G1c0lsI9fv6RTSBWHjM; ltuid=160397615',
+  uid: 101257635,
+}

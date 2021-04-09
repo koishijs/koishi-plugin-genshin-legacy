@@ -1,0 +1,295 @@
+<!DOCTYPE html >
+<html> 
+  <head>
+    <style>
+       /* Common STyles */
+
+/* Google Noto Fonts */
+@font-face {
+  font-family: NotoSansHans;
+  src: url('./static/NotoSansHans-Regular.otf');
+}
+
+html,
+body {
+  margin: 0.5em;
+  padding: 0;
+  font-size: 14px;
+  font-family: '微软雅黑', 'Microsoft Yahei', NotoSansHans, Arial, Helvetica,
+    sans-serif;
+  background-color: white;
+}
+
+h1 {
+}
+
+.box {
+  border: 1px solid rgb(255, 221, 149);
+  margin: 1rem 0;
+}
+
+.box .boxTitle {
+  font-size: 1.4rem;
+  background-color: rgb(255, 241, 212);
+}
+
+.box .boxContent {
+  padding: 0.4rem 0.75rem;
+}
+      /* 基础信息（神瞳数量等） */
+.statsList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.statsList .item {
+  box-sizing: border-box;
+  width: 25%;
+  padding: 8px;
+  text-align: center;
+}
+.statsList .item .count {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.statsList .item .desc {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+/* 简单角色卡 */
+.characterList {
+  display: flex;
+  flex-flow: wrap;
+}
+.characterList .characterCard {
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  margin: 1rem;
+  padding: 1rem;
+  color: white;
+}
+.characterList .characterCard.rarity-5 {
+  background-color: rgba(228, 157, 71, 0.8);
+}
+.characterList .characterCard.rarity-4 {
+  background-color: rgba(200, 62, 228, 0.8);
+}
+.characterList .characterCard img {
+  width: 120px;
+  height: 120px;
+}
+.characterList .characterCard .characterName {
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 1.4rem;
+  padding: 0.2rem;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="profile-container"> 
+      <h1>玩家 100000001 的原神信息</h1>
+      <div class="box"> 
+        <div class="boxTitle">基本信息</div>
+        <div class="boxContent"> 
+          <div class="statsList">
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+            <div class="item">
+              <div class="count"></div>
+              <div class="desc"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="boxTitle">角色列表</div>
+        <div class="boxContent"> 
+          <div class="characterList"> 
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Diluc.png"/>
+              <div class="characterName">迪卢克</div>
+              <div class="characterLevel">90级</div>
+              <div class="characterFetter">好感 10</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Razor.png"/>
+              <div class="characterName">雷泽</div>
+              <div class="characterLevel">90级</div>
+              <div class="characterFetter">好感 10</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Qiqi.png"/>
+              <div class="characterName">七七</div>
+              <div class="characterLevel">81级</div>
+              <div class="characterFetter">好感 10</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Venti.png"/>
+              <div class="characterName">温迪</div>
+              <div class="characterLevel">80级</div>
+              <div class="characterFetter">好感 10</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Qin.png"/>
+              <div class="characterName">琴</div>
+              <div class="characterLevel">80级</div>
+              <div class="characterFetter">好感 7</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Zhongli.png"/>
+              <div class="characterName">钟离</div>
+              <div class="characterLevel">70级</div>
+              <div class="characterFetter">好感 7</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Klee.png"/>
+              <div class="characterName">可莉</div>
+              <div class="characterLevel">85级</div>
+              <div class="characterFetter">好感 6</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xiangling.png"/>
+              <div class="characterName">香菱</div>
+              <div class="characterLevel">70级</div>
+              <div class="characterFetter">好感 6</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xiao.png"/>
+              <div class="characterName">魈</div>
+              <div class="characterLevel">85级</div>
+              <div class="characterFetter">好感 5</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Bennett.png"/>
+              <div class="characterName">班尼特</div>
+              <div class="characterLevel">60级</div>
+              <div class="characterFetter">好感 4</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Chongyun.png"/>
+              <div class="characterName">重云</div>
+              <div class="characterLevel">60级</div>
+              <div class="characterFetter">好感 4</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xingqiu.png"/>
+              <div class="characterName">行秋</div>
+              <div class="characterLevel">60级</div>
+              <div class="characterFetter">好感 3</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Keqing.png"/>
+              <div class="characterName">刻晴</div>
+              <div class="characterLevel">79级</div>
+              <div class="characterFetter">好感 2</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Barbara.png"/>
+              <div class="characterName">芭芭拉</div>
+              <div class="characterLevel">50级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Fischl.png"/>
+              <div class="characterName">菲谢尔</div>
+              <div class="characterLevel">50级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Noel.png"/>
+              <div class="characterName">诺艾尔</div>
+              <div class="characterLevel">50级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Diona.png"/>
+              <div class="characterName">迪奥娜</div>
+              <div class="characterLevel">50级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Lisa.png"/>
+              <div class="characterName">丽莎</div>
+              <div class="characterLevel">40级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ambor.png"/>
+              <div class="characterName">安柏</div>
+              <div class="characterLevel">26级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Kaeya.png"/>
+              <div class="characterName">凯亚</div>
+              <div class="characterLevel">14级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ningguang.png"/>
+              <div class="characterName">凝光</div>
+              <div class="characterLevel">2级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Beidou.png"/>
+              <div class="characterName">北斗</div>
+              <div class="characterLevel">1级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Sucrose.png"/>
+              <div class="characterName">砂糖</div>
+              <div class="characterLevel">1级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-4"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xinyan.png"/>
+              <div class="characterName">辛焱</div>
+              <div class="characterLevel">1级</div>
+              <div class="characterFetter">好感 1</div>
+            </div>
+            <div class="characterCard rarity-5"><img src="https://upload-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_PlayerGirl.png"/>
+              <div class="characterName">旅行者</div>
+              <div class="characterLevel">40级</div>
+              <div class="characterFetter">好感 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box"> 
+        <div class="boxTitle">世界探索</div>
+        <div class="boxContent">
+          <div class="cityList"> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

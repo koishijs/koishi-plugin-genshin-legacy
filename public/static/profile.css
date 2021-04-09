@@ -1,67 +1,31 @@
-@font-face {
-  font-family: NotoSansHans;
-  src: url('./static/NotoSansHans-Regular.otf');
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-family: '微软雅黑', 'Microsoft Yahei', NotoSansHans, Arial, Helvetica,
-    sans-serif;
-  background-color: white;
-}
-
-#app {
-  margin: 8px;
-}
-
-h1 {
-}
-
-.contentBox {
-  border: 1px solid rgb(255, 221, 149);
-  margin: 1rem 0;
-}
-
-.contentBox .title {
-  font-size: 1.4rem;
-  background-color: rgb(255, 241, 212);
-}
-
-.contentBox > div {
-  padding: 0.4rem 0.75rem;
-}
-
 /* 基础信息（神瞳数量等） */
-.normalDataList {
+.statsList {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.normalDataList .item {
+.statsList .item {
   box-sizing: border-box;
   width: 25%;
   padding: 8px;
   text-align: center;
 }
-.normalDataList .item .times {
+.statsList .item .count {
   font-weight: 600;
   font-size: 1.5rem;
 }
-.normalDataList .item .desc {
+.statsList .item .desc {
   font-size: 0.8rem;
   color: gray;
 }
 
 /* 简单角色卡 */
-.charasList {
+.characterList {
   display: flex;
   flex-flow: wrap;
 }
-.charasList .charaCard {
+.characterList .characterCard {
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
@@ -69,17 +33,17 @@ h1 {
   padding: 1rem;
   color: white;
 }
-.charasList .charaCard.rarity-5 {
+.characterList .characterCard.rarity-5 {
   background-color: rgba(228, 157, 71, 0.8);
 }
-.charasList .charaCard.rarity-4 {
+.characterList .characterCard.rarity-4 {
   background-color: rgba(200, 62, 228, 0.8);
 }
-.charasList .charaCard img {
+.characterList .characterCard img {
   width: 120px;
   height: 120px;
 }
-.charasList .charaCard .charaName {
+.characterList .characterCard .characterName {
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 1.4rem;
   padding: 0.2rem;

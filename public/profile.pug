@@ -1,33 +1,48 @@
-mixin characterCard({ name, icon, level, rarity, fetter })
+mixin statsCard(ctx)
+  - 
+  .item
+    .count= count 
+    .desc= desc 
+
+mixin characterCard(ctx)
+  - const { name, image, level, rarity, fetter } = ctx
   div(class=['characterCard', 'rarity-'+rarity])
-    img(src=icon)
+    img(src=image)
     .characterName= name
     .characterLevel #{level}级
     .characterFetter 好感 #{fetter}
+
+mixin cityCard(ctx)
+  - const { level, exploration_percentage, icon, name } = ctx
 
 doctype html 
 html 
   head
     style 
-      include './static/profile.css' 
+      include static/common.css
+      include static/profile.css
 
   body
     .profile-container 
-      h1 玩家 #{uid} 的玩家信息
+      h1 玩家 #{uid} 的原神信息
 
-      .contentBox 
-        .title 基本信息
-        div 
-          .basicDataList
-            for item in basic_stats 
-              .item
-                .count= item.count 
-                .desc= item.desc 
+      .box 
+        .boxTitle 基本信息
+        .boxContent 
+          .statsList
+            for item in stats
+              +statsCard(item)
 
-      .contentBox 
-        .title 角色列表
-        div 
+      .box
+        .boxTitle 角色列表
+        .boxContent 
           .characterList 
-            for item in character_list 
-              - const { name, icon, level, rarity, fetter } = item
-              +characterCard({ name, icon, level, rarity, fetter })
+            for item in avatars
+              +characterCard(item)
+
+      .box 
+        .boxTitle 世界探索
+        .boxContent
+          .cityList 
+            for item in city_explorations
+              +cityCard(item)
