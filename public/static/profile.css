@@ -55,7 +55,7 @@
 }
 .cityCard {
   background-image: url(image/cityCard.png),
-    url(https://cdn.jsdelivr.org/gh/koishijs/koishi-plugin-genshin/public/image/cityCard.png);
+    url(https://cdn.jsdelivr.net/gh/koishijs/koishi-plugin-genshin/public/image/cityCard.png);
   background-position: top left;
   background-repeat: no-repeat;
   background-size: 100% 120px;

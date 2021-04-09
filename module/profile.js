@@ -1,4 +1,5 @@
 const ppt = require('puppeteer')
+const pug = require('pug')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
 
@@ -26,17 +27,18 @@ module.exports = async ({ uid, userInfo }) => {
     options
   )
 
+  const browser = await ppt.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-infobars ', // don't show information bar
+      '--lang=zh-CN',
+      '--disable-dev-shm-usage',
+    ],
+    defaultViewport: { width: 800, height: 600 },
+    headless: 1,
+  })
+
   try {
-    const browser = await ppt.launch({
-      args: [
-        '--no-sandbox',
-        '--disable-infobars ', // don't show information bar
-        '--lang=zh-CN',
-        '--disable-dev-shm-usage',
-      ],
-      defaultViewport: { width: 800, height: 600 },
-      headless: 1,
-    })
     const page = await browser.newPage()
     await page.setContent(html)
     screenshot = await page.screenshot({

@@ -99,7 +99,10 @@ const apply = (koishi, pOptions) => {
         let image = await profile({ uid, userInfo })
         return image
       } catch (err) {
-        return err
+        return template(
+          'genshin.failed',
+          err.message || template('genshin.error_unknown')
+        )
       }
     })
 
