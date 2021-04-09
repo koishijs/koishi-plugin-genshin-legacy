@@ -103,6 +103,12 @@ dist
 # TernJS port file
 .tern-port
 
+# This part is for develop
 dev/
-secret.*.*
+*.dev.*
+
+# Secrets
+secret*.*
 secret/
+!secret_sample/
+!secret*.sample.*
