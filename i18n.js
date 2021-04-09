@@ -38,4 +38,28 @@ module.exports = {
   fetch_data_failed:
     '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
   error_unknown: '未知问题',
+  // 用于玩家信息截图
+  profile: {
+    ui: {
+      title: '玩家 {0} 的原神信息',
+      stats_title: '数据总览',
+      avatar_title: '角色列表',
+      city_explorations_title: '城市探索',
+    },
+    stats: {
+      active_day_number: '活跃天数',
+      achievement_number: '达成成就',
+      win_rate: 'win_rate',
+      anemoculus_number: '风神瞳',
+      geoculus_number: '岩神瞳',
+      avatar_number: '获得角色数',
+      way_point_number: '解锁传送点',
+      domain_number: '解锁秘境',
+      spiral_abyss: '深境螺旋',
+      precious_chest_number: '珍贵宝箱',
+      luxurious_chest_number: '华丽宝箱',
+      exquisite_chest_number: '精致宝箱',
+      common_chest_number: '普通宝箱',
+    },
+  },
 }
