@@ -30,7 +30,8 @@ h1 {
   font-size: 1.4rem;
   font-weight: bold;
   line-height: 2.4;
-  background-image: url(image/boxTitle.png);
+  background-image: url(image/boxTitle.png),
+    url(https://cdn.jsdelivr.org/gh/koishijs/koishi-plugin-genshin/public/image/boxTitle.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: auto 3rem;
@@ -47,6 +48,9 @@ footer {
   line-height: 1.2;
   text-align: right;
   color: gray;
+  padding-right: 8px;
+  border-right: 6px solid #ffdd95;
+  border-radius: 4px;
 }
 footer p {
   margin: 0;
