@@ -5,23 +5,29 @@ mixin characterCard({ name, icon, level, rarity, fetter })
     .characterLevel #{level}级
     .characterFetter 好感 #{fetter}
 
+doctype html 
+html 
+  head
+    style 
+      include './static/profile.css' 
 
-.profile-container 
-  h1 玩家 #{uid} 的玩家信息
+  body
+    .profile-container 
+      h1 玩家 #{uid} 的玩家信息
 
-  .contentBox 
-    .title 基本信息
-    div 
-      .basicDataList
-        for item in basic_stats 
-          .item
-            .count= item.count 
-            .desc= item.desc 
+      .contentBox 
+        .title 基本信息
+        div 
+          .basicDataList
+            for item in basic_stats 
+              .item
+                .count= item.count 
+                .desc= item.desc 
 
-  .contentBox 
-    .title 角色列表
-    div 
-      .characterList 
-        for item in character_list 
-          - const { name, icon, level, rarity, fetter } = item
-          +characterCard({ name, icon, level, rarity, fetter })
+      .contentBox 
+        .title 角色列表
+        div 
+          .characterList 
+            for item in character_list 
+              - const { name, icon, level, rarity, fetter } = item
+              +characterCard({ name, icon, level, rarity, fetter })
