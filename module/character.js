@@ -1,6 +1,6 @@
 const pug = require('pug')
 const ppt = require('puppeteer')
-const { segment } = require('koishi-utils')
+const { segment, template } = require('koishi-utils')
 const path = require('path')
 
 module.exports = async ({ uid, character }) => {
