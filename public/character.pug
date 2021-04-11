@@ -57,7 +57,7 @@ html
                 .name
                   .text= weapon.name
                   .tag LV #{weapon.level}
-                  .refine 精炼 #{weapon.refin} 阶
+                  .refine 精炼 #{weapon.affix_level} 阶
                 .stars
                   - var weapon_rarity = 0
                   while weapon_rarity < weapon.rarity 
