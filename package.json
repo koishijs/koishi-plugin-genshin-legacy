@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-genshin",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "main": "index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
   "author": "Dragon-Fish <824399619@qq.com>",

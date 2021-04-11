@@ -69,11 +69,18 @@ const apply = (koishi, pOptions) => {
       const userData = session.user
       if (util.isValidCnUid(uid)) {
         userData.genshin_uid = uid
-        return template('genshin.successfully_registered')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template('genshin.successfully_registered')
+        )
       } else if (uid) {
-        return template('genshin.invalid_cn_uid')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template('genshin.invalid_cn_uid')
+        )
       } else {
-        return userData.genshin_uid
+        return segment('quote', { id: session.messageId }) +
+          userData.genshin_uid
           ? template('genshin.info_regestered', userData.genshin_uid)
           : template('genshin.not_registered')
       }
@@ -93,11 +100,14 @@ const apply = (koishi, pOptions) => {
         const userInfo = await genshin.getUserInfo(uid)
         let profile = require('./module/profile')
         let image = await profile({ uid, userInfo })
-        return image
+        return segment('quote', { id: session.messageId }) + image
       } catch (err) {
-        return template(
-          'genshin.failed',
-          err.message || template('genshin.error_unknown')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template(
+            'genshin.failed',
+            err.message || template('genshin.error_unknown')
+          )
         )
       }
     })
@@ -107,7 +117,7 @@ const apply = (koishi, pOptions) => {
       'genshin.character <name>',
       template('genshin.cmd_character_desc'),
       {
-        minInterval: Time.second * 5,
+        minInterval: Time.second * 15,
       }
     )
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -124,7 +134,9 @@ const apply = (koishi, pOptions) => {
 
         if (!character) return template('genshin.no_character', uid, name)
 
-        return require('./module/character')({ uid, character })
+        const image = require('./module/character')({ uid, character })
+
+        return segment('quote', { id: session.messageId }) + image
 
         // function reliquariesFmt(reliquaries) {
         //   if (reliquaries.length < 1) return '无'
@@ -165,9 +177,12 @@ const apply = (koishi, pOptions) => {
         //   ),
         // ].join('\n')
       } catch (err) {
-        return template(
-          'genshin.failed',
-          err.message || template('genshin.error_unknown')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template(
+            'genshin.failed',
+            err.message || template('genshin.error_unknown')
+          )
         )
       }
     })
@@ -175,7 +190,7 @@ const apply = (koishi, pOptions) => {
   // 深境螺旋
   koishi
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
-      minInterval: Time.second * 5,
+      minInterval: Time.second * 15,
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -263,11 +278,12 @@ const apply = (koishi, pOptions) => {
           }
 
           // 发送
-          session.send(msg)
+          session.send(segment('quote', { id: session.messageId }) + msg)
         },
         (err) => {
           session.send(
-            template('genshin.failed', err.message || '出现未知问题')
+            segment('quote', { id: session.messageId }) +
+              template('genshin.failed', err.message || '出现未知问题')
           )
         }
       )
