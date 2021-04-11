@@ -7,7 +7,7 @@ function m(k) {
   return template(`genshin.profile.${k}`)
 }
 
-module.exports = async ({ uid, userInfo }) => {
+module.exports = async ({ uid, userInfo, allCharacters }) => {
   let screenshot
 
   let _stats = Object.assign({}, userInfo.stats)
@@ -15,6 +15,17 @@ module.exports = async ({ uid, userInfo }) => {
   for (key in _stats) {
     userInfo.stats.push({ desc: m('stats.' + key), count: _stats[key] })
   }
+
+  allCharacters.forEach((item) => {
+    let constellation = 0
+    item.constellations.forEach(({ is_actived }) =>
+      is_actived ? constellation++ : null
+    )
+    item.constellation = constellation
+  })
+
+  userInfo.avatars = allCharacters
+
   const options = {
     ui: {
       title: m('ui.title'),

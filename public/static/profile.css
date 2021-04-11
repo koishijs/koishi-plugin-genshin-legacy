@@ -25,6 +25,7 @@
   flex-flow: wrap;
 }
 .characterList .characterCard {
+  position: relative;
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
@@ -33,10 +34,10 @@
   color: white;
 }
 .characterList .characterCard.rarity-5 {
-  background-color: rgba(228, 157, 71, 0.8);
+  background-color: #e49d47;
 }
 .characterList .characterCard.rarity-4 {
-  background-color: rgba(200, 62, 228, 0.8);
+  background-color: #c83ee4;
 }
 .characterList .characterCard img {
   width: 120px;
@@ -46,6 +47,27 @@
   background-color: rgba(0, 0, 0, 0.1);
   font-size: 1.4rem;
   padding: 0.2rem;
+}
+.characterCard .constellation {
+  position: absolute;
+  right: -1rem;
+  top: -0.8rem;
+  border-radius: 50%;
+  display: inline-block;
+  width: 2.5rem;
+  height: 2.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #fff;
+}
+.characterCard.rarity-5 .constellation {
+  background-color: #e49d47;
+  box-shadow: 0 0 0 3px #fff inset, 0 0 0 3px #e49d47;
+}
+.characterCard.rarity-4 .constellation {
+  background-color: #c83ee4;
+  box-shadow: 0 0 0 3px #fff inset, 0 0 0 3px #c83ee4;
 }
 
 /* 城市列表 */

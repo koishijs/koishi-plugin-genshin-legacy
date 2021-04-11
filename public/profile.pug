@@ -5,9 +5,10 @@ mixin statsCard(ctx)
     .desc= desc 
 
 mixin characterCard(ctx)
-  - const { name, image, level, rarity, fetter } = ctx
-  div(class=['characterCard', 'rarity-'+rarity])
-    img(src=image)
+  - const { name, icon, level, rarity, fetter, constellation } = ctx
+  div(class=['characterCard', 'rarity-' + rarity])
+    .constellation= constellation
+    img(src=icon)
     .characterName= name
     .characterLevel #{level}级
     .characterFetter 好感 #{fetter}
@@ -30,9 +31,11 @@ html
       include static/profile.css
 
   body
+    //- 标题
     .profile-container 
       h1 玩家 #{uid} 的原神信息
 
+      //- 数据总览
       .box 
         .boxTitle 数据总览
         .boxContent 
@@ -40,6 +43,7 @@ html
             for item in stats
               +statsCard(item)
 
+      //- 角色列表
       .box
         .boxTitle 角色列表
         .boxContent 
@@ -47,6 +51,7 @@ html
             for item in avatars
               +characterCard(item)
 
+      //- 世界探索
       .box 
         .boxTitle 世界探索
         .boxContent

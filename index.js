@@ -97,9 +97,12 @@ const apply = (koishi, pOptions) => {
       if (!uid) return template('genshin.not_registered')
 
       try {
-        const userInfo = await genshin.getUserInfo(uid)
+        const [userInfo, allCharacters] = Promise.all([
+          genshin.getUserInfo(uid),
+          genshin.getAllCharacters(uid),
+        ])
         let profile = require('./module/profile')
-        let image = await profile({ uid, userInfo })
+        let image = await profile({ uid, userInfo, allCharacters })
         return segment('quote', { id: session.messageId }) + image
       } catch (err) {
         return (

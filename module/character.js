@@ -39,5 +39,8 @@ module.exports = async ({ uid, character }) => {
   }
 
   await browser.close()
-  return segment('image', { file: 'base64://' + screenshot.toString('base64') })
+  return (
+    template('genshin.has_character', uid, character.name) +
+    segment('image', { file: 'base64://' + screenshot.toString('base64') })
+  )
 }

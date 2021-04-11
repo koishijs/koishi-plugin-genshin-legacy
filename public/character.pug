@@ -22,18 +22,20 @@ html
       include static/common.css
       include static/character.css
 
-  body 
+  body(style="margin: 0")
     .role-wrapper 
       .role-layout 
-        //- .layout 
-        //-   .navigation
-        //-     .role-swiper-wrapper
-        //-       .role-swiper-container
-        //-         .pagination
-        //-           .name= name 
-        //-           .level= level 
-        //-           .fav= fetter
 
+        //- 标题
+        .layout(style="height: 5vw;")
+          .role-swiper-wrapper
+            .role-swiper-container
+              .pagination(style="top: -10vw;")
+                //- img.icon
+                .name= name 
+                .level 等级 #{level} 好感 #{fetter}
+
+        //- 角色
         .role-layout--container(style={ 'background-image': `url(${image})` })
           .floats
             .weapon-block 
@@ -46,6 +48,7 @@ html
                 each item in constellations 
                   +constellations(item)
           
+          //- 武器
           .view-box 
             .header
               .text 武器
@@ -67,4 +70,6 @@ html
               p= weapon.desc
 
             .tip *所有数据以游戏内为准，此处仅供参考
+
+    //- 脚注
     include footer.pug
