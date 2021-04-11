@@ -80,13 +80,9 @@ const apply = (koishi, pOptions) => {
     })
 
   koishi
-    .command(
-      'genshin.profile',
-      '警告：实验功能！' + template('genshin.cmd_profile'),
-      {
-        minInterval: Time.second * 30,
-      }
-    )
+    .command('genshin.profile', template('genshin.cmd_profile_desc'), {
+      minInterval: Time.second * 30,
+    })
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .action(async ({ session, options }) => {
@@ -106,31 +102,6 @@ const apply = (koishi, pOptions) => {
       }
     })
 
-  // 五星角色
-  // koishi
-  //   .command('genshin.5star 显示您的 5★ 角色')
-  //   // .shortcut(/原神[五5]星/)
-  //   .userFields(['genshin_uid'])
-  //   .action(async ({ session }) => {
-  //     const userData = session.user
-  //     let uid = userData.genshin_uid
-  //     if (!uid) return template('genshin.not_registered')
-  //     const chara = await genshin.getAllCharacters(uid)
-  //     if (!chara) return template('genshin.fetch_data_failed')
-  //     const fiveStar = chara.rarity(5) || []
-  //     if (fiveStar.length > 0) {
-  //       let card = await getCard(fiveStar)
-  //       return _msg(
-  //         'has_x_star_characters',
-  //         uid,
-  //         fiveStar.length,
-  //         5,
-  //         segment('image', { file: 'base64://' + card })
-  //       )
-  //     }
-  //     return template('genshin.no_x_star_character', uid, 5)
-  //   })
-
   koishi
     .command(
       'genshin.character <name>',
@@ -147,50 +118,52 @@ const apply = (koishi, pOptions) => {
       if (!uid) return template('genshin.not_registered')
       if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
-        const allCharas = await genshin.getUserRoles(uid)
-        const Filter = new util.CharactersFilter(allCharas)
-        const chara = Filter.name(name)
+        const allCharacters = await genshin.getAllCharacters(uid)
+        const Filter = new util.CharactersFilter(allCharacters)
+        const character = Filter.name(name)
 
-        if (!chara) return template('genshin.no_character', uid, name)
+        if (!character) return template('genshin.no_character', uid, name)
 
-        function reliquariesFmt(reliquaries) {
-          if (reliquaries.length < 1) return '无'
-          let msg = ''
-          reliquaries.forEach((item) => {
-            msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
-          })
-          return msg.trim()
-        }
+        return require('./module/character')({ uid, character })
 
-        const constellations = chara.constellations || []
-        let constellationActived = 0
-        constellations.forEach(({ is_actived }) =>
-          is_actived ? constellationActived++ : null
-        )
+        // function reliquariesFmt(reliquaries) {
+        //   if (reliquaries.length < 1) return '无'
+        //   let msg = ''
+        //   reliquaries.forEach((item) => {
+        //     msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
+        //   })
+        //   return msg.trim()
+        // }
 
-        return [
-          template('genshin.has_character', uid, chara.name),
-          template('genshin.character_basic', {
-            icon: segment('image', { url: chara.icon }),
-            image: segment('image', { url: chara.image }),
-            name: chara.name,
-            rarity: chara.rarity,
-            constellation: constellationActived,
-            level: chara.level,
-            fetter: chara.fetter,
-          }),
-          template('genshin.character_weapon', {
-            name: chara.weapon.name,
-            rarity: chara.weapon.rarity,
-            type_name: chara.weapon.type_name,
-            level: chara.weapon.level,
-            affix_level: chara.weapon.affix_level,
-          }),
-          template(
-            'genshin.character_reliquaries',
-            reliquariesFmt(chara.reliquaries)
-          ),
-        ].join('\n')
+        // const constellations = character.constellations || []
+        // let constellationActived = 0
+        // constellations.forEach(({ is_actived }) =>
+        //   is_actived ? constellationActived++ : null
+        // )
+
+        // return [
+        //   template('genshin.has_character', uid, character.name),
+        //   template('genshin.character_basic', {
+        //     icon: segment('image', { url: character.icon }),
+        //     image: segment('image', { url: character.image }),
+        //     name: character.name,
+        //     rarity: character.rarity,
+        //     constellation: constellationActived,
+        //     level: character.level,
+        //     fetter: character.fetter,
+        //   }),
+        //   template('genshin.character_weapon', {
+        //     name: character.weapon.name,
+        //     rarity: character.weapon.rarity,
+        //     type_name: character.weapon.type_name,
+        //     level: character.weapon.level,
+        //     affix_level: character.weapon.affix_level,
+        //   }),
+        //   template(
+        //     'genshin.character_reliquaries',
+        //     reliquariesFmt(character.reliquaries)
+        //   ),
+        // ].join('\n')
       } catch (err) {
         return template(
           'genshin.failed',

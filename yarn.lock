@@ -241,12 +241,14 @@ function-bind@^1.1.1:
   resolved "https://registry.npm.taobao.org/function-bind/download/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0=
 
-genshin-kit@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-0.4.2.tgz#b917f8e9d345f71acd1f7fb6482c17b21f47c3e5"
-  integrity sha512-f1BR3BMt0GwS6pS747Akk08oal/h2jvpvlXGlIJSJWOgoDINd2z/ZMbSJUl7wtSmLIZVE/bbVHE5UIDz3rCJPg==
+genshin-kit@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-1.0.1.tgz#435473084cb9509db077bd6d1302c15978a32923"
+  integrity sha512-hylBal1JUQfeXdVrpnX3kEWDdnRixKfOZ6O5Bue5vrfX87G2Er8FFcmOT376JsTs5MpZpCC+c5AefAknINAp+w==
   dependencies:
     axios "^0.21.1"
+    querystring "^0.2.1"
+    tslib "^2.2.0"
 
 get-intrinsic@^1.0.2:
   version "1.1.1"
@@ -619,6 +621,11 @@ puppeteer@^8.0.0:
     unbzip2-stream "^1.3.3"
     ws "^7.2.3"
 
+querystring@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.npmjs.org/querystring/-/querystring-0.2.1.tgz#40d77615bb09d16902a85c3e38aa8b5ed761c2dd"
+  integrity sha512-wkvS7mL/JMugcup3/rMitHmd9ecIGd2lhFhK9N3UUQ450h66d1r3Y9nvXzQAW1Lq+wyx61k/1pfKS5KuKiyEbg==
+
 readable-stream@^3.1.1, readable-stream@^3.4.0:
   version "3.6.0"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
@@ -697,6 +704,11 @@ token-stream@1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/token-stream/download/token-stream-1.0.0.tgz#cc200eab2613f4166d27ff9afc7ca56d49df6eb4"
   integrity sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=
+
+tslib@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
+  integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
 
 unbzip2-stream@^1.3.3:
   version "1.4.3"

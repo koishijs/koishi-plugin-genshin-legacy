@@ -1,7 +1,7 @@
 module.exports = {
   // command descriptions
   cmd_genshin_desc: '《原神 Genshin Impact》功能',
-  cmd_profile: '查询玩家基本信息（宝箱、成就、声望）',
+  cmd_profile_desc: '查询玩家基本信息（宝箱、成就、声望）',
   cmd_abyss_desc: '查询原神深境螺旋数据。',
   cmd_character_desc: '查询指定名称的角色的等级与装备信息。',
   cmd_specify_uid: '查询指定 uid 的信息',
