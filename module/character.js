@@ -1,9 +1,5 @@
-const path = require('path')
 const pug = require('pug')
 const ppt = require('puppeteer')
-
-const ppt = require('puppeteer')
-const pug = require('pug')
 const { segment } = require('koishi-utils')
 const path = require('path')
 
