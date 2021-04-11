@@ -134,7 +134,7 @@ const apply = (koishi, pOptions) => {
 
         if (!character) return template('genshin.no_character', uid, name)
 
-        const image = require('./module/character')({ uid, character })
+        const image = await require('./module/character')({ uid, character })
 
         return segment('quote', { id: session.messageId }) + image
 
