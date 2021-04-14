@@ -47,4 +47,4 @@ Promise.all([genshin.getUserInfo(uid), genshin.getAllCharacters(uid)]).then(
     )
     writeFileSync(path.resolve(__dirname, '../public/profile.dev.html'), html)
   }
-)
+).catch(console.error)

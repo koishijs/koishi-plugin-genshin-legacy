@@ -6,10 +6,11 @@
  * @license Apache-2.0
  */
 // Koishi
-const { segment, template, Time } = require('koishi-utils')
+const { segment, template, Time } = require('koishi-core')
 
 // GenshinKit
-const { GenshinKit, util } = require('genshin-kit')
+const { GenshinKit } = require('genshin-kit')
+const { CharactersFilter, isValidCnUid } = require('genshin-kit').util
 const genshin = new GenshinKit()
 
 /**
@@ -67,7 +68,7 @@ const apply = (koishi, pOptions) => {
     .example('@我 genshin 100000001')
     .action(async ({ session }, uid) => {
       const userData = session.user
-      if (util.isValidCnUid(uid)) {
+      if (isValidCnUid(uid)) {
         userData.genshin_uid = uid
         return (
           segment('quote', { id: session.messageId }) +
@@ -132,10 +133,10 @@ const apply = (koishi, pOptions) => {
     .action(async ({ session, options }, name = '旅行者') => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
-      if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
         const allCharacters = await genshin.getAllCharacters(uid)
-        const Filter = new util.CharactersFilter(allCharacters)
+        const Filter = new CharactersFilter(allCharacters)
         const character = Filter.name(name)
 
         if (!character) return template('genshin.no_character', uid, name)
@@ -215,7 +216,7 @@ const apply = (koishi, pOptions) => {
         (data) => {
           // 变量
           let [abyssInfo, basicInfo] = data
-          let Filter = new util.CharactersFilter(basicInfo.avatars || [])
+          let Filter = new CharactersFilter(basicInfo.avatars || [])
           let {
             start_time,
             end_time,

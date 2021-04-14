@@ -23,7 +23,7 @@ module.exports = async ({ uid, character }) => {
       '--lang=zh-CN',
       '--disable-dev-shm-usage',
     ],
-    defaultViewport: { width: 400, height: 750 },
+    defaultViewport: { width: 600, height: 1000 },
     headless: 1,
   })
 

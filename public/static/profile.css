@@ -1,4 +1,8 @@
 /* 基础信息（神瞳数量等） */
+.profile-container {
+  margin: 1rem;
+}
+
 .statsList {
   display: flex;
   flex-wrap: wrap;

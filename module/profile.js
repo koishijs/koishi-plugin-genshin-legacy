@@ -2,6 +2,7 @@ const ppt = require('puppeteer')
 const pug = require('pug')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
+const { activedConstellations } = require('genshin-kit').util
 
 function m(k) {
   return template(`genshin.profile.${k}`)
@@ -17,11 +18,7 @@ module.exports = async ({ uid, userInfo, allCharacters }) => {
   }
 
   allCharacters.forEach((item) => {
-    let constellation = 0
-    item.constellations.forEach(({ is_actived }) =>
-      is_actived ? constellation++ : null
-    )
-    item.constellation = constellation
+    item.activedConstellations = activedConstellations(item)
   })
 
   userInfo.avatars = allCharacters

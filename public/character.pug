@@ -1,60 +1,61 @@
 mixin reliquaries(ctx)
-  - const { name, icon, rarity } = ctx
+  - const { name, icon, rarity } = ctx;
   .item.weapon-item
-    .inner 
+    .inner
       img.icon(src=icon)
-      div(class=[ 'star-div', 'rarity-' + rarity ])
+      div(class=['star-div', 'rarity-' + rarity])
 
 mixin constellations(ctx)
-  - const { icon, is_actived } = ctx
-  div(class=[ 'fate-icon-item', 'fate-item', is_actived ? '' : 'lock' ])
-    .inner 
+  - const { icon, is_actived } = ctx;
+  div(class=['fate-icon-item', 'fate-item', is_actived ? '' : 'lock'])
+    .inner
       img.icon(src=icon)
-      img.lock-icon(src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAw1BMVEVHcEz////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////p/mAvAAAAQHRSTlMA/e9f4aJ0/mdcA+qNiOlmCb1F0AyXIHK1ukj3GfP2ZbLgFhD44yTxOsukIwSpRxM8o6hGicwSREnOPY4vLiVdDr8+KwAAAR1JREFUOMvV1Mdyg1AQRNEBIYFyzjlLzjnbuv//VV5gC7AJo/JC5d5N11nAezAiPzMbT5aLxXIynklS5sURXxkV5/H2fYov07c4ezUkkOFLtG3lAczC4+mq9moC5FuRuApw/uAOlzcA1SjbA2h6cxPgKQJ3gOecN5/dA51w2+gDPX9zAfQbobgGlHL+JpcHbkNxGegGqy5QDsVt4DpYnQDtUJwB0sEqDWT+hB3LJia25fgsifG0lYytPbaTsb3HKHIEXC8U6kpsOCIijqHCRbe802B74JYDW4HN79ZUYKPilhVD88wpt0ypXrC0EhH5KOnOeb0R2ay1l5IVyfL/8E6NU79OOQan3SWg/Pi322P8VgetgoOWzEHrS7sYPwGNnBMEhGj5yQAAAABJRU5ErkJggg==")
-  
+      img.lock-icon(
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAw1BMVEVHcEz////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////p/mAvAAAAQHRSTlMA/e9f4aJ0/mdcA+qNiOlmCb1F0AyXIHK1ukj3GfP2ZbLgFhD44yTxOsukIwSpRxM8o6hGicwSREnOPY4vLiVdDr8+KwAAAR1JREFUOMvV1Mdyg1AQRNEBIYFyzjlLzjnbuv//VV5gC7AJo/JC5d5N11nAezAiPzMbT5aLxXIynklS5sURXxkV5/H2fYov07c4ezUkkOFLtG3lAczC4+mq9moC5FuRuApw/uAOlzcA1SjbA2h6cxPgKQJ3gOecN5/dA51w2+gDPX9zAfQbobgGlHL+JpcHbkNxGegGqy5QDsVt4DpYnQDtUJwB0sEqDWT+hB3LJia25fgsifG0lYytPbaTsb3HKHIEXC8U6kpsOCIijqHCRbe802B74JYDW4HN79ZUYKPilhVD88wpt0ypXrC0EhH5KOnOeb0R2ay1l5IVyfL/8E6NU79OOQan3SWg/Pi322P8VgetgoOWzEHrS7sYPwGNnBMEhGj5yQAAAABJRU5ErkJggg=="
+      )
+
 mixin 1star
   span.star-span
 
-doctype html 
-html 
-  head 
-    style 
+doctype html
+html
+  head
+    style
       include static/common.css
       include static/character.css
 
   body(style="margin: 0")
-    .role-wrapper 
-      .role-layout 
-
+    .role-wrapper
+      .role-layout
         //- 标题
-        .layout(style="height: 5vw;")
+        .layout(style="height: 5vw")
           .role-swiper-wrapper
             .role-swiper-container
-              .pagination(style="top: -10vw;")
+              .pagination(style="top: -10vw")
                 //- img.icon
-                .name= name 
+                .name= name
                 .level 等级 #{level} 好感 #{fetter}
 
         //- 角色
         .role-layout--container(style={ 'background-image': `url(${image})` })
           .floats
-            .weapon-block 
-              .weapons 
+            .weapon-block
+              .weapons
                 each item in reliquaries
                   +reliquaries(item)
-          
-            .fate-block 
-              .fates 
-                each item in constellations 
+
+            .fate-block
+              .fates
+                each item in constellations
                   +constellations(item)
-          
+
           //- 武器
-          .view-box 
+          .view-box
             .header
               .text 武器
             .main
-              .item 
-                .inner 
+              .item
+                .inner
                   img.icon(src=weapon.icon)
               .info
                 .name
@@ -62,11 +63,11 @@ html
                   .tag LV #{weapon.level}
                   .refine 精炼 #{weapon.affix_level} 阶
                 .stars
-                  - var weapon_rarity = 0
-                  while weapon_rarity < weapon.rarity 
-                    - weapon_rarity++
+                  - var weapon_rarity = 0;
+                  while weapon_rarity < weapon.rarity
+                    - weapon_rarity++;
                     +1star
-            .desc-block 
+            .desc-block
               p= weapon.desc
 
             .tip *所有数据以游戏内为准，此处仅供参考
