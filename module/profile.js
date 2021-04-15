@@ -17,7 +17,7 @@ module.exports = async ({ uid, userInfo, allCharacters }) => {
     userInfo.stats.push({ desc: m('stats.' + key), count: _stats[key] })
   }
 
-  allCharacters.forEach((item) => {
+  allCharacters.forEach(item => {
     item.activedConstellations = activedConstellations(item)
   })
 
@@ -48,6 +48,9 @@ module.exports = async ({ uid, userInfo, allCharacters }) => {
 
   try {
     const page = await browser.newPage()
+    await page.goto(
+      'file:///' + path.resolve(__dirname, '../public/index.html')
+    )
     await page.setContent(html)
     screenshot = await page.screenshot({
       fullPage: true,
