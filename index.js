@@ -66,25 +66,35 @@ const apply = (koishi, pOptions) => {
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
-    .action(async ({ session }, uid) => {
-      const userData = session.user
-      if (isValidCnUid(uid)) {
-        userData.genshin_uid = uid
-        return (
-          segment('quote', { id: session.messageId }) +
-          template('genshin.successfully_registered')
-        )
-      } else if (uid) {
+    .check(async ({ session }, uid) => {
+      const userFileds = session.user
+      if (!uid) {
+        const reply = userFileds.genshin_uid
+          ? template('genshin.info_regestered', userFileds.genshin_uid)
+          : template('genshin.not_registered')
+        return segment('quote', { id: session.messageId }) + reply
+      } else if (!isValidCnUid(uid)) {
         return (
           segment('quote', { id: session.messageId }) +
           template('genshin.invalid_cn_uid')
         )
-      } else {
-        return segment('quote', { id: session.messageId }) +
-          userData.genshin_uid
-          ? template('genshin.info_regestered', userData.genshin_uid)
-          : template('genshin.not_registered')
       }
+    })
+    .action(async ({ session }, uid) => {
+      const userFileds = session.user
+      userFileds.genshin_uid = uid
+      try {
+        await session.user._update()
+      } catch (err) {
+        return (
+          segment('quote', { id: session.messageId }) +
+          template('genshin.faild', err.message)
+        )
+      }
+      return (
+        segment('quote', { id: session.messageId }) +
+        template('genshin.successfully_registered')
+      )
     })
 
   koishi
