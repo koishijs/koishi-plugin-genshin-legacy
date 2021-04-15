@@ -66,7 +66,7 @@ const apply = (koishi, pOptions) => {
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
-    .check(async ({ session }, uid) => {
+    .check(({ session }, uid) => {
       const userFileds = session.user
       if (!uid) {
         const reply = userFileds.genshin_uid
@@ -103,9 +103,13 @@ const apply = (koishi, pOptions) => {
     })
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
-    .action(async ({ session, options }) => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }) => {
+      let uid = options.uid || session.user.genshin_uid
 
       try {
         const [userInfo, allCharacters] = await Promise.all([
@@ -140,10 +144,13 @@ const apply = (koishi, pOptions) => {
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
-    .action(async ({ session, options }, name = '旅行者') => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
       if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }, name = '旅行者') => {
+      let uid = options.uid || session.user.genshin_uid
       try {
         const allCharacters = await genshin.getAllCharacters(uid)
         const Filter = new CharactersFilter(allCharacters)
@@ -213,9 +220,13 @@ const apply = (koishi, pOptions) => {
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .option('previous', '-p 查询上一期的数据', { type: 'boolean' })
     .userFields(['genshin_uid'])
-    .action(async ({ session, options }) => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }) => {
+      let uid = options.uid || session.user.genshin_uid
 
       const type = options.previous ? 'prev' : 'cur'
 
@@ -223,7 +234,7 @@ const apply = (koishi, pOptions) => {
         genshin.getAbyss(uid, type === 'cur' ? 1 : 2),
         genshin.getUserInfo(uid),
       ]).then(
-        (data) => {
+        data => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new CharactersFilter(basicInfo.avatars || [])
@@ -297,7 +308,7 @@ const apply = (koishi, pOptions) => {
           // 发送
           session.send(segment('quote', { id: session.messageId }) + msg)
         },
-        (err) => {
+        err => {
           session.send(
             segment('quote', { id: session.messageId }) +
               template('genshin.failed', err.message || '出现未知问题')
