@@ -6,7 +6,6 @@ const path = require('path')
 module.exports = async ({ uid, character }) => {
   let screenshot
 
-  character.reliquaries.unshift(character.weapon)
   const options = {
     uid,
     ...character,

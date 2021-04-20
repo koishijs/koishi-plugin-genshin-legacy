@@ -90,7 +90,7 @@ const apply = (koishi, pOptions) => {
       if (!uid) return template('genshin.not_registered')
 
       try {
-        const userInfo = await genshin.getUserInfo(uid)
+        const userInfo = await genshin.getUserInfo(uid, true)
         let profile = require('./module/profile')
         let image = await profile({ uid, userInfo })
         return image
@@ -118,7 +118,7 @@ const apply = (koishi, pOptions) => {
       if (!uid) return template('genshin.not_registered')
       if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
       try {
-        const allCharacters = await genshin.getAllCharacters(uid)
+        const allCharacters = await genshin.getAllCharacters(uid, true)
         const Filter = new util.CharactersFilter(allCharacters)
         const character = Filter.name(name)
 
@@ -188,10 +188,10 @@ const apply = (koishi, pOptions) => {
       const type = options.previous ? 'prev' : 'cur'
 
       Promise.all([
-        genshin.getAbyss(uid, type === 'cur' ? 1 : 2),
-        genshin.getUserInfo(uid),
+        genshin.getAbyss(uid, type === 'cur' ? 1 : 2, true),
+        genshin.getUserInfo(uid, true),
       ]).then(
-        (data) => {
+        data => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new util.CharactersFilter(basicInfo.avatars || [])
@@ -265,7 +265,7 @@ const apply = (koishi, pOptions) => {
           // 发送
           session.send(msg)
         },
-        (err) => {
+        err => {
           session.send(
             template('genshin.failed', err.message || '出现未知问题')
           )
