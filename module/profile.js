@@ -2,12 +2,13 @@ const ppt = require('puppeteer')
 const pug = require('pug')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
+const { activedConstellations } = require('genshin-kit').util
 
 function m(k) {
   return template(`genshin.profile.${k}`)
 }
 
-module.exports = async ({ uid, userInfo }) => {
+module.exports = async ({ uid, userInfo, allCharacters }) => {
   let screenshot
 
   let _stats = Object.assign({}, userInfo.stats)
@@ -15,6 +16,13 @@ module.exports = async ({ uid, userInfo }) => {
   for (key in _stats) {
     userInfo.stats.push({ desc: m('stats.' + key), count: _stats[key] })
   }
+
+  allCharacters.forEach(item => {
+    item.activedConstellations = activedConstellations(item)
+  })
+
+  userInfo.avatars = allCharacters
+
   const options = {
     ui: {
       title: m('ui.title'),
@@ -40,6 +48,9 @@ module.exports = async ({ uid, userInfo }) => {
 
   try {
     const page = await browser.newPage()
+    await page.goto(
+      'file:///' + path.resolve(__dirname, '../public/index.html')
+    )
     await page.setContent(html)
     screenshot = await page.screenshot({
       fullPage: true,

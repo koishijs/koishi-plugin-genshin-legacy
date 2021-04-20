@@ -14,23 +14,37 @@ function m(k) {
 
 const genshin = new GenshinKit()
 genshin.loginWithCookie(cookie)
-genshin.getUserInfo(uid).then((data) => {
-  let _stats = Object.assign({}, data.stats)
-  data.stats = []
-  for (key in _stats) {
-    data.stats.push({ desc: m('stats.' + key), count: _stats[key] })
+Promise.all([genshin.getUserInfo(uid), genshin.getAllCharacters(uid)]).then(
+  ([userInfo, allCharacters]) => {
+    let _stats = Object.assign({}, userInfo.stats)
+    userInfo.stats = []
+
+    for (key in _stats) {
+      userInfo.stats.push({ desc: m('stats.' + key), count: _stats[key] })
+    }
+
+    allCharacters.forEach((item) => {
+      let constellation = 0
+      item.constellations.forEach(({ is_actived }) =>
+        is_actived ? constellation++ : null
+      )
+      item.constellation = constellation
+    })
+
+    userInfo.avatars = allCharacters
+
+    const options = {
+      ui: {
+        title: m('ui.title'),
+      },
+      uid,
+      ...userInfo,
+    }
+    console.log(options)
+    const html = pug.renderFile(
+      path.resolve(__dirname, '../public/profile.pug'),
+      options
+    )
+    writeFileSync(path.resolve(__dirname, '../public/profile.dev.html'), html)
   }
-  const options = {
-    ui: {
-      title: m('ui.title'),
-    },
-    uid,
-    ...data,
-  }
-  console.log(options)
-  const html = pug.renderFile(
-    path.resolve(__dirname, '../public/profile.pug'),
-    options
-  )
-  writeFileSync(path.resolve(__dirname, '../public/profile.dev.html'), html)
-})
+).catch(console.error)

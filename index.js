@@ -6,10 +6,11 @@
  * @license Apache-2.0
  */
 // Koishi
-const { segment, template, Time } = require('koishi-utils')
+const { segment, template, Time } = require('koishi-core')
 
 // GenshinKit
-const { GenshinKit, util } = require('genshin-kit')
+const { GenshinKit } = require('genshin-kit')
+const { CharactersFilter, isValidCnUid } = require('genshin-kit').util
 const genshin = new GenshinKit()
 
 /**
@@ -65,18 +66,35 @@ const apply = (koishi, pOptions) => {
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
-    .action(async ({ session }, uid) => {
-      const userData = session.user
-      if (util.isValidCnUid(uid)) {
-        userData.genshin_uid = uid
-        return template('genshin.successfully_registered')
-      } else if (uid) {
-        return template('genshin.invalid_cn_uid')
-      } else {
-        return userData.genshin_uid
-          ? template('genshin.info_regestered', userData.genshin_uid)
+    .check(({ session }, uid) => {
+      const userFileds = session.user
+      if (!uid) {
+        const reply = userFileds.genshin_uid
+          ? template('genshin.info_regestered', userFileds.genshin_uid)
           : template('genshin.not_registered')
+        return segment('quote', { id: session.messageId }) + reply
+      } else if (!isValidCnUid(uid)) {
+        return (
+          segment('quote', { id: session.messageId }) +
+          template('genshin.invalid_cn_uid')
+        )
       }
+    })
+    .action(async ({ session }, uid) => {
+      const userFileds = session.user
+      userFileds.genshin_uid = uid
+      try {
+        await session.user._update()
+      } catch (err) {
+        return (
+          segment('quote', { id: session.messageId }) +
+          template('genshin.faild', err.message)
+        )
+      }
+      return (
+        segment('quote', { id: session.messageId }) +
+        template('genshin.successfully_registered')
+      )
     })
 
   koishi
@@ -85,19 +103,32 @@ const apply = (koishi, pOptions) => {
     })
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
-    .action(async ({ session, options }) => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }) => {
+      let uid = options.uid || session.user.genshin_uid
 
       try {
-        const userInfo = await genshin.getUserInfo(uid, true)
-        let profile = require('./module/profile')
-        let image = await profile({ uid, userInfo })
-        return image
+        const [userInfo, allCharacters] = await Promise.all([
+          genshin.getUserInfo(uid, true),
+          genshin.getAllCharacters(uid, true),
+        ])
+        let image = await require('./module/profile')({
+          uid,
+          userInfo,
+          allCharacters,
+        })
+        return segment('quote', { id: session.messageId }) + image
       } catch (err) {
-        return template(
-          'genshin.failed',
-          err.message || template('genshin.error_unknown')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template(
+            'genshin.failed',
+            err.message || template('genshin.error_unknown')
+          )
         )
       }
     })
@@ -107,24 +138,29 @@ const apply = (koishi, pOptions) => {
       'genshin.character <name>',
       template('genshin.cmd_character_desc'),
       {
-        minInterval: Time.second * 5,
+        minInterval: Time.second * 15,
       }
     )
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
-    .action(async ({ session, options }, name = '旅行者') => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
-      if (!util.isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }, name = '旅行者') => {
+      let uid = options.uid || session.user.genshin_uid
       try {
         const allCharacters = await genshin.getAllCharacters(uid, true)
-        const Filter = new util.CharactersFilter(allCharacters)
+        const Filter = new CharactersFilter(allCharacters)
         const character = Filter.name(name)
 
         if (!character) return template('genshin.no_character', uid, name)
 
-        return require('./module/character')({ uid, character })
+        const image = await require('./module/character')({ uid, character })
+
+        return segment('quote', { id: session.messageId }) + image
 
         // function reliquariesFmt(reliquaries) {
         //   if (reliquaries.length < 1) return '无'
@@ -165,9 +201,12 @@ const apply = (koishi, pOptions) => {
         //   ),
         // ].join('\n')
       } catch (err) {
-        return template(
-          'genshin.failed',
-          err.message || template('genshin.error_unknown')
+        return (
+          segment('quote', { id: session.messageId }) +
+          template(
+            'genshin.failed',
+            err.message || template('genshin.error_unknown')
+          )
         )
       }
     })
@@ -175,15 +214,19 @@ const apply = (koishi, pOptions) => {
   // 深境螺旋
   koishi
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
-      minInterval: Time.second * 5,
+      minInterval: Time.second * 15,
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
     .option('previous', '-p 查询上一期的数据', { type: 'boolean' })
     .userFields(['genshin_uid'])
-    .action(async ({ session, options }) => {
+    .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')
+      if (!isValidCnUid(uid)) return template('genshin.invalid_cn_uid')
+    })
+    .action(async ({ session, options }) => {
+      let uid = options.uid || session.user.genshin_uid
 
       const type = options.previous ? 'prev' : 'cur'
 
@@ -194,7 +237,7 @@ const apply = (koishi, pOptions) => {
         data => {
           // 变量
           let [abyssInfo, basicInfo] = data
-          let Filter = new util.CharactersFilter(basicInfo.avatars || [])
+          let Filter = new CharactersFilter(basicInfo.avatars || [])
           let {
             start_time,
             end_time,
@@ -263,11 +306,12 @@ const apply = (koishi, pOptions) => {
           }
 
           // 发送
-          session.send(msg)
+          session.send(segment('quote', { id: session.messageId }) + msg)
         },
         err => {
           session.send(
-            template('genshin.failed', err.message || '出现未知问题')
+            segment('quote', { id: session.messageId }) +
+              template('genshin.failed', err.message || '出现未知问题')
           )
         }
       )

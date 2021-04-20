@@ -1,6 +1,6 @@
 const pug = require('pug')
 const ppt = require('puppeteer')
-const { segment } = require('koishi-utils')
+const { segment, template } = require('koishi-utils')
 const path = require('path')
 
 module.exports = async ({ uid, character }) => {
@@ -22,12 +22,15 @@ module.exports = async ({ uid, character }) => {
       '--lang=zh-CN',
       '--disable-dev-shm-usage',
     ],
-    defaultViewport: { width: 400, height: 750 },
+    defaultViewport: { width: 600, height: 1000 },
     headless: 1,
   })
 
   try {
     const page = await browser.newPage()
+    await page.goto(
+      'file:///' + path.resolve(__dirname, '../public/index.html')
+    )
     await page.setContent(html)
     screenshot = await page.screenshot({
       fullPage: true,
@@ -38,5 +41,8 @@ module.exports = async ({ uid, character }) => {
   }
 
   await browser.close()
-  return segment('image', { file: 'base64://' + screenshot.toString('base64') })
+  return (
+    template('genshin.has_character', uid, character.name) +
+    segment('image', { file: 'base64://' + screenshot.toString('base64') })
+  )
 }
