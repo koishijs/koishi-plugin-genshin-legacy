@@ -13,7 +13,7 @@
   "dependencies": {
     "genshin-kit": "^1.1.0",
     "pug": "^3.0.2",
-    "puppeteer": "^8.0.0"
+    "puppeteer-core": "^9.0.0"
   },
   "peerDependencies": {
     "koishi-core": "^3.8.0"

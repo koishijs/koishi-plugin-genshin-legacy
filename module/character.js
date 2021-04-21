@@ -1,9 +1,9 @@
+const ppt = require('puppeteer-core')
 const pug = require('pug')
-const ppt = require('puppeteer')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
 
-module.exports = async ({ uid, character }) => {
+module.exports = async ({ uid, character, executablePath }) => {
   let screenshot
 
   const options = {
@@ -16,6 +16,7 @@ module.exports = async ({ uid, character }) => {
   )
 
   const browser = await ppt.launch({
+    executablePath,
     args: [
       '--no-sandbox',
       '--disable-infobars ', // don't show information bar

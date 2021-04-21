@@ -11,6 +11,7 @@ const { segment, template, Time } = require('koishi-core')
 // GenshinKit
 const { GenshinKit } = require('genshin-kit')
 const { CharactersFilter, isValidCnUid } = require('genshin-kit').util
+const { activedConstellations } = require('genshin-kit').util
 const genshin = new GenshinKit()
 
 /**
@@ -54,8 +55,13 @@ Date.prototype.format = function(fmt) {
  * @command genshin
  */
 const apply = (koishi, pOptions) => {
-  genshin.loginWithCookie(pOptions.cookie)
+  pOptions = {
+    cookie: '',
+    browserPath: '',
+    ...pOptions,
+  }
 
+  genshin.loginWithCookie(pOptions.cookie)
   template.set('genshin', { ...require('./i18n'), ...pOptions.i18n })
 
   // 注册
@@ -116,12 +122,6 @@ const apply = (koishi, pOptions) => {
           genshin.getUserInfo(uid, true),
           genshin.getAllCharacters(uid, true),
         ])
-        let image = await require('./module/profile')({
-          uid,
-          userInfo,
-          allCharacters,
-        })
-        return segment('quote', { id: session.messageId }) + image
       } catch (err) {
         return (
           segment('quote', { id: session.messageId }) +
@@ -131,6 +131,20 @@ const apply = (koishi, pOptions) => {
           )
         )
       }
+
+      // 截图
+      if (pOptions.browserPath) {
+        let image = await require('./module/profile')({
+          uid,
+          userInfo,
+          allCharacters,
+          executablePath: pOptions.browserPath,
+        })
+        return segment('quote', { id: session.messageId }) + image
+      }
+
+      // 文字版
+      return '截图失败：未配置截图用浏览器路径。'
     })
 
   koishi
@@ -158,48 +172,49 @@ const apply = (koishi, pOptions) => {
 
         if (!character) return template('genshin.no_character', uid, name)
 
-        const image = await require('./module/character')({ uid, character })
+        // 截图
+        if (pOptions.browserPath) {
+          const image = await require('./module/character')({
+            uid,
+            character,
+            executablePath: pOptions.browserPath,
+          })
+          return segment('quote', { id: session.messageId }) + image
+        }
 
-        return segment('quote', { id: session.messageId }) + image
+        // 文字版
+        function reliquariesFmt(reliquaries) {
+          if (reliquaries.length < 1) return '无'
+          let msg = ''
+          reliquaries.forEach((item) => {
+            msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
+          })
+          return msg.trim()
+        }
 
-        // function reliquariesFmt(reliquaries) {
-        //   if (reliquaries.length < 1) return '无'
-        //   let msg = ''
-        //   reliquaries.forEach((item) => {
-        //     msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
-        //   })
-        //   return msg.trim()
-        // }
-
-        // const constellations = character.constellations || []
-        // let constellationActived = 0
-        // constellations.forEach(({ is_actived }) =>
-        //   is_actived ? constellationActived++ : null
-        // )
-
-        // return [
-        //   template('genshin.has_character', uid, character.name),
-        //   template('genshin.character_basic', {
-        //     icon: segment('image', { url: character.icon }),
-        //     image: segment('image', { url: character.image }),
-        //     name: character.name,
-        //     rarity: character.rarity,
-        //     constellation: constellationActived,
-        //     level: character.level,
-        //     fetter: character.fetter,
-        //   }),
-        //   template('genshin.character_weapon', {
-        //     name: character.weapon.name,
-        //     rarity: character.weapon.rarity,
-        //     type_name: character.weapon.type_name,
-        //     level: character.weapon.level,
-        //     affix_level: character.weapon.affix_level,
-        //   }),
-        //   template(
-        //     'genshin.character_reliquaries',
-        //     reliquariesFmt(character.reliquaries)
-        //   ),
-        // ].join('\n')
+        return [
+          template('genshin.has_character', uid, character.name),
+          template('genshin.character_basic', {
+            icon: segment('image', { url: character.icon }),
+            image: segment('image', { url: character.image }),
+            name: character.name,
+            rarity: character.rarity,
+            constellation: activedConstellations(character),
+            level: character.level,
+            fetter: character.fetter,
+          }),
+          template('genshin.character_weapon', {
+            name: character.weapon.name,
+            rarity: character.weapon.rarity,
+            type_name: character.weapon.type_name,
+            level: character.weapon.level,
+            affix_level: character.weapon.affix_level,
+          }),
+          template(
+            'genshin.character_reliquaries',
+            reliquariesFmt(character.reliquaries)
+          ),
+        ].join('\n')
       } catch (err) {
         return (
           segment('quote', { id: session.messageId }) +
@@ -234,7 +249,7 @@ const apply = (koishi, pOptions) => {
         genshin.getAbyss(uid, type === 'cur' ? 1 : 2, true),
         genshin.getUserInfo(uid, true),
       ]).then(
-        data => {
+        (data) => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new CharactersFilter(basicInfo.avatars || [])
@@ -308,7 +323,7 @@ const apply = (koishi, pOptions) => {
           // 发送
           session.send(segment('quote', { id: session.messageId }) + msg)
         },
-        err => {
+        (err) => {
           session.send(
             segment('quote', { id: session.messageId }) +
               template('genshin.failed', err.message || '出现未知问题')
