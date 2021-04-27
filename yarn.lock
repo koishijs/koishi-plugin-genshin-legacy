@@ -516,6 +516,13 @@ function-bind@^1.1.1:
   resolved "https://registry.npm.taobao.org/function-bind/download/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0=
 
+genshin-gacha-kit@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.nlark.com/genshin-gacha-kit/download/genshin-gacha-kit-0.0.2.tgz#f677ce9d1e4bbe910a7210428420c8c3140d2c2e"
+  integrity sha1-9nfOnR5LvpEKchBChCDIwxQNLC4=
+  dependencies:
+    tslib "^2.2.0"
+
 genshin-kit@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-1.1.0.tgz#b9e56b2a6d73dde680ca7b9d5f5582c1276a787d"

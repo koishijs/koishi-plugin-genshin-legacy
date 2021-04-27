@@ -58,6 +58,7 @@ const apply = (koishi, pOptions) => {
   pOptions = {
     cookie: '',
     browserPath: '',
+    gachaPool: [],
     ...pOptions,
   }
 
@@ -122,6 +123,20 @@ const apply = (koishi, pOptions) => {
           genshin.getUserInfo(uid, true),
           genshin.getAllCharacters(uid, true),
         ])
+
+        // 截图
+        if (pOptions.browserPath) {
+          let image = await require('./module/renderProfile')({
+            uid,
+            userInfo,
+            allCharacters,
+            executablePath: pOptions.browserPath,
+          })
+          return segment('quote', { id: session.messageId }) + image
+        }
+
+        // 文字版
+        return '截图失败：未配置截图用浏览器路径。'
       } catch (err) {
         return (
           segment('quote', { id: session.messageId }) +
@@ -131,20 +146,6 @@ const apply = (koishi, pOptions) => {
           )
         )
       }
-
-      // 截图
-      if (pOptions.browserPath) {
-        let image = await require('./module/profile')({
-          uid,
-          userInfo,
-          allCharacters,
-          executablePath: pOptions.browserPath,
-        })
-        return segment('quote', { id: session.messageId }) + image
-      }
-
-      // 文字版
-      return '截图失败：未配置截图用浏览器路径。'
     })
 
   koishi
@@ -174,7 +175,7 @@ const apply = (koishi, pOptions) => {
 
         // 截图
         if (pOptions.browserPath) {
-          const image = await require('./module/character')({
+          const image = await require('./module/renderCharacter')({
             uid,
             character,
             executablePath: pOptions.browserPath,
@@ -186,7 +187,7 @@ const apply = (koishi, pOptions) => {
         function reliquariesFmt(reliquaries) {
           if (reliquaries.length < 1) return '无'
           let msg = ''
-          reliquaries.forEach((item) => {
+          reliquaries.forEach(item => {
             msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
           })
           return msg.trim()
@@ -249,7 +250,7 @@ const apply = (koishi, pOptions) => {
         genshin.getAbyss(uid, type === 'cur' ? 1 : 2, true),
         genshin.getUserInfo(uid, true),
       ]).then(
-        (data) => {
+        data => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new CharactersFilter(basicInfo.avatars || [])
@@ -323,7 +324,7 @@ const apply = (koishi, pOptions) => {
           // 发送
           session.send(segment('quote', { id: session.messageId }) + msg)
         },
-        (err) => {
+        err => {
           session.send(
             segment('quote', { id: session.messageId }) +
               template('genshin.failed', err.message || '出现未知问题')
@@ -331,6 +332,8 @@ const apply = (koishi, pOptions) => {
         }
       )
     })
+
+  koishi.plugin(require('./module/wish'), pOptions)
 }
 
 module.exports = {
