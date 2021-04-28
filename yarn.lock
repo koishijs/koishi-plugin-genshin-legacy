@@ -523,10 +523,10 @@ genshin-gacha-kit@^0.0.2:
   dependencies:
     tslib "^2.2.0"
 
-genshin-kit@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-1.1.0.tgz#b9e56b2a6d73dde680ca7b9d5f5582c1276a787d"
-  integrity sha512-GoXLG53Hban3igaKFeMTL/uMPURF+Teuwwej/1+lx+Jzz8/lBVSWT1rJf79QkLknjI7TYLTaS+XnX0MYXKcx6A==
+genshin-kit@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-1.2.0.tgz#b9daa6043d9f9a76df5378a508ddcf158ecfafe0"
+  integrity sha512-Q4+uMP8YbSwRqMeuhgAI3L90+YLAGAD9+WlbSj6fKQXqwHjsiciouqTFQjXR2FNQg3VLZpa2EuCzMT+JNk1vXg==
   dependencies:
     axios "^0.21.1"
     querystring "^0.2.1"
