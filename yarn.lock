@@ -516,10 +516,10 @@ function-bind@^1.1.1:
   resolved "https://registry.npm.taobao.org/function-bind/download/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0=
 
-genshin-gacha-kit@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/genshin-gacha-kit/-/genshin-gacha-kit-1.0.1.tgz#655eca3e1170d1b5b322d923d7c5ac05f91f007c"
-  integrity sha512-hw5hQwhGsmKrvQAkgeOZ53e2Es01fA0nflbQMRsoH2/EnRB+giZ1sm+kWdZgrcFvKXqckADYmDVsIGE1ZX8F3g==
+genshin-gacha-kit@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/genshin-gacha-kit/-/genshin-gacha-kit-1.1.0.tgz#dd1b73e69e7c04bd7b94e4e2113bd05b5229a93b"
+  integrity sha512-xQ2tRLjSzcGD5FA2RTJZ35oDjenuvJr+eBvvet6TN9dkedLDydYqq73hVshRXvaYcVqUKbX543MvxYBAVEhD+A==
   dependencies:
     axios "^0.21.1"
     tslib "^2.2.0"

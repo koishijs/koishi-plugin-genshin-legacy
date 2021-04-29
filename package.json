@@ -11,7 +11,7 @@
     "publish:next": "npm publish --tag next"
   },
   "dependencies": {
-    "genshin-gacha-kit": "^1.0.1",
+    "genshin-gacha-kit": "^1.1.0",
     "genshin-kit": "^1.2.0",
     "pug": "^3.0.2",
     "puppeteer-core": "^9.0.0"
