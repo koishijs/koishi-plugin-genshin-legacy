@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 // Koishi
-const { segment, template, Time } = require('koishi-core')
+const { segment, template, Time, Context } = require('koishi-core')
 
 // GenshinKit
 const { GenshinKit } = require('genshin-kit')
@@ -32,7 +32,7 @@ Date.prototype.format = function(fmt) {
     'm+': this.getMinutes(), //分
     's+': this.getSeconds(), //秒
     'q+': Math.floor((this.getMonth() + 3) / 3), //季度
-    S: this.getMilliseconds(), //毫秒
+    S: this.getMilliseconds() //毫秒
   }
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(
@@ -53,13 +53,20 @@ Date.prototype.format = function(fmt) {
 
 /**
  * @command genshin
+ * @param {Context} koishi
  */
 const apply = (koishi, pOptions) => {
   pOptions = {
     cookie: '',
+    donateMin: 5,
+    donateMax: 25,
     browserPath: '',
-    gachaPool: [],
-    ...pOptions,
+    wish: {
+      enable: false,
+      officialPools: true,
+      customPools: []
+    },
+    ...pOptions
   }
 
   genshin.loginWithCookie(pOptions.cookie)
@@ -68,7 +75,7 @@ const apply = (koishi, pOptions) => {
   // 注册
   koishi
     .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
-      minInterval: Time.hour,
+      minInterval: Time.hour
     })
     .alias('原神')
     .userFields(['genshin_uid'])
@@ -106,7 +113,7 @@ const apply = (koishi, pOptions) => {
 
   koishi
     .command('genshin.profile', template('genshin.cmd_profile_desc'), {
-      minInterval: Time.second * 30,
+      minInterval: Time.second * 30
     })
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -121,7 +128,7 @@ const apply = (koishi, pOptions) => {
       try {
         const [userInfo, allCharacters] = await Promise.all([
           genshin.getUserInfo(uid, true),
-          genshin.getAllCharacters(uid, true),
+          genshin.getAllCharacters(uid, true)
         ])
 
         // 截图
@@ -130,7 +137,7 @@ const apply = (koishi, pOptions) => {
             uid,
             userInfo,
             allCharacters,
-            executablePath: pOptions.browserPath,
+            executablePath: pOptions.browserPath
           })
           return segment('quote', { id: session.messageId }) + image
         }
@@ -153,7 +160,7 @@ const apply = (koishi, pOptions) => {
       'genshin.character <name>',
       template('genshin.cmd_character_desc'),
       {
-        minInterval: Time.second * 15,
+        minInterval: Time.second * 15
       }
     )
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -178,7 +185,7 @@ const apply = (koishi, pOptions) => {
           const image = await require('./module/renderCharacter')({
             uid,
             character,
-            executablePath: pOptions.browserPath,
+            executablePath: pOptions.browserPath
           })
           return segment('quote', { id: session.messageId }) + image
         }
@@ -187,7 +194,7 @@ const apply = (koishi, pOptions) => {
         function reliquariesFmt(reliquaries) {
           if (reliquaries.length < 1) return '无'
           let msg = ''
-          reliquaries.forEach(item => {
+          reliquaries.forEach((item) => {
             msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
           })
           return msg.trim()
@@ -202,19 +209,19 @@ const apply = (koishi, pOptions) => {
             rarity: character.rarity,
             constellation: activedConstellations(character),
             level: character.level,
-            fetter: character.fetter,
+            fetter: character.fetter
           }),
           template('genshin.character_weapon', {
             name: character.weapon.name,
             rarity: character.weapon.rarity,
             type_name: character.weapon.type_name,
             level: character.weapon.level,
-            affix_level: character.weapon.affix_level,
+            affix_level: character.weapon.affix_level
           }),
           template(
             'genshin.character_reliquaries',
             reliquariesFmt(character.reliquaries)
-          ),
+          )
         ].join('\n')
       } catch (err) {
         return (
@@ -230,7 +237,7 @@ const apply = (koishi, pOptions) => {
   // 深境螺旋
   koishi
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
-      minInterval: Time.second * 15,
+      minInterval: Time.second * 15
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -248,9 +255,9 @@ const apply = (koishi, pOptions) => {
 
       Promise.all([
         genshin.getAbyss(uid, type === 'cur' ? 1 : 2, true),
-        genshin.getUserInfo(uid, true),
+        genshin.getUserInfo(uid, true)
       ]).then(
-        data => {
+        (data) => {
           // 变量
           let [abyssInfo, basicInfo] = data
           let Filter = new CharactersFilter(basicInfo.avatars || [])
@@ -265,7 +272,7 @@ const apply = (koishi, pOptions) => {
             reveal_rank,
             damage_rank,
             take_damage_rank,
-            energy_skill_rank,
+            energy_skill_rank
           } = abyssInfo
           start_time *= 1000
           end_time *= 1000
@@ -294,14 +301,14 @@ const apply = (koishi, pOptions) => {
                 max_floor,
                 total_win_times,
                 total_battle_times,
-                total_star,
+                total_star
               }),
               template('genshin.abyss_top_stats', {
                 damage_rank: formatedCharacterValue(damage_rank),
                 take_damage_rank: formatedCharacterValue(take_damage_rank),
                 reveal_rank: formatedCharacterValue(reveal_rank),
-                energy_skill_rank: formatedCharacterValue(energy_skill_rank),
-              }),
+                energy_skill_rank: formatedCharacterValue(energy_skill_rank)
+              })
             ].join('\n')
           }
 
@@ -324,7 +331,7 @@ const apply = (koishi, pOptions) => {
           // 发送
           session.send(segment('quote', { id: session.messageId }) + msg)
         },
-        err => {
+        (err) => {
           session.send(
             segment('quote', { id: session.messageId }) +
               template('genshin.failed', err.message || '出现未知问题')
@@ -333,10 +340,13 @@ const apply = (koishi, pOptions) => {
       )
     })
 
-  koishi.plugin(require('./module/wish'), pOptions)
+  // Load wish plugin
+  if (pOptions.wish.enable) {
+    koishi.plugin(require('./module/plugin-wish'), pOptions)
+  }
 }
 
 module.exports = {
   name: 'genshin',
-  apply,
+  apply
 }

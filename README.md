@@ -1,12 +1,14 @@
 # koishi-plugin-genshin
 
-**原神四季**（_Genshin Impact for Koishi_ → ~~征名启事~~）是一个为[koishi](https://github.com/koishijs/koishi)设计的查询原神国服玩家数据的插件。
+**Koishi 原神大礼包**（_Genshin Impact for Koishi.js_）是一个为[koishi](https://github.com/koishijs/koishi)设计的查询展示原神国服玩家数据以及抽卡模拟的插件。
 
 ## 特色功能
 
-喜欢玩《原神》？想和沙雕群友一起凹数据？懒得下载米游社？那么本插件将会是您的不二之选！来给您的群聊安排一只能查询原神数据的 koishi 机械姬吧~
+喜欢玩《原神》？懒得下载米游社？想和沙雕群友一起凹数据？那么本插件将会是您的不二之选！来给您的群聊安排一只能查询原神数据的 koishi 机械姬吧~
 
 为您的机械姬安装本插件，玩家们无需打开米游社，向 koishi bot 发送指令，一键炫耀您的五星角色、五星武器和深渊数据！
+
+想看看自己是不是非酋？想要成为下一个天选之人？向 koishi bot 发送指令，进行模拟抽卡吧！
 
 ## 安装方法
 
@@ -37,6 +39,9 @@ npm install koishi-plugin-genshin
 
 安装插件，详见 [官方指南](https://koishi.js.org/guide/context.html)。
 
+<details>
+<summary>配置示例</summary>
+
 ```js
 // koishi.config.js
 module.exports = {
@@ -44,19 +49,27 @@ module.exports = {
     // ...
     genshin: {
       // 本插件的配置项
-      cookie: '<您的小饼干>',
-    },
+      }
+    }
     // ...
-  },
+  }
 }
 // 当然如果您是 index.js 玩家也可以这样
 App.plugin(require('koishi-plugin-genshin'), {
   // 本插件的配置项
-  cookie: '<您的小饼干>',
 })
 ```
 
-关于自定义输出排版，可以使用 koishi 的 template 语法，由于字符串太多，[《请您读源码.jpg》](./i18n.js)。
+</details>
+
+自定义输出排版，可以使用 koishi 的 template 语法，由于字符串太多，[《请您读源码.jpg》](./i18n.js)。
+
+**可用配置项**
+
+- `cookie` {string} 您的米游社小饼干
+- `wish` {object}
+  - `wish.enable` {boolean} 是否开启抽卡模拟器
+  - `wish.customPools` {[AppGachaPool[]](https://github.com/Dragon-Fish/genshin-gacha-kit)} 自定义卡池（格式详见`genshin-gacha-kit`）
 
 ## 注意事项
 

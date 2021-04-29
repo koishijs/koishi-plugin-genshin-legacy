@@ -21,10 +21,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@dragon-fish/bump@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.npmjs.org/@dragon-fish/bump/-/bump-0.0.14.tgz#5b7e7ed1a35d48bf975b49502987f5f7a8776f3d"
-  integrity sha512-hcjZfcfuMSBoN/VGnf9n1ZWNBURJIX2vn1aBfWUwsk8JhsBylwYReNQKAls6BOpnKmofW6zdj8HqjXdLGuk73Q==
+"@dragon-fish/bump@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.npmjs.org/@dragon-fish/bump/-/bump-0.0.15.tgz#b04e9e3e3be11b8166228fc14da427c18386dfb8"
+  integrity sha512-ObYvwi0vNhKZ1eerSpOK6ThfIF4bruzLxuc74joC4ag9uc3VocKHzVqdzIlWKh43dTwmdEisawOOJ/iobI/70A==
   dependencies:
     axios "^0.21.1"
     commander "^7.1.0"
@@ -516,11 +516,12 @@ function-bind@^1.1.1:
   resolved "https://registry.npm.taobao.org/function-bind/download/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0=
 
-genshin-gacha-kit@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.nlark.com/genshin-gacha-kit/download/genshin-gacha-kit-0.0.2.tgz#f677ce9d1e4bbe910a7210428420c8c3140d2c2e"
-  integrity sha1-9nfOnR5LvpEKchBChCDIwxQNLC4=
+genshin-gacha-kit@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/genshin-gacha-kit/-/genshin-gacha-kit-1.0.1.tgz#655eca3e1170d1b5b322d923d7c5ac05f91f007c"
+  integrity sha512-hw5hQwhGsmKrvQAkgeOZ53e2Es01fA0nflbQMRsoH2/EnRB+giZ1sm+kWdZgrcFvKXqckADYmDVsIGE1ZX8F3g==
   dependencies:
+    axios "^0.21.1"
     tslib "^2.2.0"
 
 genshin-kit@^1.2.0:
