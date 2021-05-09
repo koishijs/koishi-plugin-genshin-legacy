@@ -62,5 +62,5 @@ module.exports = async ({ uid, userInfo, allCharacters, executablePath }) => {
   }
 
   await browser.close()
-  return segment('image', { file: 'base64://' + screenshot.toString('base64') })
+  return segment('image', { url: 'base64://' + screenshot.toString('base64') })
 }
