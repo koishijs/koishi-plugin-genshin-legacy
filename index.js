@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 // Koishi
-const { segment, template, Time, Context } = require('koishi-core')
+const { segment, template, Time } = require('koishi-core')
 
 // GenshinKit
 const { GenshinKit } = require('genshin-kit')
@@ -53,9 +53,9 @@ Date.prototype.format = function(fmt) {
 
 /**
  * @command genshin
- * @param {Context} koishi
+ * @param {import('koishi-core').Context} ctx
  */
-const apply = (koishi, pOptions) => {
+const apply = (ctx, pOptions) => {
   pOptions = {
     cookie: '',
     donateMin: 5,
@@ -73,7 +73,7 @@ const apply = (koishi, pOptions) => {
   template.set('genshin', { ...require('./i18n'), ...pOptions.i18n })
 
   // 注册
-  koishi
+  ctx
     .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
       minInterval: Time.hour
     })
@@ -111,7 +111,7 @@ const apply = (koishi, pOptions) => {
       )
     })
 
-  koishi
+  ctx
     .command('genshin.profile', template('genshin.cmd_profile_desc'), {
       minInterval: Time.second * 30
     })
@@ -155,7 +155,7 @@ const apply = (koishi, pOptions) => {
       }
     })
 
-  koishi
+  ctx
     .command(
       'genshin.character <name>',
       template('genshin.cmd_character_desc'),
@@ -235,7 +235,7 @@ const apply = (koishi, pOptions) => {
     })
 
   // 深境螺旋
-  koishi
+  ctx
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
       minInterval: Time.second * 15
     })
@@ -342,7 +342,7 @@ const apply = (koishi, pOptions) => {
 
   // Load wish plugin
   if (pOptions.wish.enable) {
-    koishi.plugin(require('./module/plugin-wish'), pOptions)
+    ctx.plugin(require('./plugin/wish'), pOptions)
   }
 }
 

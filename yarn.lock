@@ -180,10 +180,10 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/ws@^7.4.1":
-  version "7.4.1"
-  resolved "https://registry.npmjs.org/@types/ws/-/ws-7.4.1.tgz#49eacb15a0534663d53a36fbf5b4d98f5ae9a73a"
-  integrity sha512-ISCK1iFnR+jYv7+jLNX0wDqesZ/5RAeY3wUx6QaphmocphU61h+b+PHjS18TF4WIPTu/MMzxIq2PHr32o2TS5Q==
+"@types/ws@^7.4.2":
+  version "7.4.4"
+  resolved "https://registry.npmjs.org/@types/ws/-/ws-7.4.4.tgz#93e1e00824c1de2608c30e6de4303ab3b4c0c9bc"
+  integrity sha512-d/7W23JAXPodQNbOZNXvl2K+bqAQrCMwlh/nuQsPSQk6Fq0opHoPrUw43aHsvSbIiQPr8Of2hkFbnz1XBFVyZQ==
   dependencies:
     "@types/node" "*"
 
@@ -524,10 +524,10 @@ genshin-gacha-kit@^1.1.0:
     axios "^0.21.1"
     tslib "^2.2.0"
 
-genshin-kit@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-1.2.0.tgz#b9daa6043d9f9a76df5378a508ddcf158ecfafe0"
-  integrity sha512-Q4+uMP8YbSwRqMeuhgAI3L90+YLAGAD9+WlbSj6fKQXqwHjsiciouqTFQjXR2FNQg3VLZpa2EuCzMT+JNk1vXg==
+genshin-kit@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-2.0.2.tgz#bab1953e30c5ee498a5b56e396a77240fc35996e"
+  integrity sha512-dxiPx9EmcHXADc2C5R5eViKqLcdH6ygLlfp0dBuApuMIms3ZLlomceyeHz6DDjDJnX+b5DLedep1EUHZfUOfHA==
   dependencies:
     axios "^0.21.1"
     querystring "^0.2.1"
@@ -770,29 +770,29 @@ koa@^2.13.1:
     type-is "^1.6.16"
     vary "^1.1.2"
 
-koishi-core@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.npmjs.org/koishi-core/-/koishi-core-3.8.0.tgz#300947c58ff8e09f2f90073b99cbbbadbcdbc040"
-  integrity sha512-cYTV6I0eOt62jVMa+dw2KgdUGZ1Of3EGuEP6nbbfQlS6EkGJSiGYMPhvDt7dXL/FlhUk98vLtEf8d1MTScnUDw==
+koishi-core@^3.11.1:
+  version "3.11.1"
+  resolved "https://registry.npmjs.org/koishi-core/-/koishi-core-3.11.1.tgz#48aae8c630b70f3e1914f49176c921b42f086e5d"
+  integrity sha512-lJML1TVU5BetGyTiF5aFrmY/Qhz4lY3sL5ndkm7Vat+zPFcMQ5247AR3pY1k2yrAH9LGYVksnAJEI21rm4pFiw==
   dependencies:
     "@koa/router" "^10.0.0"
     "@types/koa-bodyparser" "^4.3.0"
     "@types/koa__router" "^8.0.4"
     "@types/lru-cache" "^5.1.0"
-    "@types/ws" "^7.4.1"
+    "@types/ws" "^7.4.2"
     axios "^0.21.1"
     fastest-levenshtein "^1.0.12"
     koa "^2.13.1"
     koa-bodyparser "^4.3.0"
-    koishi-utils "^4.2.0"
+    koishi-utils "^4.2.2"
     lru-cache "^6.0.0"
 
-koishi-utils@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/koishi-utils/-/koishi-utils-4.2.0.tgz#af6104965ce27ccd16dbdbbbf9ad2db4737a219d"
-  integrity sha512-6WZh+mypx1jQXCy/xQFM5Y1/DquqACoQ8qEpnxW8Yod2XuxlGTADUVl40O3btSS2mbA4C8I6pp20wWKB54ITjg==
+koishi-utils@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.npmjs.org/koishi-utils/-/koishi-utils-4.2.2.tgz#0597c0fdb651d0b08b5608fe0a6ee9fef015b160"
+  integrity sha512-PxH9rfJB7ozNeSKuMkby81b5Oxfimetx2WVEjZmJLURPiWNTy5HGZMcZtST/iGWs7pnqiafJOH2LM512pIARFA==
   dependencies:
-    supports-color "^8.1.1"
+    supports-color "^8.1.0"
 
 locate-path@^5.0.0:
   version "5.0.0"
@@ -1190,7 +1190,7 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-supports-color@^8.1.1:
+supports-color@^8.1.0:
   version "8.1.1"
   resolved "https://registry.npmjs.org/supports-color/-/supports-color-8.1.1.tgz#cd6fc17e28500cff56c1b86c0a7fd4a54a73005c"
   integrity sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==

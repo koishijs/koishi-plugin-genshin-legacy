@@ -12,16 +12,16 @@
   },
   "dependencies": {
     "genshin-gacha-kit": "^1.1.0",
-    "genshin-kit": "^1.2.0",
+    "genshin-kit": "^2.0.2",
     "pug": "^3.0.2",
     "puppeteer-core": "^9.0.0"
   },
   "peerDependencies": {
-    "koishi-core": "^3.8.0"
+    "koishi-core": "^3.11.1"
   },
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
-    "koishi-core": "^3.8.0"
+    "koishi-core": "^3.11.1"
   },
   "keywords": [
     "genshin",
