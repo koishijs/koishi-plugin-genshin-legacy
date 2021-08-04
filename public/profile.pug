@@ -7,11 +7,17 @@ mixin statsCard(ctx)
 mixin characterCard(ctx)
   - const { name, icon, level, rarity, fetter, activedConstellations } = ctx;
   div(class=['characterCard', 'rarity-' + rarity])
-    .constellation= activedConstellations
-    img(src=icon)
-    .characterName= name
-    .characterLevel #{level}级
-    .characterFetter 好感 #{fetter}
+    .inner
+      .rarity
+        img(src='image/starRarity' + rarity + '.png')
+      .constellation= activedConstellations
+      img.avatar(src=icon)
+      .characterName
+        img(src="image/characterCardBottom.png")
+        span.text #{name}
+    .outer
+      .characterLevel #{level}级
+      .characterFetter 好感 #{fetter}
 
 mixin cityCard(ctx)
   - const { level, exploration_percentage, icon, name } = ctx;
@@ -23,11 +29,37 @@ mixin cityCard(ctx)
       .cityLevel 声望 #{level} 级
       .cityExploration 探索度 #{exploration_percentage / 10}%
 
+mixin homeCard(ctx)
+  - const { name, icon, level, item_num, visit_num, comfort_num, comfort_level_name,  comfort_level_icon } = ctx
+  .homeCard(
+    style={ 'background-image': 'url(' + icon + ')' }
+    )
+    .top
+      .comfortInfo
+        img(src=comfort_level_icon)
+        .confortName= comfort_level_name
+      .homeName= name
+    .bottom
+      .levelInfo
+        .num= level
+        .desc 信任等阶
+      .comfortNum
+        .num= comfort_num
+        .desc 最高仙力
+      .itemNum 
+        .num= item_num 
+        .desc 摆设数量
+      .visitorNum 
+        .num= visit_num
+        .desc 来访人数
+
+
 doctype html
 html
   head
-    style
+    style#commonStyles
       include static/common.css
+    style#profileStyles
       include static/profile.css
 
   body
@@ -58,5 +90,13 @@ html
           .cityList
             each item in world_explorations
               +cityCard(item)
+
+      //- 尘歌壶
+      .box
+        .boxTitle 尘歌壶
+        .boxContent
+          .homeList
+            each item in homes
+              +homeCard(item)
 
     include footer.pug

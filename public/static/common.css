@@ -54,3 +54,10 @@ footer {
 footer p {
   margin: 0;
 }
+
+.flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}

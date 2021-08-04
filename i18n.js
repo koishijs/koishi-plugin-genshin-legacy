@@ -46,7 +46,7 @@ module.exports = {
       title: '玩家 {0} 的原神信息',
       stats_title: '数据总览',
       avatar_title: '角色列表',
-      city_explorations_title: '城市探索'
+      city_explorations_title: '城市探索',
     },
     stats: {
       active_day_number: '活跃天数',
@@ -61,8 +61,9 @@ module.exports = {
       precious_chest_number: '珍贵宝箱',
       luxurious_chest_number: '华丽宝箱',
       exquisite_chest_number: '精致宝箱',
-      common_chest_number: '普通宝箱'
-    }
+      common_chest_number: '普通宝箱',
+      electroculus_number: '雷神瞳',
+    },
   },
   // 贡献账号
   donate_daily_runout:
@@ -85,5 +86,5 @@ module.exports = {
   donate_checked_error:
     '哎呀，您提供的 cookie 似乎不可用\n回复“确认捐赠米游社账号”再试一次，或者回复“如何捐赠米游社账号”重新确认 cookie 获取步骤。\n如有疑问，请联系 bot 管理员。',
   donate_donor_list:
-    '感谢以下玩家捐赠的查询用账号：\n{0}\n想要提高查询上限吗？想要解锁无限次查询自己信息的特权吗？私信我“捐赠原神账号”了解详情。'
+    '感谢以下玩家捐赠的查询用账号：\n{0}\n想要提高查询上限吗？想要解锁无限次查询自己信息的特权吗？私信我“捐赠原神账号”了解详情。',
 }

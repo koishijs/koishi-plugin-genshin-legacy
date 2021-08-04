@@ -3,7 +3,7 @@ const path = require('path')
 const { writeFileSync } = require('fs')
 
 const { uid, cookie } = require('./secret')
-const { GenshinKit } = require('genshin-kit')
+const { GenshinKit, util } = require('genshin-kit')
 const { template } = require('koishi-utils')
 
 template.set('genshin', require('../i18n'))
@@ -14,21 +14,16 @@ function m(k) {
 
 const genshin = new GenshinKit()
 genshin.loginWithCookie(cookie)
-Promise.all([genshin.getUserInfo(uid), genshin.getAllCharacters(uid)]).then(
-  ([userInfo, allCharacters]) => {
+Promise.all([genshin.getUserInfo(uid), genshin.getAllCharacters(uid)])
+  .then(([userInfo, allCharacters]) => {
     let _stats = Object.assign({}, userInfo.stats)
     userInfo.stats = []
-
     for (key in _stats) {
       userInfo.stats.push({ desc: m('stats.' + key), count: _stats[key] })
     }
 
     allCharacters.forEach((item) => {
-      let constellation = 0
-      item.constellations.forEach(({ is_actived }) =>
-        is_actived ? constellation++ : null
-      )
-      item.constellation = constellation
+      item.activedConstellations = util.activedConstellations(item)
     })
 
     userInfo.avatars = allCharacters
@@ -46,5 +41,5 @@ Promise.all([genshin.getUserInfo(uid), genshin.getAllCharacters(uid)]).then(
       options
     )
     writeFileSync(path.resolve(__dirname, '../public/profile.dev.html'), html)
-  }
-).catch(console.error)
+  })
+  .catch(console.error)

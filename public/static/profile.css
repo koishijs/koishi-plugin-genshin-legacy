@@ -27,51 +27,86 @@
 .characterList {
   display: flex;
   flex-flow: wrap;
+  justify-content: center;
 }
 .characterList .characterCard {
+  margin: 1rem;
+}
+.characterList .characterCard .inner {
   position: relative;
   background-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  margin: 1rem;
-  padding: 1rem;
   color: white;
 }
-.characterList .characterCard.rarity-5 {
-  background-color: #e49d47;
+.characterList .characterCard.rarity-5 .inner {
+  background: linear-gradient(180deg, #865a2e 0%, #b2732b 100%);
 }
-.characterList .characterCard.rarity-4 {
-  background-color: #c83ee4;
+.characterList .characterCard.rarity-4 .inner {
+  background: linear-gradient(180deg, #565382 0%, #896ba7 100%);
 }
-.characterList .characterCard img {
+.characterList .characterCard .rarity {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+.characterList .characterCard .rarity img {
+  width: auto;
+  height: 24px;
+}
+.characterList .characterCard img.avatar {
   width: 120px;
   height: 120px;
+  padding: 1rem;
+  padding-bottom: 0;
 }
 .characterList .characterCard .characterName {
-  background-color: rgba(0, 0, 0, 0.1);
   font-size: 1.4rem;
-  padding: 0.2rem;
+  padding: 0.4rem;
+  padding-top: 0;
+  font-weight: 600;
+  color: #000;
+  text-align: center;
+  position: relative;
+}
+.characterList .characterCard .characterName .text {
+  position: relative;
+  z-index: 1;
+}
+.characterList .characterCard .characterName img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 148px;
+  height: auto;
 }
 .characterCard .constellation {
   position: absolute;
-  right: -1rem;
+  right: -0.8rem;
   top: -0.8rem;
   border-radius: 50%;
   display: inline-block;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   color: #fff;
 }
 .characterCard.rarity-5 .constellation {
-  background-color: #e49d47;
-  box-shadow: 0 0 0 3px #fff inset, 0 0 0 3px #e49d47;
+  background-color: #b2732b;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px #b2732b;
 }
 .characterCard.rarity-4 .constellation {
-  background-color: #c83ee4;
-  box-shadow: 0 0 0 3px #fff inset, 0 0 0 3px #c83ee4;
+  background-color: #63598b;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px #896ba7;
+}
+.characterList .characterCard .outer {
+  margin-top: 0.4rem;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 /* 城市列表 */
@@ -104,4 +139,49 @@
 }
 .cityCard .cityName {
   font-size: 30px;
+}
+
+/* 家园列表 */
+.homeList {
+  display: flex;
+  flex-flow: wrap;
+}
+.homeCard {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-sizing: border-box;
+  width: calc(50% - 2rem);
+  color: #fff;
+  border-radius: 8px;
+  margin: 1rem;
+}
+.homeCard .top {
+  display: flex;
+  padding: 1rem;
+}
+.homeCard .top .comfortInfo {
+  flex: 1;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.homeCard .top .comfortInfo img {
+  width: 2rem;
+  margin-right: 4px;
+}
+.homeCard .bottom {
+  display: flex;
+  margin: 1rem auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1rem 0.2rem;
+}
+.homeCard .bottom > div {
+  flex: 1;
+  text-align: center;
+}
+.homeCard .bottom > div .num {
+  font-size: 1.5rem;
+  font-weight: 600;
 }

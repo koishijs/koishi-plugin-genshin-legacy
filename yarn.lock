@@ -111,13 +111,6 @@
   resolved "https://registry.nlark.com/@types/keygrip/download/@types/keygrip-1.0.2.tgz?cache=0&sync_timestamp=1621241583205&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fkeygrip%2Fdownload%2F%40types%2Fkeygrip-1.0.2.tgz#513abfd256d7ad0bf1ee1873606317b33b1b2a72"
   integrity sha1-UTq/0lbXrQvx7hhzYGMXszsbKnI=
 
-"@types/koa-bodyparser@^4.3.0":
-  version "4.3.1"
-  resolved "https://registry.nlark.com/@types/koa-bodyparser/download/@types/koa-bodyparser-4.3.1.tgz#ec2e06f6f50cfddba035d33a3cfe75a8f0cd7fa4"
-  integrity sha1-7C4G9vUM/dugNdM6PP51qPDNf6Q=
-  dependencies:
-    "@types/koa" "*"
-
 "@types/koa-compose@*":
   version "3.2.5"
   resolved "https://registry.nlark.com/@types/koa-compose/download/@types/koa-compose-3.2.5.tgz#85eb2e80ac50be95f37ccf8c407c09bbe3468e9d"
@@ -523,10 +516,10 @@ genshin-gacha-kit@^1.1.0:
     axios "^0.21.1"
     tslib "^2.2.0"
 
-genshin-kit@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.nlark.com/genshin-kit/download/genshin-kit-2.1.0.tgz#db063428824ba6fd4cddcdb525445000cc18491f"
-  integrity sha1-2wY0KIJLpv1M3c21JURQAMwYSR8=
+genshin-kit@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-2.2.0.tgz#8c7740fa696a27c279f12b42422efd95f8904aa2"
+  integrity sha512-8hVXoygKF3cn+OqLd2zK7Q4EaZIqOA79fEIeckAadIlfTE5TZYw7NcS0pSPwjwh6wVaZGjTabTpSndN1RdyXUg==
   dependencies:
     axios "^0.21.1"
     querystring "^0.2.1"
@@ -769,13 +762,12 @@ koa@^2.13.1:
     type-is "^1.6.16"
     vary "^1.1.2"
 
-koishi-core@^3.8.0:
-  version "3.11.2"
-  resolved "https://registry.nlark.com/koishi-core/download/koishi-core-3.11.2.tgz#d2d2edcf40336fe5cf9e868fc6234fc983e275e5"
-  integrity sha1-0tLtz0Azb+XPnoaPxiNPyYPideU=
+koishi-core@^3.11.1:
+  version "3.13.0"
+  resolved "https://registry.npmjs.org/koishi-core/-/koishi-core-3.13.0.tgz#f6ef64028a9803123650cfa5de929d2c19254d7f"
+  integrity sha512-VIB3ykL89xt1/xkRq2bELKk9n2expEy+xrzYOXBJmrjvs8wbCspyUKDYPfCBgj9z+O5tu5nyfn5TjIdwhnIj3g==
   dependencies:
     "@koa/router" "^10.0.0"
-    "@types/koa-bodyparser" "^4.3.0"
     "@types/koa__router" "^8.0.4"
     "@types/lru-cache" "^5.1.0"
     "@types/ws" "^7.4.2"
@@ -783,13 +775,13 @@ koishi-core@^3.8.0:
     fastest-levenshtein "^1.0.12"
     koa "^2.13.1"
     koa-bodyparser "^4.3.0"
-    koishi-utils "^4.2.2"
+    koishi-utils "^4.2.3"
     lru-cache "^6.0.0"
 
-koishi-utils@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.nlark.com/koishi-utils/download/koishi-utils-4.2.2.tgz#0597c0fdb651d0b08b5608fe0a6ee9fef015b160"
-  integrity sha1-BZfA/bZR0LCLVgj+Cm7p/vAVsWA=
+koishi-utils@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.npmjs.org/koishi-utils/-/koishi-utils-4.2.3.tgz#e6954ca5719795dedb91c55c5c940176c9501f19"
+  integrity sha512-FKOEazHwXDXI1XLIYz9Ox950bvXB5ZlYrfLML0OSZlfgY/QMbJi3bMcvMbN/TcT7BhzYTT+CHIWsJyuWt8CdXA==
   dependencies:
     supports-color "^8.1.0"
 
