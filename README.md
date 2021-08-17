@@ -27,13 +27,13 @@ npm install koishi-plugin-genshin
 
 需要最新版 koishi v3，并配置数据库。
 
-另外还需要安装 Chromium 用于生成图片。
+另外还需要安装 `koishi-plugin-puppeteer` 用于生成图片。
 
 ## 配置项目
 
 插件目前需要使用您的网页版米游社的 cookie 来获取玩家信息。
 
-> 使用网页版米游社登录 <https://bbs.mihoyo.com/ys/>，然后在控制台输入 `document.cookie`，返回的结果就是 cookie，一般来说一个 cookie 可以使用一段时间，如果失效了就再次获取一遍。
+> 使用网页版米游社登录 <https://bbs.mihoyo.com/ys/>，然后在控制台输入 `document.cookie`，返回的结果就是 cookie，一般来说只要没有进行修改密码、换绑手机或点击退出按钮等操作，当前 cookie 便能长久使用，如果失效了就重新登录获取一遍。
 
 > **⚠️ 注意 ⚠️**：请妥善保存您的 cookies。<br>绝对不要把你的 cookies 交给任何人！<br>绝对绝对不要把你的 cookies 交给任何人！！<br>绝对绝对绝对不要把你的 cookies 交给任何人！！！
 

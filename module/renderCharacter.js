@@ -1,9 +1,8 @@
-const ppt = require('puppeteer-core')
 const pug = require('pug')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
 
-module.exports = async ({ uid, character, executablePath }) => {
+module.exports = async ({ uid, character, ctx }) => {
   let screenshot
 
   const options = {
@@ -15,35 +14,36 @@ module.exports = async ({ uid, character, executablePath }) => {
     options
   )
 
-  const browser = await ppt.launch({
-    executablePath,
-    args: [
-      '--no-sandbox',
-      '--disable-infobars ', // don't show information bar
-      '--lang=zh-CN',
-      '--disable-dev-shm-usage',
-    ],
-    defaultViewport: { width: 600, height: 1000 },
-    headless: 1,
-  })
+  const page = await ctx.app.puppeteer.page();
 
   try {
-    const page = await browser.newPage()
     await page.goto(
       'file:///' + path.resolve(__dirname, '../public/index.html')
     )
     await page.setContent(html)
+    const { width, height } = await page.evaluate(() => {
+      const ele = document.body;
+      return {
+        width: ele.scrollWidth,
+        height: ele.scrollHeight,
+      };
+    });
+    await page.setViewport({
+      width: Math.ceil(width + 14),
+      height: Math.ceil(height + 14),
+    });
     screenshot = await page.screenshot({
       fullPage: true,
+      type: 'jpeg',
     })
   } catch (err) {
-    await browser.close()
+    await page.close()
     return `错误：${err}`
   }
 
-  await browser.close()
+  await page.close()
   return (
     template('genshin.has_character', uid, character.name) +
-    segment('image', { url: 'base64://' + screenshot.toString('base64') })
+    segment.image(screenshot)
   )
 }
