@@ -24,7 +24,7 @@ function getTimeLeft(time) {
 /**
  * @function Date.format
  */
-Date.prototype.format = function(fmt) {
+Date.prototype.format = function (fmt) {
   var o = {
     'M+': this.getMonth() + 1, //月份
     'd+': this.getDate(), //日
@@ -60,7 +60,6 @@ const apply = (ctx, pOptions) => {
     cookie: '',
     donateMin: 5,
     donateMax: 25,
-    browserPath: '',
     wish: {
       enable: false,
       officialPools: true,
@@ -132,18 +131,18 @@ const apply = (ctx, pOptions) => {
         ])
 
         // 截图
-        if (pOptions.browserPath) {
+        if (ctx.app.puppeteer) {
           let image = await require('./module/renderProfile')({
             uid,
             userInfo,
             allCharacters,
-            executablePath: pOptions.browserPath
+            ctx,
           })
           return segment('quote', { id: session.messageId }) + image
         }
 
         // 文字版
-        return '截图失败：未配置截图用浏览器路径。'
+        return '截图失败：未安装koishi-plugin-puppeteer'
       } catch (err) {
         return (
           segment('quote', { id: session.messageId }) +
@@ -181,11 +180,11 @@ const apply = (ctx, pOptions) => {
         if (!character) return template('genshin.no_character', uid, name)
 
         // 截图
-        if (pOptions.browserPath) {
+        if (ctx.app.puppeteer) {
           const image = await require('./module/renderCharacter')({
             uid,
             character,
-            executablePath: pOptions.browserPath
+            ctx,
           })
           return segment('quote', { id: session.messageId }) + image
         }
@@ -285,9 +284,8 @@ const apply = (ctx, pOptions) => {
           function formatedCharacterValue(data) {
             if (data.length < 1) return '无'
             let top = data[0]
-            return `${Filter.id(top.avatar_id).name || top.avatar_id} ${
-              top.value
-            }`
+            return `${Filter.id(top.avatar_id).name || top.avatar_id} ${top.value
+              }`
           }
 
           // 格式化信息
@@ -334,7 +332,7 @@ const apply = (ctx, pOptions) => {
         (err) => {
           session.send(
             segment('quote', { id: session.messageId }) +
-              template('genshin.failed', err.message || '出现未知问题')
+            template('genshin.failed', err.message || '出现未知问题')
           )
         }
       )
