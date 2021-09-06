@@ -24,7 +24,7 @@ function getTimeLeft(time) {
 /**
  * @function Date.format
  */
-Date.prototype.format = function (fmt) {
+Date.prototype.format = function(fmt) {
   var o = {
     'M+': this.getMonth() + 1, //月份
     'd+': this.getDate(), //日
@@ -32,7 +32,7 @@ Date.prototype.format = function (fmt) {
     'm+': this.getMinutes(), //分
     's+': this.getSeconds(), //秒
     'q+': Math.floor((this.getMonth() + 3) / 3), //季度
-    S: this.getMilliseconds() //毫秒
+    S: this.getMilliseconds(), //毫秒
   }
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(
@@ -63,9 +63,9 @@ const apply = (ctx, pOptions) => {
     wish: {
       enable: false,
       officialPools: true,
-      customPools: []
+      customPools: [],
     },
-    ...pOptions
+    ...pOptions,
   }
 
   genshin.loginWithCookie(pOptions.cookie)
@@ -74,7 +74,7 @@ const apply = (ctx, pOptions) => {
   // 注册
   ctx
     .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
-      minInterval: Time.hour
+      minInterval: Time.hour,
     })
     .alias('原神')
     .userFields(['genshin_uid'])
@@ -112,7 +112,7 @@ const apply = (ctx, pOptions) => {
 
   ctx
     .command('genshin.profile', template('genshin.cmd_profile_desc'), {
-      minInterval: Time.second * 30
+      minInterval: Time.second * 30,
     })
     .userFields(['genshin_uid'])
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -127,7 +127,7 @@ const apply = (ctx, pOptions) => {
       try {
         const [userInfo, allCharacters] = await Promise.all([
           genshin.getUserInfo(uid, true),
-          genshin.getAllCharacters(uid, true)
+          genshin.getAllCharacters(uid, true),
         ])
 
         // 截图
@@ -159,7 +159,7 @@ const apply = (ctx, pOptions) => {
       'genshin.character <name>',
       template('genshin.cmd_character_desc'),
       {
-        minInterval: Time.second * 15
+        minInterval: Time.second * 15,
       }
     )
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -190,15 +190,6 @@ const apply = (ctx, pOptions) => {
         }
 
         // 文字版
-        function reliquariesFmt(reliquaries) {
-          if (reliquaries.length < 1) return '无'
-          let msg = ''
-          reliquaries.forEach((item) => {
-            msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
-          })
-          return msg.trim()
-        }
-
         return [
           template('genshin.has_character', uid, character.name),
           template('genshin.character_basic', {
@@ -208,19 +199,19 @@ const apply = (ctx, pOptions) => {
             rarity: character.rarity,
             constellation: activedConstellations(character),
             level: character.level,
-            fetter: character.fetter
+            fetter: character.fetter,
           }),
           template('genshin.character_weapon', {
             name: character.weapon.name,
             rarity: character.weapon.rarity,
             type_name: character.weapon.type_name,
             level: character.weapon.level,
-            affix_level: character.weapon.affix_level
+            affix_level: character.weapon.affix_level,
           }),
           template(
             'genshin.character_reliquaries',
             reliquariesFmt(character.reliquaries)
-          )
+          ),
         ].join('\n')
       } catch (err) {
         return (
@@ -233,10 +224,19 @@ const apply = (ctx, pOptions) => {
       }
     })
 
+  function reliquariesFmt(reliquaries) {
+    if (reliquaries.length < 1) return '无'
+    let msg = ''
+    reliquaries.forEach((item) => {
+      msg += `${item.pos_name}：${item.name} (${item.rarity}★)\n`
+    })
+    return msg.trim()
+  }
+
   // 深境螺旋
   ctx
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
-      minInterval: Time.second * 15
+      minInterval: Time.second * 15,
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
     .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
@@ -254,7 +254,7 @@ const apply = (ctx, pOptions) => {
 
       Promise.all([
         genshin.getAbyss(uid, type === 'cur' ? 1 : 2, true),
-        genshin.getUserInfo(uid, true)
+        genshin.getUserInfo(uid, true),
       ]).then(
         (data) => {
           // 变量
@@ -271,7 +271,7 @@ const apply = (ctx, pOptions) => {
             reveal_rank,
             damage_rank,
             take_damage_rank,
-            energy_skill_rank
+            energy_skill_rank,
           } = abyssInfo
           start_time *= 1000
           end_time *= 1000
@@ -284,8 +284,9 @@ const apply = (ctx, pOptions) => {
           function formatedCharacterValue(data) {
             if (data.length < 1) return '无'
             let top = data[0]
-            return `${Filter.id(top.avatar_id).name || top.avatar_id} ${top.value
-              }`
+            return `${Filter.id(top.avatar_id).name || top.avatar_id} ${
+              top.value
+            }`
           }
 
           // 格式化信息
@@ -299,14 +300,14 @@ const apply = (ctx, pOptions) => {
                 max_floor,
                 total_win_times,
                 total_battle_times,
-                total_star
+                total_star,
               }),
               template('genshin.abyss_top_stats', {
                 damage_rank: formatedCharacterValue(damage_rank),
                 take_damage_rank: formatedCharacterValue(take_damage_rank),
                 reveal_rank: formatedCharacterValue(reveal_rank),
-                energy_skill_rank: formatedCharacterValue(energy_skill_rank)
-              })
+                energy_skill_rank: formatedCharacterValue(energy_skill_rank),
+              }),
             ].join('\n')
           }
 
@@ -332,11 +333,16 @@ const apply = (ctx, pOptions) => {
         (err) => {
           session.send(
             segment('quote', { id: session.messageId }) +
-            template('genshin.failed', err.message || '出现未知问题')
+              template('genshin.failed', err.message || '出现未知问题')
           )
         }
       )
     })
+
+  ctx.command('genshin.debug', 'DEBUG', { hidden: true }).action(() => {
+    const hoyolabVer = genshin._hoyolabVersion()
+    return [`hoyolab(cn): ${hoyolabVer}`].join('\n')
+  })
 
   // Load wish plugin
   if (pOptions.wish.enable) {
@@ -346,5 +352,5 @@ const apply = (ctx, pOptions) => {
 
 module.exports = {
   name: 'genshin',
-  apply
+  apply,
 }
