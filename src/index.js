@@ -88,6 +88,9 @@ const apply = (ctx, pOptions) => {
     ctx.plugin(require('./plugins/wish'), pOptions)
   }
 
+  // Donate
+  ctx.plugin(require('./plugins/donate'))
+
   // Debug
   ctx.command('genshin.debug', 'DEBUG', { hidden: true }).action(() => {
     const hoyolabVer = genshin._hoyolabVersion()

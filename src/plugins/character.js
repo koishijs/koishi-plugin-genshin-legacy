@@ -4,6 +4,7 @@ const {
   CharactersFilter,
   activedConstellations,
 } = require('genshin-kit').util
+const { getErrMsg } = require('./errorCode')
 
 /**
  * @param {import('koishi-core').Context} ctx
@@ -70,13 +71,7 @@ function apply(ctx, { genshin }) {
           ),
         ].join('\n')
       } catch (err) {
-        return (
-          segment('quote', { id: session.messageId }) +
-          template(
-            'genshin.failed',
-            err.message || template('genshin.error_unknown')
-          )
-        )
+        return segment('quote', { id: session.messageId }) + getErrMsg(err)
       }
     })
 

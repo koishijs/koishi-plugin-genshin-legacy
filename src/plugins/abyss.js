@@ -1,6 +1,7 @@
 const { template, segment, Time } = require('koishi-utils')
 const { isValidCnUid, CharactersFilter } = require('genshin-kit').util
 const { dateFormat, getTimeLeft } = require('../utils/dateFormat')
+const { getErrMsg } = require('./errorCode')
 
 /**
  * @param {import('koishi-core').Context} ctx
@@ -104,8 +105,7 @@ function apply(ctx, { genshin }) {
         },
         (err) => {
           session.send(
-            segment('quote', { id: session.messageId }) +
-              template('genshin.failed', err.message || '出现未知问题')
+            segment('quote', { id: session.messageId }) + getErrMsg(err)
           )
         }
       )

@@ -1,5 +1,6 @@
 const { template, segment, Time } = require('koishi-utils')
 const { isValidCnUid } = require('genshin-kit').util
+const { getErrMsg } = require('./errorCode')
 
 /**
  * @param {import('koishi-core').Context} ctx
@@ -40,13 +41,7 @@ function apply(ctx, { genshin }) {
         // 文字版
         return '截图失败：未安装 koishi-plugin-puppeteer'
       } catch (err) {
-        return (
-          segment.quote(session.messageId) +
-          template(
-            'genshin.failed',
-            err.message || template('genshin.error_unknown')
-          )
-        )
+        return segment.quote(session.messageId) + getErrMsg(err)
       }
     })
 }
