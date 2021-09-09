@@ -1,5 +1,9 @@
 const { template, segment, Time } = require('koishi-utils')
-const { CharactersFilter, activedConstellations } = require('genshin-kit').util
+const {
+  isValidCnUid,
+  CharactersFilter,
+  activedConstellations,
+} = require('genshin-kit').util
 
 /**
  * @param {import('koishi-core').Context} ctx

@@ -1,5 +1,5 @@
 const { template, segment, Time } = require('koishi-utils')
-const { isValidCnUid } = require('genshin-kit').util
+const { isValidCnUid, CharactersFilter } = require('genshin-kit').util
 const { dateFormat, getTimeLeft } = require('../utils/dateFormat')
 
 /**
