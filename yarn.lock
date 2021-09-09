@@ -404,14 +404,12 @@ genshin-gacha-kit@^1.1.0:
     axios "^0.21.1"
     tslib "^2.2.0"
 
-genshin-kit@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-2.2.0.tgz#8c7740fa696a27c279f12b42422efd95f8904aa2"
-  integrity sha512-8hVXoygKF3cn+OqLd2zK7Q4EaZIqOA79fEIeckAadIlfTE5TZYw7NcS0pSPwjwh6wVaZGjTabTpSndN1RdyXUg==
+genshin-kit@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/genshin-kit/-/genshin-kit-2.4.0.tgz#f1f2d2b5dd79967dd39fbd20cca56eb9d22df22c"
+  integrity sha512-k4Ea4VumLQrBO4jEslJfEbHvc2h9PBiaOoXYtAj9qgZqk0Pde5x6gV1xG5QBo/ra/63ea17rZgutz6gah1iDOQ==
   dependencies:
-    axios "^0.21.1"
-    querystring "^0.2.1"
-    tslib "^2.2.0"
+    tslib "^2.3.0"
 
 get-intrinsic@^1.0.2:
   version "1.1.1"
@@ -831,11 +829,6 @@ qs@^6.5.2:
   dependencies:
     side-channel "^1.0.4"
 
-querystring@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.nlark.com/querystring/download/querystring-0.2.1.tgz#40d77615bb09d16902a85c3e38aa8b5ed761c2dd"
-  integrity sha1-QNd2FbsJ0WkCqFw+OKqLXtdhwt0=
-
 raw-body@^2.3.3:
   version "2.4.1"
   resolved "https://registry.npm.taobao.org/raw-body/download/raw-body-2.4.1.tgz#30ac82f98bb5ae8c152e67149dac8d55153b168c"
@@ -914,6 +907,11 @@ tslib@^2.2.0:
   version "2.3.0"
   resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
   integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
+
+tslib@^2.3.0:
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 tsscmp@1.0.6:
   version "1.0.6"

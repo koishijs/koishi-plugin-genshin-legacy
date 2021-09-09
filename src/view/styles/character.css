@@ -1,0 +1,188 @@
+/* palette */
+.rarity-5 {
+  --bg-color: #fcf0d5;
+  --card-color: #f4e4be;
+  --border-color: #b2732b;
+  --hr-color: #e0cda1;
+}
+.rarity-4 {
+  --bg-color: #e4dffb;
+  --card-color: #d3ccf3;
+  --border-color: #63598b;
+  --hr-color: #b9afe7;
+}
+.rarity-105 {
+  --bg-color: #fad6d8;
+  --card-color: #f1c1c4;
+  --border-color: #b54f56;
+  --hr-color: #eba8ac;
+}
+
+/* common */
+.flex {
+  display: flex;
+}
+.container {
+  display: flex;
+  background-color: var(--bg-color);
+  margin: 6px;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px var(--border-color);
+  border-radius: 6px;
+}
+
+/* left */
+.container > .left {
+  display: flex;
+  position: relative;
+  width: 40vw;
+}
+.container > .left .flex {
+  align-items: center;
+}
+.container > .left .portrait {
+  align-content: center;
+  display: flex;
+}
+.container > .left .portrait img {
+  width: 100%;
+  height: auto;
+}
+.container > .left .title {
+  position: absolute;
+  width: 100%;
+  bottom: 25%;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+  padding: 1rem;
+  color: #fff;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0)
+  );
+}
+.container > .left .title .name {
+  font-size: 2rem;
+}
+
+/* right */
+.container > .right {
+  flex: 1;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* card */
+.card h2 {
+  font-weight: normal;
+  background-color: var(--border-color);
+  color: #fff;
+  margin: 0;
+  padding: 0.4rem;
+  padding-left: 1rem;
+}
+.card .content {
+  background-color: var(--card-color);
+  padding: 1rem;
+}
+.card hr {
+  border: none;
+  border-bottom: 2px dashed var(--hr-color);
+  margin: 0.4rem 0 0.4rem 0;
+  padding: 0;
+}
+
+/* constellations */
+.constellations .flex {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
+}
+.constellations .item .icon {
+  height: auto;
+  width: 100%;
+}
+.constellations .desc {
+  margin-top: 0.5rem;
+}
+.constellations .item {
+  flex: 1;
+  position: relative;
+  border-radius: 50%;
+}
+.constellations .item {
+  border: 4px solid #fff;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.constellations .item.is-locked::before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  background-image: url(../images/Lock.png);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 30px;
+}
+
+/* reliquaries */
+.reliquaries .content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.reliquaries .item {
+  width: calc(50% - 1rem);
+  align-items: center;
+}
+.reliquaries .icon {
+  width: 65px;
+}
+.reliquaries .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.reliquaries .info .name {
+  font-size: 1.2rem;
+}
+.reliquaries .info .rarity img {
+  height: 1em;
+}
+
+/* weapon */
+.weapon .content > .flex {
+  gap: 1rem;
+  align-items: center;
+}
+.weapon .icon img {
+  width: 80px;
+}
+.weapon .info {
+  flex: 1;
+}
+.weapon .rarity img {
+  height: 1.4rem;
+}
+.weapon .info .title {
+  gap: 8px;
+  vertical-align: baseline;
+}
+
+.weapon .info .title > div {
+  display: inline;
+}
+
+.weapon .info .title .name {
+  font-size: 1.6rem;
+}

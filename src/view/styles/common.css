@@ -1,0 +1,75 @@
+/* Common STyles */
+@font-face {
+  font-family: 'Genshin';
+  font-style: normal;
+  font-weight: normal;
+  src: url('Genshin_Impact_Font.woff')
+    format('truetype');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-family: Genshin, '微软雅黑', 'Microsoft Yahei', Arial, Helvetica,
+    sans-serif;
+  background-color: white;
+}
+
+h1 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #eae3dd;
+  box-shadow: 0 0 0 2px #d9d3c5 inset, 0 0 0 4px #eae3dd;
+}
+
+.box {
+  margin: 1rem 0;
+}
+
+.box .boxTitle {
+  margin: 2rem 0 1rem 0;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 2.4;
+  background-image: url(../images/Header_background.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 3rem;
+}
+
+.box .boxContent {
+  border: 1px solid #ffdd95;
+  background-color: #f5f5f5;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+}
+
+footer {
+  line-height: 1.2;
+  text-align: right;
+  color: gray;
+  padding-right: 8px;
+  border-right: 6px solid #ffdd95;
+  border-radius: 4px;
+}
+footer p {
+  margin: 0;
+}
+
+.flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}

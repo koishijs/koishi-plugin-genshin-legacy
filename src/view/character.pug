@@ -1,0 +1,67 @@
+mixin reliquaries(ctx)
+  - const { name, icon, rarity , pos_name, level } = ctx;
+  .item.flex(class=[`rarity-${rarity}`])
+    img.icon(src=icon)
+    .info
+      .name= name
+      .flex
+        .rarity
+          img(src=`images/Star/${rarity}.png`)
+        .level +#{level}
+
+mixin constellations(ctx)
+  - const { icon, is_actived } = ctx;
+  div.item(class={ 'is-actived': is_actived, 'is-locked': !is_actived })
+    img.icon(src=icon)
+
+doctype html
+html
+  head
+    style
+    link(rel="stylesheet", href="styles/common.css")
+    link(rel="stylesheet", href="styles/character.css")
+
+  body
+    .container(class=[`rarity-${rarity}`])
+      .left
+        .flex
+          .portrait
+            img(src=image)
+          .title
+            .name= name
+            .level #{level}级
+            .fetter 好感度 #{fetter}
+
+      .right
+        .card.constellations
+          h2 命之座
+          .content
+            .flex
+              each item in constellations
+                +constellations(item)
+            .desc 已激活: #{actived_constellation_num}
+        
+        .card.weapon
+          h2 武器 - #{weapon.type_name}
+          .content
+            .flex
+              .icon
+                img(src=weapon.icon)
+              .info
+                .title
+                  .name= weapon.name
+                  .affix_level 精炼 #{weapon.affix_level} 阶
+                .rarity
+                  img(src=`images/Star/${weapon.rarity}.png`)
+                .level #{weapon.level}级
+                hr
+                .desc= weapon.desc
+        
+        .card.reliquaries
+          h2 圣遗物
+          .content
+            each item in reliquaries
+              +reliquaries(item)
+
+    //- 脚注
+    include footer.pug

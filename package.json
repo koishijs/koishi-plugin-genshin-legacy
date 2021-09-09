@@ -2,7 +2,7 @@
   "name": "koishi-plugin-genshin",
   "version": "2.0.0-beta.14",
   "description": "Genshin Impact player data fetcher and gacha simulator for Koishi.js",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
   "author": "Dragon-Fish <824399619@qq.com>",
   "license": "Apache-2.0",
