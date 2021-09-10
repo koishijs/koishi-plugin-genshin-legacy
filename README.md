@@ -10,6 +10,22 @@
 
 想看看自己是不是非酋？想要成为下一个天选之人？向 koishi bot 发送指令，进行模拟抽卡吧！
 
+**截图展示**
+
+<details>
+<summary>玩家资料卡 (genshin.profile)</summary>
+
+![genshin-profile.jpg](https://i.loli.net/2021/09/10/9Q1MzJfqmUhj46y.jpg)
+
+</details>
+
+<details>
+<summary>角色展示卡 (genshin.character)</summary>
+
+![genshin-character.jpg](https://i.loli.net/2021/09/10/oq1AYMeQNjlX8Zf.jpg)
+
+</details>
+
 ## 安装方法
 
 ```bash
@@ -25,9 +41,9 @@ npm install koishi-plugin-genshin
 
 ## 系统需求
 
-需要最新版 koishi v3，并配置数据库。
+需要配合最新版 koishi v3。需要配置数据库，暂时只保证兼容 MongoDB。
 
-另外还需要安装 Chromium 用于生成图片。
+若要使用完整的“卡片”功能，需要配置并安装 [koishi-plugin-puppeteer](https://npmjs.com/package/koishi-plugin-puppeteer)。
 
 ## 配置项目
 
@@ -49,7 +65,6 @@ module.exports = {
     // ...
     genshin: {
       // 本插件的配置项
-      }
     }
     // ...
   }
@@ -69,7 +84,7 @@ App.plugin(require('koishi-plugin-genshin'), {
 - `cookie` {string} 您的米游社小饼干
 - `wish` {object}
   - `wish.enable` {boolean} 是否开启抽卡模拟器
-  - `wish.customPools` {[AppGachaPool[]](https://github.com/Dragon-Fish/genshin-gacha-kit)} 自定义卡池（格式详见`genshin-gacha-kit`）
+  - `wish.customPools` {[AppGachaPool[]](https://github.com/genshin-kit/genshin-gacha-kit)} 自定义卡池（格式详见`genshin-gacha-kit`）
 
 ## 注意事项
 
@@ -81,9 +96,9 @@ App.plugin(require('koishi-plugin-genshin'), {
 
 _For communication and learning only._
 
-**All game data & pictures from query:** &copy;miHoYo
+**All game data & pictures from query, Genshin Impact font:** &copy;miHoYo
 
-> Copyright 2021 Koishijs/机智的小鱼君
+> Copyright 2021 koishijs/机智的小鱼君
 >
 > Licensed under the Apache License, Version 2.0 (the "License");<br>
 > you may not use this file except in compliance with the License.<br>
