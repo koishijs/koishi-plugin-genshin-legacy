@@ -17,11 +17,11 @@ const genshin = new GenshinKit()
  * @command genshin
  * @param {import('koishi-core').Context} ctx
  */
-const apply = (ctx, pOptions) => {
+function apply(ctx, pOptions) {
   pOptions = {
-    cookie: '',
-    donateMin: 5,
-    donateMax: 25,
+    donate: {
+      enable: true,
+    },
     wish: {
       enable: false,
       officialPools: true,
@@ -32,8 +32,6 @@ const apply = (ctx, pOptions) => {
 
   // Set template
   template.set('genshin', { ...require('./i18n'), ...pOptions.i18n })
-
-  genshin.loginWithCookie(pOptions.cookie)
 
   // Register
   ctx
@@ -75,13 +73,13 @@ const apply = (ctx, pOptions) => {
     })
 
   // Abyss
-  ctx.plugin(require('./plugins/abyss'), { genshin })
+  ctx.plugin(require('./plugins/abyss'))
 
   // Character Card
-  ctx.plugin(require('./plugins/character'), { genshin })
+  ctx.plugin(require('./plugins/character'))
 
   // Profile
-  ctx.plugin(require('./plugins/profile'), { genshin })
+  ctx.plugin(require('./plugins/profile'))
 
   // Wish
   if (pOptions.wish.enable) {

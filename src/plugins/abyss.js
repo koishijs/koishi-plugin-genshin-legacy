@@ -1,13 +1,14 @@
 const { template, segment, Time } = require('koishi-utils')
 const { isValidCnUid, CharactersFilter } = require('genshin-kit').util
 const { dateFormat, getTimeLeft } = require('../utils/dateFormat')
-const { getErrMsg } = require('./errorCode')
+const { handleError } = require('./handleError')
+const { getGenshinApp } = require('../modules/database')
 
 /**
  * @param {import('koishi-core').Context} ctx
  * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
-function apply(ctx, { genshin }) {
+function apply(ctx) {
   ctx
     .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
       minInterval: Time.second * 15,
@@ -23,6 +24,10 @@ function apply(ctx, { genshin }) {
     })
     .action(async ({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
+      const genshin = getGenshinApp(session, uid)
+      if (!genshin) {
+        return template('genshin.dinate.daily_runout')
+      }
 
       const type = options.previous ? 'prev' : 'cur'
 
@@ -104,9 +109,7 @@ function apply(ctx, { genshin }) {
           session.send(segment('quote', { id: session.messageId }) + msg)
         },
         (err) => {
-          session.send(
-            segment('quote', { id: session.messageId }) + getErrMsg(err)
-          )
+          handleError(session, genshin, err)
         }
       )
     })

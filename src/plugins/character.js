@@ -4,13 +4,14 @@ const {
   CharactersFilter,
   activedConstellations,
 } = require('genshin-kit').util
-const { getErrMsg } = require('./errorCode')
+const { handleError } = require('./handleError')
+const { getGenshinApp } = require('../modules/database')
 
 /**
  * @param {import('koishi-core').Context} ctx
  * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
-function apply(ctx, { genshin }) {
+function apply(ctx) {
   ctx
     .command(
       'genshin.character <name>',
@@ -29,6 +30,11 @@ function apply(ctx, { genshin }) {
     })
     .action(async ({ session, options }, name = '旅行者') => {
       let uid = options.uid || session.user.genshin_uid
+      const genshin = getGenshinApp(session, uid)
+      if (!genshin) {
+        return template('genshin.dinate.daily_runout')
+      }
+
       try {
         const allCharacters = await genshin.getAllCharacters(uid, true)
         const Filter = new CharactersFilter(allCharacters)
@@ -43,7 +49,7 @@ function apply(ctx, { genshin }) {
             character,
             ctx,
           })
-          return segment('quote', { id: session.messageId }) + image
+          return segment.quote(session.messageId) + image
         }
 
         // 文字版
@@ -71,7 +77,7 @@ function apply(ctx, { genshin }) {
           ),
         ].join('\n')
       } catch (err) {
-        return segment('quote', { id: session.messageId }) + getErrMsg(err)
+        handleError(session, genshin, err)
       }
     })
 

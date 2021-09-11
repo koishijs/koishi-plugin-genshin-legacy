@@ -1,109 +1,52 @@
-const { template, segment } = require('koishi-utils')
-const { readFileSync } = require('fs')
 const path = require('path')
-const {} = require('genshin-kit').util
-const { GenshinKit } = require('genshin-kit')
-const { Tables } = require('koishi-core')
+const { readFileSync } = require('fs')
+const { segment, template } = require('koishi-utils')
+const { insertCookie } = require('../modules/database')
 
 const howToDonate = readFileSync(
-  path.resolve(__dirname, '../assets/how-to-donate.jpg')
+  path.resolve(__dirname, '../assets/how-to-donate.png')
 )
 
 /**
  * @param {import('koishi-core').Context} ctx
  * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
-function apply(ctx, { genshin }) {
+function apply(ctx) {
   ctx
     .private()
-    .command('genshin.donate [input:text]', '捐赠米游社账号')
-    .alias('捐赠米游社账号')
-    .check(({ session }, input) => {
-      if (!input) return session.execute('genshin.donate -h')
+    .command('genshin.donate [cookie:text]', '捐赠米游社账号')
+    .alias('捐赠米游社账号', '捐赠原神账号')
+    .usage('输入“米游社账号捐赠指南”查看教程')
+    .check(({ session, options }, cookie) => {
+      if (!cookie || options.help) return session.execute('genshin.donate.how')
     })
-    .action(async ({ session }, input) => {
-      const s = input.trim().split(/\r?\n/)
-      if (s.length < 2 || isNaN(s[0])) return '输入的内容不正确'
-      const { ltoken, ltuid } = parseCookie(s[1])
-      if (!ltoken || !ltuid) return '输入的 cookie 不正确'
-      return cookieDonate({
+    .action(async ({ session }, cookie) => {
+      return insertCookie({
         session,
-        uid,
-        ltoken,
-        ltuid,
+        cookie,
       })
     })
 
   ctx
-    .command('genshin.donate.how', 'internal command')
-    .action(({ session }) => {
-      return `
-${segment.image(howToDonate)}
-〓额外说明〓
-捐赠账号后，您依然可以正常使用该账号进行游戏。
-捐赠时填写的原神UID最好是该账号绑定的UID。
-如果不放心，建议捐赠小号。
-〓您可能会用到的〓
-米游社网页版: https://bbs.mihoyo.com/ys/
-输入到控制台的代码: alert(document.cookie)
-`
+    .command('genshin.donate.delete', '取消捐赠米游社账号')
+    .alias('取消捐赠米游社账号', '取消捐赠原神账号')
+    .option('user', '-u <user> 指定捐赠者', { authority: 2 })
+    .usage('输入“米游社账号捐赠指南”查看教程')
+    .action(async ({ session, options }) => {
+      return '该功能暂未实装，请联系 bot 管理员进行操作！'
     })
 
-  // On add
-  // ltoken=xxxxx; ltuid=xxxxxx;
-  async function cookieDonate({ session, uid, ltoken, ltuid }) {
-    const cookie = `ltoken=${ltoken}; ltuid=${ltuid}`
-
-    const g = new GenshinKit()
-    g.setCookie(cookie)
-    try {
-      await g.getUserInfo(uid)
-    } catch (e) {
-      if (e.code === -10001) {
-        return session.send('保存失败：米游社协议异常，请联系 bot 管理员。')
-      }
-      return session.send('验证失败：无效的 cookie 或 UID。')
-    }
-    try {
-      await ctx.database.mongo.db.collection('hoyolab-cookies').insertOne({
-        uid,
-        ltuid,
-        ltoken,
-        lastDisabled: '',
-        invalid: '',
-      })
-    } catch (e) {
-      ctx.logger('genshin').warn('保存 cookie 时发生错误', e)
-      return session.send('保存失败：数据库错误，请联系 bot 管理员。')
-    }
-    return session.send('保存成功！')
-  }
-
-  async function getCookie(uid) {
-    const [self, common] = await Promise.all([
-      ctx.database.mongo.db.collection('hoyolab-cookies').find({ uid }),
-      ctx.database.mongo.db
-        .collection('hoyolab-cookies')
-        .find({ lastDisabled: { $not: '2021-09-09' } }),
-    ])
-  }
+  ctx
+    .command('genshin.donate.how', 'internal command', { hidden: true })
+    .alias('米游社账号捐赠指南', '原神账号捐赠指南')
+    .action(() => {
+      return segment.image(howToDonate) + template('genshin.donate.help_extra')
+    })
 }
-
-function parseCookie(str) {
-  const obj = {}
-  str.split(';').forEach((item) => {
-    if (!item) return
-    const s = item.split('=')
-    const key = s?.[0].trim()
-    const val = s?.[1].trim()
-    obj[key] = val
-  })
-  return obj
-}
-
-Tables.extend('hoyolab-cookies', { primary: 'id' })
 
 module.exports = {
   name: 'genshin/donate',
   apply,
+  setCookie,
+  disableCookie,
 }

@@ -1,6 +1,7 @@
 const { template, segment, Time } = require('koishi-utils')
 const { isValidCnUid } = require('genshin-kit').util
-const { getErrMsg } = require('./errorCode')
+const { getErrMsg, handleError } = require('./handleError')
+const { getGenshinApp } = require('../modules/database')
 
 /**
  * @param {import('koishi-core').Context} ctx
@@ -20,6 +21,10 @@ function apply(ctx, { genshin }) {
     })
     .action(async ({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
+      const genshin = getGenshinApp(session, uid)
+      if (!genshin) {
+        return template('genshin.dinate.daily_runout')
+      }
 
       try {
         const [userInfo, allCharacters] = await Promise.all([
@@ -39,9 +44,9 @@ function apply(ctx, { genshin }) {
         }
 
         // 文字版
-        return '截图失败：未安装 koishi-plugin-puppeteer'
+        return '截图失败：未安装 koishi-plugin-puppeteer，请联系 bot 管理员。'
       } catch (err) {
-        return segment.quote(session.messageId) + getErrMsg(err)
+        handleError(session, genshin, err)
       }
     })
 }
