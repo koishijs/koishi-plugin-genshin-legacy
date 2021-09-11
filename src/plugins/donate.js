@@ -47,6 +47,4 @@ function apply(ctx) {
 module.exports = {
   name: 'genshin/donate',
   apply,
-  setCookie,
-  disableCookie,
 }
