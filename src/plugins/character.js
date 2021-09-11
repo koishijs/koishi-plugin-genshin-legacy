@@ -30,9 +30,9 @@ function apply(ctx) {
     })
     .action(async ({ session, options }, name = '旅行者') => {
       let uid = options.uid || session.user.genshin_uid
-      const genshin = getGenshinApp(session, uid)
+      const genshin = await getGenshinApp(session, uid)
       if (!genshin) {
-        return template('genshin.dinate.daily_runout')
+        return template('genshin.donate.daily_runout')
       }
 
       try {

@@ -21,10 +21,7 @@ function apply(ctx) {
       if (!cookie || options.help) return session.execute('genshin.donate.how')
     })
     .action(async ({ session }, cookie) => {
-      return insertCookie({
-        session,
-        cookie,
-      })
+      return insertCookie(session, cookie)
     })
 
   ctx

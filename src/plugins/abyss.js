@@ -24,9 +24,9 @@ function apply(ctx) {
     })
     .action(async ({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
-      const genshin = getGenshinApp(session, uid)
+      const genshin = await getGenshinApp(session, uid)
       if (!genshin) {
-        return template('genshin.dinate.daily_runout')
+        return template('genshin.donate.daily_runout')
       }
 
       const type = options.previous ? 'prev' : 'cur'

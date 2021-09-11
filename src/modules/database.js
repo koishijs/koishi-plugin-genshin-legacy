@@ -30,6 +30,7 @@ async function insertCookie(session, cookie) {
       .collection(colName)
       .find({ ltuid })
       .limit(1)
+      .toArray()
     if (already.length) {
       // 已保存过，刷新信息
       await session.database.mongo.db.collection(colName).updateOne(
@@ -78,13 +79,16 @@ async function getGenshinApp(session, uid) {
   const [self, common] = await Promise.all([
     session.database.mongo.db
       .collection(colName)
-      .find({ game_uid: { $in: uid } })
-      .limit(1),
+      .find({ game_uid: { $in: ['' + uid] } })
+      .limit(1)
+      .toArray(),
     session.database.mongo.db
       .collection(colName)
-      .find({ last_disabled: { $not: getFormatedToday() } })
-      .limit(1),
+      .find({ last_disabled: { $ne: getFormatedToday() } })
+      .limit(1)
+      .toArray(),
   ])
+
   let data
   if (self.length) {
     // 本人账号
@@ -118,11 +122,11 @@ async function disableCookie(session, cookie) {
 async function getBindingRoles(cookie) {
   const g = new GenshinKit()
   g.setCookie(cookie)
-  const { data } = g.request(
+  const { data } = await g.request(
     'get',
     'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie'
   )
-  return data?.data?.list
+  return data?.list
 }
 
 function getCookieObj(str) {
