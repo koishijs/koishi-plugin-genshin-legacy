@@ -7,7 +7,7 @@ const { getGenshinApp } = require('../modules/database')
  * @param {import('koishi-core').Context} ctx
  * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
-function apply(ctx, { genshin }) {
+function apply(ctx) {
   ctx
     .command('genshin.profile', template('genshin.cmd_profile_desc'), {
       minInterval: Time.second * 30,
