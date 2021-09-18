@@ -1,0 +1,101 @@
+mixin statsCard(ctx)
+  - const { desc, count } = ctx;
+  .item
+    .count= count
+    .desc= desc
+
+mixin characterCard(ctx)
+  - const { name, icon, level, rarity, fetter, element, activedConstellations } = ctx;
+  div(class=['characterCard', 'rarity-' + rarity])
+    .inner(style={'background-image':`url(images/ItemBackground/Rarity_${rarity}.png)`})
+      .sideIcons
+        .element
+          img(src=`images/Element/${element}.png` alt=element)
+        .constellation= activedConstellations
+      img.avatar(src=icon)
+      .characterName
+        span.text #{name}
+    .outer
+      .characterLevel 等级 #{level}
+      .characterFetter 好感 #{fetter}
+
+mixin cityCard(ctx)
+  - const { level, exploration_percentage, icon, name } = ctx;
+  .cityCard
+    .left
+      img.cityIcon(src=icon)
+    .right
+      .cityName= name
+      .cityLevel 声望 #{level} 级
+      .cityExploration 探索度 #{exploration_percentage / 10}%
+
+mixin homeCard(ctx)
+  - const { name, icon, level, item_num, visit_num, comfort_num, comfort_level_name,  comfort_level_icon } = ctx
+  .homeCard(
+    style={ 'background-image': 'url(' + icon + ')' }
+    )
+    .top
+      .comfortInfo
+        img(src=comfort_level_icon)
+        .confortName= comfort_level_name
+      .homeName= name
+    .bottom
+      .levelInfo
+        .num= level
+        .desc 信任等阶
+      .comfortNum
+        .num= comfort_num
+        .desc 最高仙力
+      .itemNum 
+        .num= item_num 
+        .desc 摆设数量
+      .visitorNum 
+        .num= visit_num
+        .desc 来访人数
+
+
+doctype html
+html
+  head
+    link(rel="stylesheet", href="styles/common.css")
+    link(rel="stylesheet", href="styles/profile.css")
+
+  body
+    //- 标题
+    .profile-container
+      h1 玩家 #{uid} 的原神信息
+
+      //- 数据总览
+      .box
+        .boxTitle 数据总览
+        .boxContent
+          .statsList
+            each item in stats
+              +statsCard(item)
+
+      //- 角色列表
+      .box
+        .boxTitle 角色列表
+        .boxContent
+          .characterList
+            each item in avatars
+              +characterCard(item)
+          p 右上角为命座数量
+
+      //- 世界探索
+      .box
+        .boxTitle 世界探索
+        .boxContent
+          .cityList
+            each item in world_explorations
+              +cityCard(item)
+
+      //- 尘歌壶
+      .box
+        .boxTitle 尘歌壶
+        .boxContent
+          .homeList
+            each item in homes
+              +homeCard(item)
+
+    include footer.pug

@@ -1,0 +1,187 @@
+/* 基础信息（神瞳数量等） */
+.profile-container {
+  margin: 1rem;
+}
+
+.statsList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.statsList .item {
+  box-sizing: border-box;
+  width: 25%;
+  padding: 8px;
+  text-align: center;
+}
+.statsList .item .count {
+  font-size: 1.6rem;
+}
+.statsList .item .desc {
+  color: gray;
+}
+
+/* 简单角色卡 */
+.characterList {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+}
+.characterList .characterCard .inner {
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  color: white;
+}
+.characterList .characterCard .rarity {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+.characterList .characterCard .rarity img {
+  width: auto;
+  height: 24px;
+}
+.characterList .characterCard img.avatar {
+  height: 150px;
+  width: auto;
+}
+.characterList .characterCard .characterName {
+  font-size: 1.4rem;
+  padding: 0.4rem;
+  padding-top: 0;
+  color: #000;
+  text-align: center;
+  position: relative;
+}
+.characterList .characterCard .characterName .text {
+  position: relative;
+  z-index: 1;
+}
+.characterList .characterCard .characterName img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 148px;
+  height: auto;
+}
+.characterCard .element img {
+  position: absolute;
+  left: 0rem;
+  top: 0rem;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.characterCard .constellation {
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  border-radius: 50%;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: calc(2 / 1.2);
+  color: #fff;
+}
+.characterCard.rarity-105 .constellation {
+  background-color: #b54f56;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px #b54f56;
+}
+.characterCard.rarity-5 .constellation {
+  background-color: #b2732b;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px #b2732b;
+}
+.characterCard.rarity-4 .constellation {
+  background-color: #63598b;
+  box-shadow: 0 0 0 2px #fff inset, 0 0 0 2px #63598b;
+}
+.characterList .characterCard .outer {
+  margin-top: 0.4rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* 城市列表 */
+.cityList {
+  display: flex;
+  flex-flow: wrap;
+}
+.cityCard {
+  background-image: url(../images/City_background.png);
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 100% 120px;
+  box-sizing: border-box;
+  width: calc(50% - 2rem);
+  height: 120px;
+  color: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem;
+}
+.cityCard img {
+  width: 90px;
+  float: left;
+}
+.cityCard .right {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cityCard .cityName {
+  font-size: 30px;
+}
+
+/* 家园列表 */
+.homeList {
+  display: flex;
+  flex-flow: wrap;
+}
+.homeCard {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-sizing: border-box;
+  width: calc(50% - 2rem);
+  color: #fff;
+  border-radius: 8px;
+  margin: 1rem;
+}
+.homeCard .top {
+  display: flex;
+  padding: 1rem;
+}
+.homeCard .top .comfortInfo {
+  flex: 1;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.homeCard .top .comfortInfo img {
+  width: 2rem;
+  margin-right: 4px;
+}
+.homeCard .bottom {
+  display: flex;
+  margin: 1rem auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1rem 0.2rem;
+}
+.homeCard .bottom > div {
+  flex: 1;
+  text-align: center;
+}
+.homeCard .bottom > div .num {
+  font-size: 1.5rem;
+}
