@@ -1,5 +1,3 @@
-const { GenshinKit } = require('genshin-kit')
-const { Session } = require('koishi-core')
 const { template, segment } = require('koishi-utils')
 const { disableCookie } = require('../modules/database')
 
@@ -19,12 +17,14 @@ function getErrMsg(err) {
 }
 
 /**
- * @param {Session} session
- * @param {GenshinKit} genshin
+ * @param {import('koishi-core').Session} session
+ * @param {import('genshin-kit').GenshinKit} genshin
  * @param {*} err
  */
 async function handleError(session, genshin, err) {
-  if (err.code === 10101) {
+  // 10001 - cookie 异常
+  // 10101 - 次数耗尽
+  if ([10001, 10101].includes(err.code)) {
     await session.send(template('genshin.donate.current_runout'))
     await disableCookie(session, genshin.cookie)
     return

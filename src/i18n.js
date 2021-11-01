@@ -54,6 +54,7 @@ module.exports = {
       win_rate: 'win_rate',
       anemoculus_number: '风神瞳',
       geoculus_number: '岩神瞳',
+      electroculus_number: '雷神瞳',
       avatar_number: '获得角色数',
       way_point_number: '解锁传送点',
       domain_number: '解锁秘境',
@@ -62,7 +63,7 @@ module.exports = {
       luxurious_chest_number: '华丽宝箱',
       exquisite_chest_number: '精致宝箱',
       common_chest_number: '普通宝箱',
-      electroculus_number: '雷神瞳',
+      magic_chest_number: '奇馈宝箱',
     },
   },
   // 贡献账号
