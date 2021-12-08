@@ -58,7 +58,9 @@ function apply(ctx) {
               ({ avatar_side_icon, status, remained_time }) =>
                 `  ${
                   avatar_side_icon.split('_').pop().split('.')[0]
-                } - ${status} (${remained_time > 1 ? 'seconds' : 'second'} left)`
+                } - ${status} (${
+                  remained_time > 1 ? 'seconds' : 'second'
+                } left)`
             )
             .join('\n'),
         ].join('\n')
@@ -69,6 +71,6 @@ function apply(ctx) {
 }
 
 module.exports = {
-  name: 'genshin/abyss',
+  name: 'genshin/dailynote',
   apply,
 }

@@ -1,4 +1,4 @@
-const { GenshinKit } = require('genshin-kit')
+const { GenshinKit } = require('@genshin-kit/core')
 async function checkCookie(cookie, uid) {
   const App = new GenshinKit()
   try {

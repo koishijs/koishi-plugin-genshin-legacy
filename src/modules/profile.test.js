@@ -3,7 +3,7 @@ const path = require('path')
 const { writeFileSync } = require('fs')
 
 const { uid, cookie } = require('./secret')
-const { GenshinKit, util } = require('genshin-kit')
+const { GenshinKit, util } = require('@genshin-kit/core')
 const { template } = require('koishi-utils')
 
 template.set('genshin', require('../i18n'))

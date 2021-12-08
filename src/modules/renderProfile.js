@@ -1,7 +1,7 @@
 const pug = require('pug')
 const { segment, template } = require('koishi-utils')
 const path = require('path')
-const { activedConstellations } = require('genshin-kit').util
+const { activedConstellations } = require('@genshin-kit/core').util
 
 function m(k) {
   return template(`genshin.profile.${k}`)

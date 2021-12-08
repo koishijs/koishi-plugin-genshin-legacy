@@ -9,7 +9,7 @@
 const { segment, template, Time } = require('koishi-core')
 
 // GenshinKit
-const { isValidCnUid } = require('@genshin-kit/core/lib/util')
+const { isValidCnUid } = require('@genshin-kit/core').util
 
 /**
  * @command genshin
@@ -39,7 +39,8 @@ function apply(ctx, pOptions) {
     .alias('原神')
     .userFields(['genshin_uid'])
     .example('@我 genshin 100000001')
-    .check(({ session }, uid) => {
+    .check(({ session, options }, uid) => {
+      if (options.help) return
       const userFileds = session.user
       if (!uid) {
         const reply = userFileds.genshin_uid
@@ -72,6 +73,9 @@ function apply(ctx, pOptions) {
 
   // Abyss
   ctx.plugin(require('./plugins/abyss'))
+
+  // Daily Note
+  ctx.plugin(require('./plugins/dailynote'))
 
   // Character Card
   ctx.plugin(require('./plugins/character'))
