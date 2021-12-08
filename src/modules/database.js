@@ -133,16 +133,23 @@ async function getBindingRoles(cookie) {
   )
 }
 
+/**
+ *
+ * @param {string} str
+ * @returns {Record<string, string>}
+ */
 function getCookieObj(str) {
   const obj = {}
-  str.split(';').forEach((item) => {
-    if (!item) return
-    const s = item.split('=')
-    const key = s?.[0].trim()
-    const val = s?.[1].trim() || ''
-    if (!key) return
-    obj[key] = val
-  })
+  str
+    .split(';')
+    .filter((i) => !!i)
+    .forEach((item) => {
+      const s = item.split('=')
+      const key = s?.[0].trim()
+      const val = s?.[1].trim() || ''
+      if (!key) return
+      obj[key] = val
+    })
   return obj
 }
 

@@ -3,13 +3,12 @@ const { readFileSync } = require('fs')
 const { segment, template } = require('koishi-utils')
 const { insertCookie } = require('../modules/database')
 
-const howToDonate = readFileSync(
+const HOW_TO_DONATE = readFileSync(
   path.resolve(__dirname, '../assets/how-to-donate.png')
 )
 
 /**
  * @param {import('koishi-core').Context} ctx
- * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
 function apply(ctx) {
   ctx
@@ -37,7 +36,7 @@ function apply(ctx) {
     .command('genshin.donate.how', 'internal command', { hidden: true })
     .alias('米游社账号捐赠指南', '原神账号捐赠指南')
     .action(() => {
-      return segment.image(howToDonate) + template('genshin.donate.help_extra')
+      return segment.image(HOW_TO_DONATE) + template('genshin.donate.help_extra')
     })
 }
 

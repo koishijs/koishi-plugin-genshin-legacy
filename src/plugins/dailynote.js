@@ -4,7 +4,6 @@ const { getGenshinApp } = require('../modules/database')
 
 /**
  * @param {import('koishi-core').Context} ctx
- * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
 function apply(ctx) {
   ctx
@@ -21,7 +20,7 @@ function apply(ctx) {
       let uid = session.user.genshin_uid
       const genshin = await getGenshinApp(session, uid)
       if (!genshin?.selfUid?.includes('' + uid)) {
-        return template('genshin.dailynote.no_permission')
+        return template('genshin.dailynote.no_permission', uid)
       }
 
       try {
@@ -31,7 +30,7 @@ function apply(ctx) {
           resin_recovery_time,
           finished_task_num,
           total_task_num,
-          is_extra_task_reward_received,
+          // is_extra_task_reward_received,
           remain_resin_discount_num,
           resin_discount_num_limit,
           current_expedition_num,
@@ -43,15 +42,11 @@ function apply(ctx) {
           `${segment.quote(session.messageId)}〓玩家 ${uid} 的实时便笺〓`,
           `原粹树脂：${current_resin}/${max_resin} (${
             resin_recovery_time > 0
-              ? Time.formatTime(resin_recovery_time * 1000) + ' 后回满'
+              ? `${Time.formatTime(resin_recovery_time * 1000)} 后回满`
               : '已完全恢复'
           })`,
-          `每日委托：${finished_task_num}/${total_task_num} (每日委托${
-            finished_task_num - total_task_num >= 0 ? '已' : '未'
-          }完成)`,
-          `周常副本：${remain_resin_discount_num}/${resin_discount_num_limit} (消耗减半机会${
-            is_extra_task_reward_received ? '已' : '未'
-          }耗尽)`,
+          `每日委托：已完成 ${finished_task_num}/${total_task_num} 个`,
+          `周常副本：半价领取奖励机会 ${remain_resin_discount_num}/${resin_discount_num_limit} 次`,
           `〓探索派遣〓`,
           `已派出 ${current_expedition_num}/${max_expedition_num} 人`,
           expeditions
@@ -59,9 +54,13 @@ function apply(ctx) {
               ({ avatar_side_icon, status, remained_time }) =>
                 `  ${
                   avatar_side_icon.split('_').pop().split('.')[0]
-                } - ${status} (${remained_time} second${
-                  remained_time > 1 ? 's' : ''
-                } left)`
+                } - ${template(
+                  `genshin.dailynote.status_${status.toLocaleLowerCase()}`
+                )}${
+                  remained_time > 0
+                    ? ` (${Time.formatTime(remained_time * 1000)} 后结束)`
+                    : ''
+                }`
             )
             .join('\n'),
         ].join('\n')

@@ -9,7 +9,6 @@ const { getGenshinApp } = require('../modules/database')
 
 /**
  * @param {import('koishi-core').Context} ctx
- * @param {{genshin: import('genshin-kit').GenshinKit}} arg1
  */
 function apply(ctx) {
   ctx

@@ -41,7 +41,10 @@ module.exports = {
   no_x_star_character: '玩家 {0} 似乎没有 {1}★ 角色。',
   // 实时便笺
   dailynote: {
-    no_permission: '未找到与您绑定的账号凭据，无法查看个人实时便笺。',
+    no_permission:
+      '未找到与 {0} 绑定的账号凭据，无法查看实时便笺。请捐赠账号后再试。',
+    status_ongoing: '正在探索',
+    status_finished: '探索完成',
   },
   // 用于玩家信息截图
   profile: {
