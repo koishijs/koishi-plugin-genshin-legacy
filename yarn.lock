@@ -29,7 +29,7 @@
     commander "^7.1.0"
     fs-extra "^9.1.0"
 
-"@genshin-kit/core@^2.5.0":
+"@genshin-kit/core@^2.6.0":
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@genshin-kit/core/-/core-2.6.0.tgz#f76827d6739b3ae77b79845ea26898fba59b9526"
   integrity sha512-382F4DV6gAdJ8c/830Tg2Nhlw4lYX5mcoW7V/d6gP8F1NdmN2vnQ6kXDkK/rvp1q3GgED8rz0jTGqrrVxM2Gxg==
