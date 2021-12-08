@@ -1,12 +1,15 @@
 module.exports = {
   // command descriptions
-  cmd_genshin_desc: '《原神 Genshin Impact》功能',
-  cmd_profile_desc: '查询玩家基本信息（宝箱、成就、声望）',
-  cmd_abyss_desc: '查询原神深境螺旋数据。',
-  cmd_character_desc: '查询指定名称的角色的等级与装备信息。',
-  cmd_specify_uid: '查询指定 uid 的信息',
-  cmd_donate_desc:
-    '捐赠您的米游社账号，提高每日查询上限。解锁无限次查询自己信息的特权！',
+  commands: {
+    genshin: '《原神 Genshin Impact》功能',
+    abyss: '查询原神深境螺旋数据。',
+    character: '查询指定名称的角色的等级与装备信息。',
+    dailynote: '查看本人实时便笺（需捐赠账号）。',
+    donate:
+      '捐赠您的米游社账号，提高每日查询上限。解锁无限次查询自己信息+实时便笺的特权！',
+    profile: '查询玩家基本信息（宝箱、成就、声望）',
+    options_specify_uid: '查询指定 uid 的信息',
+  },
   // genshin
   info_regestered: '您的《原神》uid已注册为：{0}',
   invalid_cn_uid: '您输入的不是合法的《原神》国服uid~',
@@ -14,16 +17,18 @@ module.exports = {
     '您还没有注册您的《原神》用户信息，请艾特我输入“genshin 游戏内uid”进行注册~（注意打空格）',
   successfully_registered: '您的《原神》信息注册成功~',
   // abyss
-  abyss_cur_not_active: '玩家 {0} 还没有开启本期深境螺旋。',
-  abyss_cur_is_active: '玩家 {0} 的本期深境螺旋数据：',
-  abyss_prev_not_active: '玩家 {0} 没有参与上一期深境螺旋。',
-  abyss_prev_is_active: '玩家 {0} 的上一期深境螺旋数据：',
-  abyss_basic_data:
-    '〓基本信息〓\n到达层数：{{ max_floor }}\n战斗次数：{{ total_win_times }}次通关/{{ total_battle_times }}总尝试\n获得渊星：{{ total_star }}',
-  abyss_top_stats:
-    '〓最佳战绩〓\n最强一击：{{ damage_rank }}\n最高承伤：{{ take_damage_rank }}\n最常出场：{{ reveal_rank }}\n元素爆发：{{ energy_skill_rank }}',
-  abyss_cur_time: '本期深境螺旋将于【{0}】结束，还剩 {1}。',
-  abyss_prev_time: '上期深境螺旋从 {0} 开始，于 {1} 结束。',
+  abyss: {
+    cur_not_active: '玩家 {0} 还没有开启本期深境螺旋。',
+    cur_is_active: '玩家 {0} 的本期深境螺旋数据：',
+    prev_not_active: '玩家 {0} 没有参与上一期深境螺旋。',
+    prev_is_active: '玩家 {0} 的上一期深境螺旋数据：',
+    basic_data:
+      '〓基本信息〓\n到达层数：{{ max_floor }}\n战斗次数：{{ total_win_times }}次通关/{{ total_battle_times }}总尝试\n获得渊星：{{ total_star }}',
+    top_stats:
+      '〓最佳战绩〓\n最强一击：{{ damage_rank }}\n最高承伤：{{ take_damage_rank }}\n最常出场：{{ reveal_rank }}\n元素爆发：{{ energy_skill_rank }}',
+    cur_time: '本期深境螺旋将于【{0}】结束，还剩 {1}。',
+    prev_time: '上期深境螺旋从 {0} 开始，于 {1} 结束。',
+  },
   // characters
   has_character: '玩家 {0} 的 {1}：',
   no_character: '玩家 {0} 似乎没有名为 {1} 的角色。',
@@ -34,12 +39,10 @@ module.exports = {
   character_reliquaries: '〓圣遗物〓\n{0}',
   has_x_star_characters: '玩家 {0} 一共拥有 {1} 个 {2}★ 角色。',
   no_x_star_character: '玩家 {0} 似乎没有 {1}★ 角色。',
-  // error messages
-  api_request_failed: '请求数据时出现问题（可能原因：米游社验证信息过期）',
-  failed: '出现了亿点问题：{0} ({1})',
-  fetch_data_failed:
-    '出现了亿点问题……（可能原因：玩家uid注册错误或玩家未公开米游社资料。）',
-  error_unknown: '未知问题',
+  // 实时便笺
+  dailynote: {
+    no_permission: '未找到与您绑定的账号凭据，无法查看个人实时便笺。',
+  },
   // 用于玩家信息截图
   profile: {
     ui: {
@@ -78,4 +81,7 @@ module.exports = {
 输入到控制台的代码: alert(document.cookie)
 *注意：请私信 bot 操作捐赠！！！`,
   },
+  // error messages
+  error: '出现了亿点问题：{0} ({1})',
+  error_unknown: '未知问题',
 }

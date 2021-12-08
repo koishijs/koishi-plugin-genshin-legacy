@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-genshin",
-  "version": "2.0.0-beta.16",
+  "version": "2.0.0-beta.17",
   "description": "Genshin Impact player data fetcher and gacha simulator for Koishi.js",
   "main": "src/index.js",
   "repository": "https://github.com/Dragon-Fish/koishi-plugin-genshin",
@@ -11,16 +11,16 @@
     "publish:next": "npm publish --tag next"
   },
   "dependencies": {
+    "@genshin-kit/core": "^2.5.0",
     "genshin-gacha-kit": "^1.1.0",
-    "genshin-kit": "^2.4.2",
     "pug": "^3.0.2"
   },
   "peerDependencies": {
-    "koishi-core": "^3.11.1"
+    "koishi-core": "^3.13.1"
   },
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
-    "koishi-core": "^3.11.1"
+    "koishi-core": "^3.13.1"
   },
   "keywords": [
     "genshin",

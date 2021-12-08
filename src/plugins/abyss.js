@@ -1,7 +1,7 @@
 const { template, segment, Time } = require('koishi-utils')
-const { isValidCnUid, CharactersFilter } = require('genshin-kit').util
+const { isValidCnUid, CharactersFilter } = require('@genshin-kit/core').util
 const { dateFormat, getTimeLeft } = require('../utils/dateFormat')
-const { handleError } = require('./handleError')
+const { handleError } = require('../utils/handleError')
 const { getGenshinApp } = require('../modules/database')
 
 /**
@@ -10,11 +10,14 @@ const { getGenshinApp } = require('../modules/database')
  */
 function apply(ctx) {
   ctx
-    .command('genshin.abyss', template('genshin.cmd_abyss_desc'), {
+    .command('genshin.abyss', template('genshin.commands.abyss'), {
       minInterval: Time.second * 15,
     })
     // .shortcut(/(原神深渊|深境螺旋)/)
-    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
+    .option(
+      'uid',
+      `-u <uid:posint> ${template('genshin.commands.options_specify_uid')}`
+    )
     .option('previous', '-p 查询上一期的数据', { type: 'boolean' })
     .userFields(['genshin_uid'])
     .check(({ session, options }) => {
@@ -74,17 +77,17 @@ function apply(ctx) {
           // 格式化信息
           let msg = ''
           if (!is_unlock) {
-            msg += template(`genshin.abyss_${type}_not_active`, uid)
+            msg += template(`genshin.abyss.${type}_not_active`, uid)
           } else {
             msg += [
-              template(`genshin.abyss_${type}_is_active`, uid),
-              template('genshin.abyss_basic_data', {
+              template(`genshin.abyss.${type}_is_active`, uid),
+              template('genshin.abyss.basic_data', {
                 max_floor,
                 total_win_times,
                 total_battle_times,
                 total_star,
               }),
-              template('genshin.abyss_top_stats', {
+              template('genshin.abyss.top_stats', {
                 damage_rank: formatedCharacterValue(damage_rank),
                 take_damage_rank: formatedCharacterValue(take_damage_rank),
                 reveal_rank: formatedCharacterValue(reveal_rank),
@@ -97,12 +100,12 @@ function apply(ctx) {
           msg += '\n\n'
           if (type === 'cur') {
             msg += template(
-              'genshin.abyss_cur_time',
+              'genshin.abyss.cur_time',
               endTimeStr,
               getTimeLeft(end_time * 1000)
             )
           } else {
-            msg += template('genshin.abyss_prev_time', startTimeStr, endTimeStr)
+            msg += template('genshin.abyss.prev_time', startTimeStr, endTimeStr)
           }
 
           // 发送

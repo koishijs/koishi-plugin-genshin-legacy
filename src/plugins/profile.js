@@ -1,6 +1,6 @@
 const { template, segment, Time } = require('koishi-utils')
-const { isValidCnUid } = require('genshin-kit').util
-const { getErrMsg, handleError } = require('./handleError')
+const { isValidCnUid } = require('@genshin-kit/core').util
+const { getErrMsg, handleError } = require('../utils/handleError')
 const { getGenshinApp } = require('../modules/database')
 
 /**
@@ -9,11 +9,11 @@ const { getGenshinApp } = require('../modules/database')
  */
 function apply(ctx) {
   ctx
-    .command('genshin.profile', template('genshin.cmd_profile_desc'), {
+    .command('genshin.profile', template('genshin.commands.profile'), {
       minInterval: Time.second * 30,
     })
     .userFields(['genshin_uid'])
-    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
+    .option('uid', `-u <uid:posint> ${template('genshin.commands.options_specify_uid')}`)
     .check(({ session, options }) => {
       let uid = options.uid || session.user.genshin_uid
       if (!uid) return template('genshin.not_registered')

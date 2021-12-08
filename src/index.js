@@ -9,9 +9,7 @@
 const { segment, template, Time } = require('koishi-core')
 
 // GenshinKit
-const { GenshinKit } = require('genshin-kit')
-const { isValidCnUid } = require('genshin-kit').util
-const genshin = new GenshinKit()
+const { isValidCnUid } = require('@genshin-kit/core/lib/util')
 
 /**
  * @command genshin
@@ -35,7 +33,7 @@ function apply(ctx, pOptions) {
 
   // Register
   ctx
-    .command('genshin [uid:posint]', template('genshin.cmd_genshin_desc'), {
+    .command('genshin [uid:posint]', template('genshin.commands.genshin'), {
       minInterval: Time.hour,
     })
     .alias('原神')

@@ -4,7 +4,7 @@ const {
   CharactersFilter,
   activedConstellations,
 } = require('genshin-kit').util
-const { handleError } = require('./handleError')
+const { handleError } = require('../utils/handleError')
 const { getGenshinApp } = require('../modules/database')
 
 /**
@@ -15,12 +15,12 @@ function apply(ctx) {
   ctx
     .command(
       'genshin.character <name>',
-      template('genshin.cmd_character_desc'),
+      template('genshin.commands.character'),
       {
         minInterval: Time.second * 15,
       }
     )
-    .option('uid', `-u <uid:posint> ${template('genshin.cmd_specify_uid')}`)
+    .option('uid', `-u <uid:posint> ${template('genshin.commands.options_specify_uid')}`)
     .example('genshin.character 旅行者')
     .userFields(['genshin_uid'])
     .check(({ session, options }) => {

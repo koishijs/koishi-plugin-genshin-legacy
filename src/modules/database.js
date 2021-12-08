@@ -1,5 +1,5 @@
 const { Session } = require('koishi-core')
-const { GenshinKit } = require('genshin-kit')
+const { GenshinKit } = require('@genshin-kit/core')
 
 const colName = 'hoyolab-cookies'
 
@@ -100,8 +100,10 @@ async function getGenshinApp(session, uid) {
     // cookie 库耗尽
     return false
   }
-  const { ltoken, ltuid } = data
-  return new GenshinKit().setCookie(`ltoken=${ltoken}; ltuid=${ltuid}`)
+  const { ltoken, ltuid, game_uid } = data
+  const app = new GenshinKit().setCookie(`ltoken=${ltoken}; ltuid=${ltuid}`)
+  app.selfUid = game_uid
+  return app
 }
 
 /**
@@ -126,7 +128,9 @@ async function getBindingRoles(cookie) {
     'get',
     'https://api-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie'
   )
-  return data?.list
+  return data?.list.filter((item) =>
+    ['hk4e_cn', 'hk4e_global'].includes(item.game_biz)
+  )
 }
 
 function getCookieObj(str) {

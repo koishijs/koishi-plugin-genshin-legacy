@@ -10,7 +10,7 @@ const errorMap = {
 
 function getErrMsg(err) {
   return template(
-    'genshin.failed',
+    'genshin.error',
     errorMap[err.code] || err.message || template('genshin.error_unknown'),
     err.code
   )
