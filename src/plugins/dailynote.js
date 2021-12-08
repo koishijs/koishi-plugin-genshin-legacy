@@ -20,7 +20,7 @@ function apply(ctx) {
     .action(async ({ session }) => {
       let uid = session.user.genshin_uid
       const genshin = await getGenshinApp(session, uid)
-      if (!genshin?.selfUid?.includes(uid)) {
+      if (!genshin?.selfUid?.includes('' + uid)) {
         return template('genshin.dailynote.no_permission')
       }
 
@@ -30,7 +30,7 @@ function apply(ctx) {
           max_resin,
           resin_recovery_time,
           finished_task_num,
-          totoal_task_num,
+          total_task_num,
           is_extra_task_reward_received,
           remain_resin_discount_num,
           resin_discount_num_limit,
@@ -40,26 +40,27 @@ function apply(ctx) {
         } = await genshin.getDailyNote(uid)
 
         return [
-          `〓玩家 ${uid} 的实时便笺〓`,
+          `${segment.quote(session.messageId)}〓玩家 ${uid} 的实时便笺〓`,
           `原粹树脂：${current_resin}/${max_resin} (${
             resin_recovery_time > 0
-              ? '还剩 ' + Time.formatTime(resin_recovery_time * 1000)
+              ? Time.formatTime(resin_recovery_time * 1000) + ' 后回满'
               : '已完全恢复'
           })`,
-          `每日委托：${finished_task_num}/${totoal_task_num} (每日委托${
-            finished_task_num - totoal_task_num > 0 ? '未' : '已'
+          `每日委托：${finished_task_num}/${total_task_num} (每日委托${
+            finished_task_num - total_task_num >= 0 ? '已' : '未'
           }完成)`,
           `周常副本：${remain_resin_discount_num}/${resin_discount_num_limit} (消耗减半机会${
             is_extra_task_reward_received ? '已' : '未'
           }耗尽)`,
-          `探索派遣：${current_expedition_num}/${max_expedition_num}`,
+          `〓探索派遣〓`,
+          `已派出 ${current_expedition_num}/${max_expedition_num} 人`,
           expeditions
             .map(
               ({ avatar_side_icon, status, remained_time }) =>
                 `  ${
                   avatar_side_icon.split('_').pop().split('.')[0]
-                } - ${status} (${
-                  remained_time > 1 ? 'seconds' : 'second'
+                } - ${status} (${remained_time} second${
+                  remained_time > 1 ? 's' : ''
                 } left)`
             )
             .join('\n'),
