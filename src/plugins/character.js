@@ -3,7 +3,7 @@ const {
   isValidCnUid,
   CharactersFilter,
   activedConstellations,
-} = require('genshin-kit').util
+} = require('@genshin-kit/core').util
 const { handleError } = require('../utils/handleError')
 const { getGenshinApp } = require('../modules/database')
 
